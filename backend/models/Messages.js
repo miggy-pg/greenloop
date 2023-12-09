@@ -9,6 +9,10 @@ const messageSchema = mongoose.Schema({
     },
     message: {
         type: String
+    },
+    hasRead :{
+        type: Boolean,
+        default: false
     }
 });
 

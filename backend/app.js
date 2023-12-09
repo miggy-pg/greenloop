@@ -10,6 +10,9 @@ const io = require("socket.io")(8080, {
     credentials: true,
   },
 });
+const multer = require("multer");
+const path = require("path");
+
 
 // Connect DB
 require("./db/connection");
@@ -18,6 +21,7 @@ require("./db/connection");
 const Users = require("./models/Users");
 const Conversations = require("./models/Conversations");
 const Messages = require("./models/Messages");
+const Waste = require("./models/Waste")
 
 // app Use
 const app = express();
@@ -138,8 +142,8 @@ app.post("/api/sign-in", async (req, res, next) => {
             userId: user._id,
             email: user.email,
           };
-          const JWT_SECRET_KEY =
-            process.env.JWT_SECRET_KEY || "JWT_SECRET_KEY";
+          const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "JWT_SECRET_KEY";
+          
 
           jwt.sign(
             payload,
@@ -158,6 +162,8 @@ app.post("/api/sign-in", async (req, res, next) => {
                   id: user._id,
                   username: user.username,
                   companyName: user.companyName,
+                  province: user.province,
+                  cityMunicipality: user.cityMunicipality,
                 },
                 token: token,
               });
@@ -171,26 +177,42 @@ app.post("/api/sign-in", async (req, res, next) => {
   }
 });
 
-// GET LOGGED IN USER
-app.get("/api/get-user", async (req, res) => {
-  // const user = await Users.findOne({ username });
-  // console.log("user: ", user);
-  console.log("userbody: ", req);
-  // const userData = {
-  //   companyName: user[0].companyName,
-  //   email: user[0].email,
-  //   username: user[0].username,
-  //   password: user[0].password,
-  //   organizationType: user[0].organizationType,
-  //   province: user[0].province,
-  //   cityMunicipality: user[0].cityMunicipality,
-  // }
-  // res.status(200).json(user);
-});
-
-
 // ------------------------ END OF USER ROUTES --------------------------------
 
+// ------------------------ LISTING ROUTES --------------------------------
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images/waste");
+  },
+  filename: function (req, file, cb) {
+    console.log("file: ", file);
+    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
+
+app.post('/post/new', upload.single('image'), async (req, res) => {
+  try {
+    const { post, wasteCategory, user } = req.body;
+    const image = req.file ? req.file.filename : '';
+
+    const newWaste = await Waste.create({ post, wasteCategory, image, user });
+    res.json(newWaste); 
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.get("/getWaste", async (req, res) => {
+  try {
+    const waste = await Waste.find();
+    res.json(waste);
+  } catch (error) {
+    console.log(error, "Error");
+  }
+});
 
 // ------------------------ CHAT ROUTES --------------------------------
 
@@ -303,18 +325,70 @@ app.get("/api/users/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const users = await Users.find({ _id: { $ne: userId } });
+    const listing = await Waste.find({ user: userId })
     const usersData = Promise.all(
       users.map(async (user) => {
         return {
           user: {
             email: user.email,
-            fullName: user.fullName,
+            companyName: user.companyName,
             receiverId: user._id,
+            province: user.province,
+            cityMunicipality: user.cityMunicipality,
           },
         };
       })
     );
+
     res.status(200).json(await usersData);
+  } catch (error) {
+    console.log("Error", error);
+  }
+});
+
+
+// GET WASTE FROM USER
+app.get("/api/wastes/:userId", async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const listing = await Waste.find({ user: userId })
+    const wasteData = Promise.all(
+      listing.map(async (waste) => {
+        return {
+          waste: {
+            post: waste.post,
+            wasteCategory: waste.wasteCategory,
+            image: waste.image,
+            user: waste.user,
+          },
+        };
+      })
+    );
+
+    res.status(200).json(await usersData);
+  } catch (error) {
+    console.log("Error", error);
+  }
+});
+
+// GET WASTE 
+app.get("/api/wastes", async (req, res) => {
+  try {
+    const listing = await Waste.find({}).sort({ createdAt: -1 })
+    const wasteData = Promise.all(
+      listing.map(async (waste) => {
+        return {
+          waste: {
+            post: waste.post,
+            wasteCategory: waste.wasteCategory,
+            image: waste.image,
+            user: waste.user,
+          },
+        };
+      })
+    );
+
+    res.status(200).json(await wasteData);
   } catch (error) {
     console.log("Error", error);
   }
@@ -323,3 +397,7 @@ app.get("/api/users/:userId", async (req, res) => {
 app.listen(port, () => {
   console.log("listening on port " + port);
 });
+
+const waste = path.join(__dirname, "images", "waste");
+console.log("waste", waste);
+app.use("/images/waste", express.static(waste)); // for serving static files

@@ -195,17 +195,8 @@ const Header = () => {
                 </span>
               </div>
               {showNotification && <Notification scrollActive={scrollActive} />}
-
-              <NavLink
-                activeClass="active"
-                to="profile"
-                spy={true}
-                smooth={true}
-                duration={1000}
-                onSetActive={() => {
-                  setActiveLink("profile");
-                }}
-                className={
+              
+              <div className={
                   "m-0 p-2 cursor-pointer animation-hover h-[5rem] px-3.5 relative items-center justify-center flex" +
                   (activeLink === "chats"
                     ? " text-orange-500 animation-active "
@@ -218,7 +209,30 @@ const Header = () => {
                     Profile
                   </span>
                 </span>
-              </NavLink>
+              </div>
+
+
+              <div className="z-50 fixed top-[4.5rem] right-0 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow" id="dropdown-2">
+              <div className="px-4 py-3" role="none">
+                <p className="text-sm text-normal" role="none">
+                  Neil Sims
+                </p>
+                <p className="text-sm font-medium" role="none">
+                  neil.sims@flowbite.com
+                </p>
+              </div>
+              <ul className="py-1" role="none">
+                <li>
+                  <a href="#" className="block px-4 py-4 text-sm" role="menuitem">Settings</a>
+                </li>
+                <li>
+                  <a href="#" className="block px-4 py-4 text-sm" role="menuitem">Sign out</a>
+                </li>
+              </ul>
+            </div>
+
+
+
             </ul>
           </div>
         </nav>

@@ -102,7 +102,7 @@ const Dashboard = () => {
   return (
     <div className="w-screen flex">
       <div className="w-[25%] h-screen bg-secondary overflow-scroll">
-        <div className="flex items-center my-8 mx-14">
+        <div className="flex items-center my-8 mx-14 border border-red-500">
           <div>
             <img
               src={tutorialsdev}
@@ -173,11 +173,11 @@ const Dashboard = () => {
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="black"
                 fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
@@ -234,11 +234,11 @@ const Dashboard = () => {
                 width="30"
                 height="30"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="#2c3e50"
                 fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <line x1="10" y1="14" x2="21" y2="3" />
@@ -256,11 +256,11 @@ const Dashboard = () => {
                 width="30"
                 height="30"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="#2c3e50"
                 fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <circle cx="12" cy="12" r="9" />

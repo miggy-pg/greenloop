@@ -7,7 +7,8 @@ import Listing from "./modules/Listing";
 import Post from "./modules/Post";
 import Profile from "./modules/Profile";
 import { ToastContainer } from 'react-toastify';
-
+import { useContext } from "react";
+import Chat from "./modules/Chat";
 
 
 const ProtectedRoute = ({ children, auth = false }) => {
@@ -26,6 +27,8 @@ const ProtectedRoute = ({ children, auth = false }) => {
 };
 
 function App() {
+  // const context = useContext(UserContext)
+
   return (
     <BrowserRouter>
       <Routes>
@@ -58,14 +61,14 @@ function App() {
           <Route path="listing" element={<Listing />} />
           <Route path="post" element={<Post />} />
           <Route path="profile" element={<Profile />} />
-          {/* <Route path="post" element={<Post />} />
-        <Route path="chats" element={<Chats />} />
-        <Route path="notifications" element={<Notifications />} />
-      <Route path="profile" element={<Profile />} /> */}
+          <Route path="chats" element={<Chat />} />
         </Route>
+      
       </Routes>
       <ToastContainer
       position="top-center"
+      autoClose={5000}
+
       />
     </BrowserRouter>
   );

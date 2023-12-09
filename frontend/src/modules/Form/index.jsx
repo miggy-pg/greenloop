@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 import forrestImage from "../../assets/images/login.png";
 import leavesImage from "../../assets/images/signup.png";
 import greenLoopLogo from "../../assets/images/greenLoop.png";
-import {ToastContainer, toast} from "react-toastify"
+import { useDispatch } from "react-redux";
+import { successLogin } from "../../redux/userSlice";
 
 const organizationType = [
   { value: "Waste Generator", label: "Waste Generator" },
@@ -28,8 +29,7 @@ const Form = ({ isSignInPage = true }) => {
       organizationType: orgtype,
   });
 
-  const notify = (message) => toast(message, {type:"success"});
-
+  const dispatch = useDispatch();
   const [userSignIn, setUserSignIn] = useState({
     username: "",
     password: "",
@@ -45,24 +45,27 @@ const Form = ({ isSignInPage = true }) => {
   }
 
   const handleSubmit = async (e) => {
-    console.log("userSignb: ", userSignIn);
+    console.log("userSign: ", userSignIn);
 
     e.preventDefault();
     const res = await axios.post(
       `http://localhost:8000/api/${isSignInPage ? "sign-in" : "sign-up"}`,
       isSignInPage ? userSignIn : userSignUp
     );
-    console.log("res: ", res);
+
+    console.log("res: ", res.data);
+
     if (res.status === 400) {
       alert("Invalid credentials");
     } else {
       if (res.data.token) {
         localStorage.setItem("user:token", res.data.token);
         localStorage.setItem("user:detail", JSON.stringify(res.data.user));
+        
+        dispatch(successLogin(res.data.user))
         navigate("/");
       }
       if (res.status === 200) {
-        navigate("/users/sign-in");
 
         setUserSignUp({
           companyName: "",
@@ -77,6 +80,8 @@ const Form = ({ isSignInPage = true }) => {
       } 
     }
   };
+
+
   return (
     <div className="h-screen flex items-center">
       <div className="flex flex-col shadow-lg justify-center w-2/4 h-4/5 items-center md:flex-row md:items-start max-w-6xl mx-auto">
