@@ -374,7 +374,7 @@ app.get("/api/wastes/:userId", async (req, res) => {
 // GET WASTE 
 app.get("/api/wastes", async (req, res) => {
   try {
-    const listing = await Waste.find({}).sort({ createdAt: -1 })
+    const listing = await Waste.find({})
     const wasteData = Promise.all(
       listing.map(async (waste) => {
         return {
@@ -383,6 +383,7 @@ app.get("/api/wastes", async (req, res) => {
             wasteCategory: waste.wasteCategory,
             image: waste.image,
             user: waste.user,
+            createdAt: waste.createdAt
           },
         };
       })

@@ -1,6 +1,9 @@
-import { Link } from "react-router-dom";
+const sortByFields = [
+  "Latest to Oldest",
+  "Oldest to Latest",
+]
 
-const SortByCard = ({ scrollActive, type }) => {
+const SortByCard = ({ handleSortBy }) => {
   return (
     <div
       className={`z-50 max-w-sm absolute border border-violet-800"
@@ -12,12 +15,12 @@ const SortByCard = ({ scrollActive, type }) => {
       </div>
       <div>
           <div className="w-full rounded-full">
-            <div className="text-gray-500 flex justify-center py-3 font-normal text-sm hover:bg-gray-100 cursor-pointer">
-Latest to Oldest
-            </div>
-            <div className="text-gray-500 flex justify-center py-3 font-normal text-sm hover:bg-gray-100 cursor-pointer">
-Oldest to Latest
-            </div>
+            {sortByFields.map((field, index) => (
+              <div key={index} onClick={(e) => handleSortBy(e)} className="text-gray-500 flex justify-center py-3 font-normal text-sm hover:bg-gray-100 cursor-pointer">
+                {field}
+              </div>
+            ))}
+            
           </div>
       </div>
       </div>
