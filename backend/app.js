@@ -13,7 +13,6 @@ const io = require("socket.io")(8080, {
 const multer = require("multer");
 const path = require("path");
 
-
 // Connect DB
 require("./db/connection");
 
@@ -21,7 +20,7 @@ require("./db/connection");
 const Users = require("./models/Users");
 const Conversations = require("./models/Conversations");
 const Messages = require("./models/Messages");
-const Waste = require("./models/Waste")
+const Waste = require("./models/Waste");
 
 // app Use
 const app = express();
@@ -85,19 +84,27 @@ app.get("/", (req, res) => {
   res.send("Welcome");
 });
 
-
 // ------------------------ USER ROUTES --------------------------------
 // REGISTER COMPANY/USER
 app.post("/api/sign-up", async (req, res, next) => {
   console.log("Register in progress");
 
   try {
-    const { 
-      companyName, email, username, password, confirmPassword, organizationType, province, cityMunicipality, token } = req.body;
+    const {
+      companyName,
+      email,
+      username,
+      password,
+      confirmPassword,
+      organizationType,
+      province,
+      cityMunicipality,
+      token,
+    } = req.body;
 
-    if (password !== confirmPassword ){
+    if (password !== confirmPassword) {
       res.status(400).send("Password does not match");
-    } 
+    }
 
     if (!username || !email || !password) {
       res.status(400).send("Please fill all required fields");
@@ -105,9 +112,20 @@ app.post("/api/sign-up", async (req, res, next) => {
       const userNameExist = await Users.findOne({ username });
       const emailExist = await Users.findOne({ email });
       if (userNameExist || emailExist) {
-        res.status(400).send(`${userNameExist ? "Username " : "Email "}already exists`);
+        res
+          .status(400)
+          .send(`${userNameExist ? "Username " : "Email "}already exists`);
       } else {
-        const newUser = new Users({ companyName, email, username, password, organizationType, province, cityMunicipality, token });
+        const newUser = new Users({
+          companyName,
+          email,
+          username,
+          password,
+          organizationType,
+          province,
+          cityMunicipality,
+          token,
+        });
 
         bcryptjs.hash(password, 10, (err, hashedPassword) => {
           newUser.set("password", hashedPassword);
@@ -128,7 +146,9 @@ app.post("/api/sign-in", async (req, res, next) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      res.status(400).send(`Please fill ${!username ? "username" : "password"}}`);
+      res
+        .status(400)
+        .send(`Please fill ${!username ? "username" : "password"}}`);
     } else {
       const user = await Users.findOne({ username });
       if (!user) {
@@ -143,7 +163,6 @@ app.post("/api/sign-in", async (req, res, next) => {
             email: user.email,
           };
           const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "JWT_SECRET_KEY";
-          
 
           jwt.sign(
             payload,
@@ -187,21 +206,24 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     console.log("file: ", file);
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+    cb(
+      null,
+      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+    );
   },
 });
 const upload = multer({ storage: storage });
 
-app.post('/post/new', upload.single('image'), async (req, res) => {
+app.post("/post/new", upload.single("image"), async (req, res) => {
   try {
     const { post, wasteCategory, user } = req.body;
-    const image = req.file ? req.file.filename : '';
+    const image = req.file ? req.file.filename : "";
 
     const newWaste = await Waste.create({ post, wasteCategory, image, user });
-    res.json(newWaste); 
+    res.json(newWaste);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -321,18 +343,22 @@ app.get("/api/message/:conversationId", async (req, res) => {
 
 // ------------------------ END OF CHAT ROUTES --------------------------------
 
+// GET USER
 app.get("/api/users/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const users = await Users.find({ _id: { $ne: userId } });
-    const listing = await Waste.find({ user: userId })
+    const listing = await Waste.find({ user: userId });
     const usersData = Promise.all(
       users.map(async (user) => {
         return {
           user: {
             email: user.email,
+            username: user.username,
+            password: user.password,
             companyName: user.companyName,
             receiverId: user._id,
+            organizationType: user.organizationType,
             province: user.province,
             cityMunicipality: user.cityMunicipality,
           },
@@ -346,12 +372,11 @@ app.get("/api/users/:userId", async (req, res) => {
   }
 });
 
-
 // GET WASTE FROM USER
 app.get("/api/wastes/:userId", async (req, res) => {
   try {
     const { userId } = req.body;
-    const listing = await Waste.find({ user: userId })
+    const listing = await Waste.find({ user: userId });
     const wasteData = Promise.all(
       listing.map(async (waste) => {
         return {
@@ -371,10 +396,10 @@ app.get("/api/wastes/:userId", async (req, res) => {
   }
 });
 
-// GET WASTE 
+// GET WASTE
 app.get("/api/wastes", async (req, res) => {
   try {
-    const listing = await Waste.find({})
+    const listing = await Waste.find({});
     const wasteData = Promise.all(
       listing.map(async (waste) => {
         return {
@@ -383,7 +408,7 @@ app.get("/api/wastes", async (req, res) => {
             wasteCategory: waste.wasteCategory,
             image: waste.image,
             user: waste.user,
-            createdAt: waste.createdAt
+            createdAt: waste.createdAt,
           },
         };
       })
@@ -400,5 +425,4 @@ app.listen(port, () => {
 });
 
 const waste = path.join(__dirname, "images", "waste");
-console.log("waste", waste);
 app.use("/images/waste", express.static(waste)); // for serving static files

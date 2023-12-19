@@ -14,7 +14,6 @@ const Listing = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFilter, setIsFilter] = useState(false);
   const [isSortBy, setIsSortBy] = useState(false);
-  // const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(6);
 
   const [waste, setWaste] = useState({});
@@ -161,11 +160,13 @@ const Listing = () => {
                 <IoFilter className="text-white" />
               </span>
             </div>
+
             {isFilter && (
               <div className="absolute right-[30rem] top-[23rem] border border-green-500">
                 <FilterCard handleOnChangeFilter={handleOnChangeFilter} />
               </div>
             )}
+
             {isSortBy && (
               <div className="absolute right-[30rem] top-[23rem] border border-green-500">
                 <SortByCard handleSortBy={handleSortBy} />
@@ -191,6 +192,8 @@ const Listing = () => {
             paginate={paginate}
             nextPage={nextPage}
             prevPage={prevPage}
+            currentPage={currentPage}
+            pageCount={pageCount}
           />
         </div>
       </div>
