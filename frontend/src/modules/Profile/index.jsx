@@ -10,6 +10,8 @@ import { fetchUser } from "../../api/user";
 
 const Profile = () => {
   const [user, setUser] = useState({});
+  const [inputType, setInputType] = useState("password");
+
   const [isFilter, setIsFilter] = useState(false);
   const [isSortBy, setIsSortBy] = useState(false);
 
@@ -17,6 +19,22 @@ const Profile = () => {
   const [showModal, setShowModal] = useState(false);
 
   const isLoggedIn = token !== null || false;
+
+  const onChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      console.log("onSubmit buutton clicked");
+
+      // await updateProfile(user);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     async function getUser() {
@@ -66,108 +84,148 @@ const Profile = () => {
                 Message
               </span>
             )}
+
             {showModal ? (
               <>
                 <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                   <div className="relative w-auto my-6 mx-auto max-w-2xl">
-                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-[30rem] bg-white outline-none focus:outline-none">
-                      <div className="flex items-center justify-center p-5 border-solid mx-auto border-blueGray-200 rounded-t">
-                        <h3 className="text-2xl font-semibold">Edit Profile</h3>
-                      </div>
-                      <hr />
+                    <form onSubmit={(e) => onSubmit(e)}>
+                      <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-[30rem] bg-white outline-none focus:outline-none">
+                        <div className="flex items-center justify-center p-5 border-solid mx-auto border-blueGray-200 rounded-t">
+                          <h3 className="text-2xl font-semibold">
+                            Edit Profile
+                          </h3>
+                        </div>
+                        <hr />
 
-                      <div className="relative p-6 pb-1">
-                        <span className="flex justify-center items-center text-center mb-3">
-                          <img
-                            src={profileImage}
-                            className="rounded-full w-40 h-40"
-                          />
-                        </span>
-                        <span
-                          onClick={() => setShowModal(true)}
-                          className="text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full text-sm px-10 py-1 text-center inline-flex items-center"
-                        >
-                          Update Profile Picture
-                        </span>
+                        <div className="relative p-6 pb-1">
+                          <span className="flex justify-center items-center text-center mb-3">
+                            <img
+                              src={profileImage}
+                              className="rounded-full w-40 h-40"
+                            />
+                          </span>
+                          <span
+                            onClick={() => setShowModal(true)}
+                            className="text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full text-sm px-10 py-1 text-center inline-flex items-center"
+                          >
+                            Update Profile Picture
+                          </span>
 
-                        <p className="mt-5 ml-10 mb-0 text-[#5b5c61] text-normal mx-auto leading-relaxed text-left">
-                          Generate Account Settings:
-                        </p>
-                      </div>
-                      <div className="grid grid-cols-2 text-left ml-10">
-                        <div className="p-6 pt-0">
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            Name:
-                          </p>
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            Username:
-                          </p>
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            Email:
-                          </p>
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            Org Type:
-                          </p>
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            City/Municipality:
-                          </p>
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            Province:
-                          </p>
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            Password:
+                          <p className="mt-5 ml-10 mb-0 text-[#5b5c61] text-normal mx-auto leading-relaxed text-left">
+                            Generate Account Settings:
                           </p>
                         </div>
-                        <div className="p-6 mr-10 pt-0">
-                          <input
-                            type="text"
-                            name="name"
-                            id="name"
-                            className="mt-4 mb-0 w-full rounded-md text-[#5b5c61] border-none outline-none focus:ring-transparent focus:border-transparent text-sm leading-relaxed"
-                            defaultValue={user.companyName}
-                          />
+                        <div className="grid grid-cols-2 text-left ml-10">
+                          <div className="p-6 pt-0">
+                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                              Name:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                              Username:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                              Password:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                              Email:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                              Org Type:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                              City/Municipality:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                              Province:
+                            </p>
+                          </div>
+                          <div className="p-6 mr-10 pt-0">
+                            <input
+                              type="text"
+                              name="companyName"
+                              id="companyName"
+                              className="mb-0 mt-4 w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              defaultValue={user.companyName}
+                              onChange={(e) => onChange(e)}
+                            />
 
-                          {/* <p className="my-4 text-[#5b5c61]">
-                            John Doe
-                          </p> */}
-                          <p className="my-4  text-sm leading-relaxed">
-                            john.doe123
-                          </p>
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            example@email.com
-                          </p>
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            Organization A
-                          </p>
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            City ABC
-                          </p>
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            Province XYZ
-                          </p>
-                          <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
-                            ********
-                          </p>
+                            <input
+                              type="text"
+                              name="username"
+                              id="username"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              defaultValue={user.username}
+                              onChange={(e) => onChange(e)}
+                            />
+
+                            <input
+                              type={inputType}
+                              name="password"
+                              id="password"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              defaultValue={user.password}
+                              onChange={(e) => onChange(e)}
+                              onMouseOut={() => setInputType("password")}
+                              onMouseEnter={() => setInputType("text")}
+                            />
+
+                            <input
+                              type="email"
+                              name="email"
+                              id="email"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              defaultValue={user.email}
+                              onChange={(e) => onChange(e)}
+                            />
+
+                            <input
+                              type="text"
+                              name="organizationType"
+                              id="organizationType"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              defaultValue={user.organizationType}
+                              onChange={(e) => onChange(e)}
+                            />
+
+                            <input
+                              type="text"
+                              name="cityMunicipality"
+                              id="cityMunicipality"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              defaultValue={user.cityMunicipality}
+                              onChange={(e) => onChange(e)}
+                            />
+
+                            <input
+                              type="text"
+                              name="province"
+                              id="province"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              defaultValue={user.province}
+                              onChange={(e) => onChange(e)}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                          <button
+                            className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            type="button"
+                            onClick={() => setShowModal(false)}
+                          >
+                            Close
+                          </button>
+                          <button
+                            className="bg-[#31572C] text-white active:bg-[#2e4d29] font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            type="submit"
+                            onClick={onSubmit}
+                          >
+                            Update Profile
+                          </button>
                         </div>
                       </div>
-
-                      <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                        <button
-                          className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                          type="button"
-                          onClick={() => setShowModal(false)}
-                        >
-                          Close
-                        </button>
-                        <button
-                          className="bg-[#31572C] text-white active:bg-[#2e4d29] font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                          type="button"
-                          onClick={() => setShowModal(false)}
-                        >
-                          Update Profile
-                        </button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
                 <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
