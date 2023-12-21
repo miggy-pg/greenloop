@@ -396,6 +396,53 @@ app.get("/api/wastes/:userId", async (req, res) => {
   }
 });
 
+// UPDATE USER PROFILE
+app.put("/api/users/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    console.log("userId: ", userId);
+    const {
+      companyName,
+      email,
+      username,
+      password,
+      organizationType,
+      province,
+      cityMunicipality,
+    } = req.body;
+
+    const user = await Users.findById(userId);
+    if (user) {
+      user.companyName = companyName;
+      user.email = email;
+      user.username = username;
+      user.password = password;
+      user.organizationType = organizationType;
+      user.province = province;
+      user.cityMunicipality = cityMunicipality;
+    }
+
+    const updatedUser = await user.save();
+    console.log("updatedUser: ", updatedUser);
+
+    res.status(200).json({
+      user: {
+        id: updatedUser._id,
+        username: updatedUser.username,
+        companyName: updatedUser.companyName,
+        password: updatedUser.password,
+        email: updatedUser.email,
+        province: updatedUser.province,
+        cityMunicipality: updatedUser.cityMunicipality,
+        organizationType: updatedUser.organizationType,
+      },
+      token: updatedUser.token,
+    });
+  } catch (error) {
+    console.log("Error", error);
+  }
+});
+
 // GET WASTE
 app.get("/api/wastes", async (req, res) => {
   try {
