@@ -7,6 +7,7 @@ import FilterCard from "../../components/FilterCard";
 import SortByCard from "../../components/SortByCard";
 import profileImage from "../../assets/img1.jpg";
 import { fetchUser } from "../../api/user";
+import { updateProfile } from "../../api/user";
 
 const Profile = () => {
   const [user, setUser] = useState({});
@@ -30,7 +31,7 @@ const Profile = () => {
     try {
       console.log("onSubmit buutton clicked");
 
-      // await updateProfile(user);
+      await updateProfile(jwtDecode(token).userId, user);
     } catch (err) {
       console.log(err);
     }

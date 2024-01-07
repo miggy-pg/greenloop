@@ -9,5 +9,7 @@ export const uploadPost = async (post) => {
 };
 
 export const updateProfile = async (userId, user) => {
+  console.log("user", user);
+  console.log("userId", userId);
   return axios.put(`http://localhost:8000/api/users/${userId}`, user);
 };
