@@ -1,12 +1,14 @@
 import plasticColors from "../../api/utils/plasticColors";
 
-const ListingCard = ({ waste }) => {
-  const { image, post, wasteCategory } = waste.waste;
+const ListingCard = ({ props }) => {
+  const { image, post, wasteCategory } = props.waste;
 
   const getColorClass = (text) => {
-    return `[#${plasticColors[text]}]` || "bg-[#E27A00]";
+    return `[#4b443e}]` || "bg-[#E27A00]";
   };
+
   const colorClass = getColorClass(wasteCategory);
+  console.log("colorClass: ", colorClass);
 
   return (
     <div className="bg-white border border-gray-200 shadow-sm rounded-3xl my-2">

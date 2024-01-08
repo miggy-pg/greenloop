@@ -22,43 +22,42 @@ const Post = () => {
   const [success, setSuccess] = useState(false);
   const [data, setData] = useState({
     image: "",
-    post: "",
-    wasteCategory: "",
   });
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [post, setPost] = useState("");
 
   const handleFileInputChange = (e) => {
     setData({ ...data, image: e.target.files[0] });
   };
 
   const handleCategoryChange = (event) => {
-    setData({ ...data, wasteCategory: event.target.value });
+    setSelectedCategory(event.target.value);
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
     try {
       const formData = new FormData();
       formData.append("image", data.image);
-      formData.append("post", data.post);
-      formData.append("wasteCategory", data.selectedCategory);
+      formData.append("post", post);
+      formData.append("wasteCategory", selectedCategory);
       formData.append("user", jwtDecode(token).userId);
-
+      console.log("formData: ", formData);
       const res = await uploadPost(formData);
       setSuccess(res.status === 200 ? true : false);
 
       setData({
         image: "",
-        post: "",
-        wasteCategory: "",
       });
+      setSelectedCategory("");
+      setPost("");
     } catch (err) {
       console.log("error: ", err);
+    } finally {
+      setSelectedCategory("");
+      setPost("");
     }
   };
 
-  console.log("success: ", success);
-  console.log("data: ", data);
   return (
     <div className="bg-[#F8F8F8] w-full h-screen pt-[9rem] pb-11" id="post">
       <div className="max-w-screen-md px-6 sm:px-8 lg:px-16 mx-auto flex flex-col w-full text-center justify-center">
@@ -73,35 +72,19 @@ const Post = () => {
                 </div>
               </footer>
               <hr className="py-3" />
-              {success ? (
-                <textarea
-                  id="post"
-                  name="post"
-                  rows="4"
-                  className="text-gray-900 text-left w-full overflow-y-hidden mb-3 focus:outline-none focus: border-0"
-                  placeholder="Say something about the waste"
-                  onChange={(e) =>
-                    setData((data) => ({ ...data, post: e.target.value }))
-                  }
-                />
-              ) : (
-                <textarea
-                  id="post"
-                  name="post"
-                  defaultValue={data.post}
-                  rows="4"
-                  className="text-gray-900 text-left w-full overflow-y-hidden mb-3 focus:outline-none focus: border-0"
-                  placeholder="Say something about the waste"
-                  onChange={(e) =>
-                    setData((data) => ({ ...data, post: e.target.value }))
-                  }
-                />
-              )}
+              <textarea
+                id="post"
+                name="post"
+                rows="4"
+                className="text-gray-900 text-left w-full overflow-y-hidden mb-3 focus:outline-none focus: border-0"
+                placeholder="Say something about the waste"
+                onChange={(e) => setPost(e.target.value)}
+              />
+
               <div className="grid">
                 <select
                   id="category"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-2/5 p-2.5"
-                  value={data.wasteCategory}
                   onChange={handleCategoryChange}
                 >
                   <option value="">Select an option</option>

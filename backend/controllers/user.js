@@ -1,8 +1,9 @@
+const Users = require("../models/Users");
+
 exports.fetchUser = async (req, res) => {
   try {
     const userId = req.params.userId;
     const users = await Users.find({ _id: { $ne: userId } });
-    const listing = await Waste.find({ user: userId });
     const usersData = Promise.all(
       users.map(async (user) => {
         return {
