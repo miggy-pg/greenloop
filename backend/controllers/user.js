@@ -3,7 +3,7 @@ const Users = require("../models/Users");
 exports.fetchUser = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const users = await Users.find({ _id: { $ne: userId } });
+    const users = await Users.find({ _id: userId });
     const usersData = Promise.all(
       users.map(async (user) => {
         return {
@@ -52,6 +52,8 @@ exports.fetchUserWaste = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
+    const image = req.file ? req.file.filename : "";
+
     const userId = req.params.userId;
     console.log("userId: ", userId);
     const {

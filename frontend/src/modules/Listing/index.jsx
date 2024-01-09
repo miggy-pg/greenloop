@@ -8,7 +8,7 @@ import FilterCard from "../../components/FilterCard";
 import SortByCard from "../../components/SortByCard";
 import { fetchWastes } from "../../api/waste";
 
-// const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 
 const Listing = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -66,16 +66,12 @@ const Listing = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const count = 15;
-
-  console.log("waste: ", Math.ceil(count / waste.length));
-
   const currentPage = !searchParams.get("page")
     ? 1
     : Number(searchParams.get("page"));
 
   // Calculate actual number of pages
-  const pageCount = Math.ceil(count / waste.length);
+  const pageCount = Math.ceil(waste.length / PAGE_SIZE);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;

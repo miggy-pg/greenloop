@@ -27,9 +27,6 @@ exports.postWasteImage = async (req, res) => {
   try {
     const { post, wasteCategory, user } = req.body;
     const image = req.file ? req.file.filename : "";
-    console.log("req.file", req.body);
-    console.log("req.file", req);
-    console.log("wasteCategory: ", wasteCategory);
     const newWaste = await Waste.create({ post, wasteCategory, image, user });
     res.json(newWaste);
   } catch (err) {

@@ -5,14 +5,16 @@ import { IoFilter, IoSwapVerticalSharp } from "react-icons/io5";
 import ListingCard from "../../components/ListingCard";
 import FilterCard from "../../components/FilterCard";
 import SortByCard from "../../components/SortByCard";
-import profileImage from "../../assets/img1.jpg";
+import profileImage from "../../assets/default-image.jpg";
 import { fetchUser } from "../../api/user";
 import { updateProfile } from "../../api/user";
 
 const Profile = () => {
   const [user, setUser] = useState({});
   const [inputType, setInputType] = useState("password");
-
+  const [data, setData] = useState({
+    image: "",
+  });
   const [isFilter, setIsFilter] = useState(false);
   const [isSortBy, setIsSortBy] = useState(false);
 
@@ -29,9 +31,11 @@ const Profile = () => {
     e.preventDefault();
 
     try {
-      console.log("onSubmit buutton clicked");
+      const formData = new FormData();
+      formData.append("image", data.image);
 
       await updateProfile(jwtDecode(token).userId, user);
+      setShowModal(false);
     } catch (err) {
       console.log(err);
     }
@@ -64,6 +68,7 @@ const Profile = () => {
           <div className="block md:max-w-lg py-10 h-80">
             <span className="flex justify-center items-center text-center mb-3">
               <img src={profileImage} className="rounded-full w-40 h-40" />
+              {/* <img src={profileImage} className="rounded-full w-40 h-40" /> */}
             </span>
             <p className="mb-0 text-3xl font-normal text-black">LGU - Iligan</p>
             <p className="mb-5 text-normal font-thin text-black">
