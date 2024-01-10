@@ -36,6 +36,10 @@ const userSchema = mongoose.Schema({
     type: String,
     maxLength: 50,
   },
+  image: {
+    type: String,
+    maxLength: 250,
+  },
   token: {
     type: String,
     maxLength: 500,

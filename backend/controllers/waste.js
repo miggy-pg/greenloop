@@ -1,16 +1,19 @@
 const Waste = require("../models/Waste");
+const Users = require("../models/Users");
 
 exports.fetchWastes = async (req, res) => {
   try {
     const listing = await Waste.find({});
     const wasteData = Promise.all(
       listing.map(async (waste) => {
+        const user = await Users.findById(waste.user);
+        // console.log("user: ");
         return {
           waste: {
             post: waste.post,
             wasteCategory: waste.wasteCategory,
             image: waste.image,
-            user: waste.user,
+            user: user,
             createdAt: waste.createdAt,
           },
         };

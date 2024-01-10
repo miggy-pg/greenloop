@@ -1,7 +1,12 @@
 import axios from "axios";
 
 export const fetchUser = async (userId) => {
-  return await axios.get(`http://localhost:8000/api/users/${userId}`);
+  return axios.get(`http://localhost:8000/api/users/${userId}`);
+  // return await axios.get(`http://localhost:8000/api/users/${userId}`);
+};
+
+export const fetchusers = async () => {
+  return axios.get("http://localhost:8000/api/users");
 };
 
 export const uploadPost = async (post) => {
@@ -9,7 +14,5 @@ export const uploadPost = async (post) => {
 };
 
 export const updateProfile = async (userId, user) => {
-  console.log("user", user);
-  console.log("userId", userId);
   return axios.put(`http://localhost:8000/api/users/${userId}`, user);
 };

@@ -1,3 +1,6 @@
+const Conversations = require("../models/Conversations");
+const Users = require("../models/Users");
+
 exports.conversation = async (req, res) => {
   try {
     const { senderId, receiverId } = req.body;

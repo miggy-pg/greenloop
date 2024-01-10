@@ -16,12 +16,11 @@ require("./db/connection");
 
 // Import Files
 const Users = require("./models/Users");
-const Conversations = require("./models/Conversations");
-const Messages = require("./models/Messages");
 const {
   fetchUser,
   fetchUserWaste,
   updateProfile,
+  fetchUsers,
 } = require("./controllers/user");
 const { registerUser, loginUser } = require("./controllers/auth");
 const {
@@ -140,6 +139,7 @@ app.get("/api/message/:conversationId", conversationMessage);
 
 // GET USER
 app.get("/api/users/:userId", fetchUser);
+app.get("/api/users", fetchUsers);
 
 // GET WASTE FROM USER
 app.get("/api/wastes/:userId", fetchUserWaste);

@@ -11,7 +11,7 @@ import {
   IoChatboxEllipsesOutline,
   IoNotificationsSharp,
   IoNotificationsOutline,
-  IoPersonCircleOutline,
+  IoSettings,
 } from "react-icons/io5";
 
 import greenLoopLogo from "../../assets/images/greenLoop.png";
@@ -25,6 +25,7 @@ const Header = () => {
   const [isHoveredChat, setIsHoveredChat] = useState(false);
   const [isHoveredNotif, setIsHoveredNotif] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [isHoveredSettings, setHoveredSettings] = useState(false);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -73,8 +74,8 @@ const Header = () => {
                 className={
                   "m-0 p-2 cursor-pointer animation-hover h-[5rem] px-3.5 relative items-center justify-center flex" +
                   (activeLink === "home"
-                    ? " bg-[#31572C] animation-active  "
-                    : " text-black-500 hover:bg-[#31572C] hover:text-white text-sm a")
+                    ? " bg-[#5c7e59] animation-active  "
+                    : " text-black-500 hover:bg-[#5c7e59] hover:text-white text-sm a")
                 }
               >
                 <span className="text-center font-light relative">
@@ -101,7 +102,7 @@ const Header = () => {
                   "m-0 p-2 cursor-pointer animation-hover h-[5rem] px-3 relative items-center justify-center flex" +
                   (activeLink === "listing"
                     ? " text-orange-500 animation-active "
-                    : " text-black-500 hover:bg-[#31572C] hover:text-white text-sm a")
+                    : " text-black-500 hover:bg-[#5c7e59] hover:text-white text-sm a")
                 }
               >
                 <span className="text-center font-light relative">
@@ -126,7 +127,7 @@ const Header = () => {
                   "m-0 p-2 cursor-pointer animation-hover h-[5rem] px-3.5 relative items-center justify-center flex" +
                   (activeLink === "post"
                     ? " text-orange-500 animation-active "
-                    : " text-black-500 hover:bg-[#31572C] hover:text-white text-sm a")
+                    : " text-black-500 hover:bg-[#5c7e59] hover:text-white text-sm a")
                 }
               >
                 <span className="text-center font-light relative">
@@ -155,7 +156,7 @@ const Header = () => {
                   "m-0 p-2 cursor-pointer animation-hover h-[5rem] px-3.5 relative items-center justify-center flex" +
                   (activeLink === "chats"
                     ? " text-orange-500 animation-active "
-                    : " text-black-500 hover:bg-[#31572C] hover:text-white text-sm a")
+                    : " text-black-500 hover:bg-[#5c7e59] hover:text-white text-sm a")
                 }
               >
                 <span className="text-center font-light relative">
@@ -177,7 +178,7 @@ const Header = () => {
                   "m-0 p-2 cursor-pointer animation-hover h-[5rem] text-decor px-3 relative items-center justify-center flex" +
                   (activeLink === "notifications"
                     ? " text-orange-500 animation-active "
-                    : " text-black-500 hover:bg-[#31572C] hover:text-white text-sm a")
+                    : " text-black-500 hover:bg-[#5c7e59] hover:text-white text-sm a")
                 }
               >
                 <span className="text-center font-light relative">
@@ -195,44 +196,57 @@ const Header = () => {
                 </span>
               </div>
               {showNotification && <Notification scrollActive={scrollActive} />}
-              
-              <div className={
+
+              <div
+                className={
                   "m-0 p-2 cursor-pointer animation-hover h-[5rem] px-3.5 relative items-center justify-center flex" +
                   (activeLink === "chats"
                     ? " text-orange-500 animation-active "
-                    : " text-black-500 hover:bg-[#31572C] hover:text-white text-sm a")
+                    : " text-black-500 hover:bg-[#5c7e59] hover:text-white text-sm a")
                 }
+                onClick={() => setHoveredSettings((hover) => !hover)}
               >
                 <span className="text-center font-light relative">
-                  <IoPersonCircleOutline className="mb-1 mx-auto w-7 h-7 hover:font-white" />
+                  <IoSettings className="mb-1 mx-auto w-7 h-7 hover:font-white" />
                   <span className="hover:font-white  transition-opacity duration-300">
-                    Profile
+                    Settings
                   </span>
                 </span>
               </div>
 
-
-              <div className="z-50 fixed top-[4.5rem] right-0 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow" id="dropdown-2">
-              <div className="px-4 py-3" role="none">
-                <p className="text-sm text-normal" role="none">
-                  Neil Sims
-                </p>
-                <p className="text-sm font-medium" role="none">
-                  neil.sims@flowbite.com
-                </p>
-              </div>
-              <ul className="py-1" role="none">
-                <li>
-                  <a href="#" className="block px-4 py-4 text-sm" role="menuitem">Settings</a>
-                </li>
-                <li>
-                  <a href="#" className="block px-4 py-4 text-sm" role="menuitem">Sign out</a>
-                </li>
-              </ul>
-            </div>
-
-
-
+              {isHoveredSettings && (
+                <div
+                  className="z-50 fixed top-[4.5rem] right-5 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow"
+                  id="dropdown-2"
+                >
+                  <div
+                    className="px-4 py-3 cursor-pointer hover:bg-gray-100"
+                    role="none"
+                  >
+                    <p className="text-sm text-normal" role="none">
+                      My Account
+                    </p>
+                  </div>
+                  <ul className="py-1" role="none">
+                    <li>
+                      <span
+                        className="block px-4 py-4 text-sm cursor-pointer hover:bg-gray-100"
+                        role="menuitem"
+                      >
+                        Users
+                      </span>
+                    </li>
+                    <li>
+                      <span
+                        className="block px-4 py-4 text-sm cursor-pointer hover:bg-gray-100"
+                        role="menuitem"
+                      >
+                        Sign out
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </ul>
           </div>
         </nav>

@@ -35,13 +35,15 @@ const Post = () => {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
       const formData = new FormData();
       formData.append("image", data.image);
       formData.append("post", post);
       formData.append("wasteCategory", selectedCategory);
       formData.append("user", jwtDecode(token).userId);
-      console.log("formData: ", formData);
+
       const res = await uploadPost(formData);
       setSuccess(res.status === 200 ? true : false);
 
@@ -50,6 +52,8 @@ const Post = () => {
       });
       setSelectedCategory("");
       setPost("");
+      document.getElementById("postWaste").value = "";
+      document.getElementById("postCategory").value = "";
     } catch (err) {
       console.log("error: ", err);
     } finally {
@@ -73,8 +77,8 @@ const Post = () => {
               </footer>
               <hr className="py-3" />
               <textarea
-                id="post"
-                name="post"
+                id="postWaste"
+                name="postWaste"
                 rows="4"
                 className="text-gray-900 text-left w-full overflow-y-hidden mb-3 focus:outline-none focus: border-0"
                 placeholder="Say something about the waste"
@@ -83,7 +87,7 @@ const Post = () => {
 
               <div className="grid">
                 <select
-                  id="category"
+                  id="postCategory"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-2/5 p-2.5"
                   onChange={handleCategoryChange}
                 >

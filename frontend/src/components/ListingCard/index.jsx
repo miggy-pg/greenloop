@@ -1,4 +1,4 @@
-import plasticColors from "../../api/utils/plasticColors";
+import plasticColors from "../../utils/plasticColors";
 
 const ListingCard = ({ props }) => {
   const { image, post, wasteCategory } = props.waste;

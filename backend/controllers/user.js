@@ -20,6 +20,32 @@ exports.fetchUser = async (req, res) => {
         };
       })
     );
+    console.log("usersData: ", usersData);
+    res.status(200).json(await usersData);
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+exports.fetchUsers = async (req, res) => {
+  try {
+    const users = await Users.find({});
+    const usersData = Promise.all(
+      users.map(async (user) => {
+        return {
+          user: {
+            email: user.email,
+            username: user.username,
+            password: user.password,
+            companyName: user.companyName,
+            receiverId: user._id,
+            organizationType: user.organizationType,
+            province: user.province,
+            cityMunicipality: user.cityMunicipality,
+          },
+        };
+      })
+    );
 
     res.status(200).json(await usersData);
   } catch (error) {
@@ -53,9 +79,7 @@ exports.fetchUserWaste = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const image = req.file ? req.file.filename : "";
-
     const userId = req.params.userId;
-    console.log("userId: ", userId);
     const {
       companyName,
       email,
@@ -65,7 +89,6 @@ exports.updateProfile = async (req, res) => {
       province,
       cityMunicipality,
     } = req.body;
-
     const user = await Users.findById(userId);
     if (user) {
       user.companyName = companyName;
@@ -75,6 +98,7 @@ exports.updateProfile = async (req, res) => {
       user.organizationType = organizationType;
       user.province = province;
       user.cityMunicipality = cityMunicipality;
+      user.image = image;
     }
 
     const updatedUser = await user.save();

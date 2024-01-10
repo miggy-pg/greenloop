@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { IoFilter, IoSwapVerticalSharp, IoClose } from "react-icons/io5";
 import { useSearchParams } from "react-router-dom";
+import { IoFilter, IoSwapVerticalSharp, IoClose } from "react-icons/io5";
 
 import Pagination from "../../components/Pagination";
 import ListingCard from "../../components/ListingCard";
 import FilterCard from "../../components/FilterCard";
 import SortByCard from "../../components/SortByCard";
 import { fetchWastes } from "../../api/waste";
+import useOutsideClick from "../../../hooks/useOutsideClick";
 
 const PAGE_SIZE = 6;
 
@@ -14,13 +15,15 @@ const Listing = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFilter, setIsFilter] = useState(false);
   const [isSortBy, setIsSortBy] = useState(false);
+  const [openName, setOpenName] = useState("");
+
   const [postsPerPage, setPostsPerPage] = useState(6);
 
   const [waste, setWaste] = useState({});
   const [filteredWaste, setFilteredWaste] = useState({});
   const [filterValue, setFilterValue] = useState("");
 
-  const origWaste = filterValue.length > 0 ? filteredWaste : waste;
+  const origWaste = filterValue ? filteredWaste : waste;
 
   const handleOnChangeFilter = (e) => {
     setFilterValue(e.target.textContent);
@@ -40,8 +43,6 @@ const Listing = () => {
   console.log("sorted: ", sortedWaste);
 
   const handleSortBy = (e) => {
-    console.log("origWaste: ", origWaste);
-    console.log(e.target.textContent);
     if (e.target.textContent == "Latest to Oldest") {
       const sortedWaste = origWaste.sort((a, b) => {
         return new Date(a.waste.createdAt) - new Date(b.waste.createdAt);
@@ -71,7 +72,7 @@ const Listing = () => {
     : Number(searchParams.get("page"));
 
   // Calculate actual number of pages
-  const pageCount = Math.ceil(waste.length / PAGE_SIZE);
+  const pageCount = Math.ceil(origWaste.length / PAGE_SIZE);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -110,8 +111,10 @@ const Listing = () => {
     getUser();
   }, []);
 
-  // if (pageCount <= 1) return null;
+  const close = () => setOpenName("");
+  // const ref = useOutsideClick(close);
 
+  if (pageCount <= 1) return null;
   console.log("currentPosts: ", currentPosts);
 
   return (
@@ -177,26 +180,33 @@ const Listing = () => {
 
         <div className="flex justify-center px-6">
           <div className="w-4/5 mt-10 grid gap-10 md:grid-cols-2 lg:gap-10 xl:grid-cols-3">
-            {origWaste.length > 0 &&
+            {origWaste.length > 0 ? (
               currentPosts.map((waste, index) => (
                 <ListingCard key={index} props={waste} />
-              ))}
+              ))
+            ) : (
+              <p className="text-3xl font-semibold text-center">
+                No Waste Found
+              </p>
+            )}
           </div>
         </div>
       </div>
-      <div className="flex justify-center px-6 pb-10">
-        <div className="items-center">
-          <Pagination
-            postsPerPage={postsPerPage}
-            totalPosts={origWaste.length}
-            paginate={paginate}
-            nextPage={nextPage}
-            prevPage={prevPage}
-            currentPage={currentPage}
-            pageCount={pageCount}
-          />
+      {origWaste.length > 2 ? (
+        <div className="flex justify-center px-6 pb-10">
+          <div className="items-center">
+            <Pagination
+              postsPerPage={postsPerPage}
+              totalPosts={origWaste.length}
+              paginate={paginate}
+              nextPage={nextPage}
+              prevPage={prevPage}
+              currentPage={currentPage}
+              pageCount={pageCount}
+            />
+          </div>
         </div>
-      </div>
+      ) : null}
     </>
   );
 };

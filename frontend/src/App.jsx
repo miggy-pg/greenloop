@@ -6,10 +6,10 @@ import "./App.css";
 import Listing from "./modules/Listing";
 import Post from "./modules/Post";
 import Profile from "./modules/Profile";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 import { useContext } from "react";
 import Chat from "./modules/Chat";
-
+import Users from "./modules/Users";
 
 const ProtectedRoute = ({ children, auth = false }) => {
   const isLoggedIn = localStorage.getItem("user:token") !== null || false;
@@ -60,16 +60,13 @@ function App() {
           <Route index element={<Home />} />
           <Route path="listing" element={<Listing />} />
           <Route path="post" element={<Post />} />
+          <Route path="profile/:id" element={<Profile />} />
           <Route path="profile" element={<Profile />} />
           <Route path="chats" element={<Chat />} />
+          <Route path="dashboard/users" element={<Users />} />
         </Route>
-      
       </Routes>
-      <ToastContainer
-      position="top-center"
-      autoClose={5000}
-
-      />
+      <ToastContainer position="top-center" autoClose={5000} />
     </BrowserRouter>
   );
 }
