@@ -5,7 +5,7 @@ export const fetchUser = async (userId) => {
   // return await axios.get(`http://localhost:8000/api/users/${userId}`);
 };
 
-export const fetchusers = async () => {
+export const fetchUsers = async () => {
   return axios.get("http://localhost:8000/api/users");
 };
 
@@ -15,4 +15,8 @@ export const uploadPost = async (post) => {
 
 export const updateProfile = async (userId, user) => {
   return axios.put(`http://localhost:8000/api/users/${userId}`, user);
+};
+
+export const deleteUser = async (userId) => {
+  return axios.delete(`http://localhost:8000/api/users/${userId}`);
 };

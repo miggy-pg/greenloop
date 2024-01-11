@@ -12,10 +12,10 @@ exports.fetchUser = async (req, res) => {
             username: user.username,
             password: user.password,
             companyName: user.companyName,
-            receiverId: user._id,
             organizationType: user.organizationType,
             province: user.province,
             cityMunicipality: user.cityMunicipality,
+            receiverId: user._id,
           },
         };
       })
@@ -34,6 +34,7 @@ exports.fetchUsers = async (req, res) => {
       users.map(async (user) => {
         return {
           user: {
+            id: user._id,
             email: user.email,
             username: user.username,
             password: user.password,
@@ -117,6 +118,14 @@ exports.updateProfile = async (req, res) => {
       },
       token: updatedUser.token,
     });
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    await Users.findByIdAndDelete(req.params.userId);
   } catch (error) {
     console.log("Error", error);
   }

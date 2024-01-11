@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import img1 from "../../assets/img1.jpg";
 import "./styles.css";
 
 function hasWhiteSpace(s) {
@@ -32,7 +31,7 @@ const PostCard = ({ props }) => {
                 <Link to={`profile/${user?._id}`}>
                   <img
                     className="w-11 h-11 mr-5 rounded-full cursor-pointer hover:opacity-80"
-                    src={img1}
+                    src=""
                     alt="Jese avatar"
                   />
                 </Link>

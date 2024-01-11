@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import {
   IoHome,
@@ -219,22 +219,23 @@ const Header = () => {
                   className="z-50 fixed top-[4.5rem] right-5 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow"
                   id="dropdown-2"
                 >
-                  <div
-                    className="px-4 py-3 cursor-pointer hover:bg-gray-100"
-                    role="none"
-                  >
-                    <p className="text-sm text-normal" role="none">
-                      My Account
-                    </p>
-                  </div>
+                  <Link to="profile">
+                    <div className="px-4 py-3 cursor-pointer hover:bg-gray-100">
+                      <p className="text-sm text-normal" role="none">
+                        My Account
+                      </p>
+                    </div>
+                  </Link>
                   <ul className="py-1" role="none">
                     <li>
-                      <span
-                        className="block px-4 py-4 text-sm cursor-pointer hover:bg-gray-100"
-                        role="menuitem"
-                      >
-                        Users
-                      </span>
+                      <Link to="dashboard/users">
+                        <span
+                          className="block px-4 py-4 text-sm cursor-pointer hover:bg-gray-100"
+                          role="menuitem"
+                        >
+                          Users
+                        </span>
+                      </Link>
                     </li>
                     <li>
                       <span

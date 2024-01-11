@@ -47,8 +47,6 @@ const Profile = () => {
     console.log("btn clicked");
     try {
       const profileData = new FormData();
-      console.log("userData: ", userData);
-
       profileData.append("image", data.image);
       profileData.append("companyName", userData.companyName);
       profileData.append("username", userData.username);
@@ -57,8 +55,6 @@ const Profile = () => {
       profileData.append("organizationType", userData.organizationType);
       profileData.append("cityMunicipality", userData.cityMunicipality);
       profileData.append("province", userData.province);
-      // console.log("data: ", data);
-      console.log("profileData: ", profileData);
       await updateProfile(jwtDecode(token).userId, profileData);
 
       setShowModal(false);
@@ -66,6 +62,10 @@ const Profile = () => {
       console.log(err);
     }
   };
+
+  const profileType = isLoggedIn
+    ? String(id) === String(jwtDecode(token).userId)
+    : String(id) !== String(jwtDecode(token).userId);
 
   useEffect(() => {
     async function getUser() {
@@ -81,10 +81,6 @@ const Profile = () => {
     getUser();
     setData({ image: "" });
   }, [token, showModal]);
-
-  console.log("userData: ", userData);
-  console.log("data: ", data);
-  console.log("token: ", token);
 
   return (
     <div
@@ -107,7 +103,7 @@ const Profile = () => {
               {userData.cityMunicipality}
             </p>
 
-            {isLoggedIn ? (
+            {profileType ? (
               <span
                 onClick={() => setShowModal(true)}
                 className="text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full text-sm px-10 py-1 text-center inline-flex items-center"
@@ -291,7 +287,7 @@ const Profile = () => {
                     </form>
                   </div>
                 </div>
-                {/* <div className="opacity-25 fixed inset-0 z-40 bg-black"></div> */}
+                <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
               </>
             ) : null}
           </div>

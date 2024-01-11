@@ -4,9 +4,7 @@ const sizes = {
   small: css`
     font-size: 0.8;
     padding: 0.2rem 0.6rem;
-    text-transform: uppercase;
-    font-weight: 700;
-    text-align: center;
+    font-weight: 500;
   `,
   medium: css`
     font-size: 1.125rem;

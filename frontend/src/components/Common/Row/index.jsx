@@ -3,7 +3,7 @@ export default function Row({ children, type }) {
     actionButton:
       "space-x-2 whitespace-nowrap p-8 text-sm sm:text-sm lg:text-lg",
     default:
-      "md:text-md whitespace-nowrap p-8 text-sm font-medium text-gray-900 sm:text-sm lg:text-lg",
+      "whitespace-nowrap p-8 text-xs font-medium text-gray-900 sm:text-sm md:text-md lg:text-lg",
   };
 
   if (type === "name")

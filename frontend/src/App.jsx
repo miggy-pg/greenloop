@@ -27,19 +27,9 @@ const ProtectedRoute = ({ children, auth = false }) => {
 };
 
 function App() {
-  // const context = useContext(UserContext)
-
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route
-        path="/"
-        element={
-          <ProtectedRoute auth={true}>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      /> */}
         <Route
           path="/users/sign-in"
           element={
@@ -56,7 +46,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/" element={<Layout />}>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute auth={true}>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<Home />} />
           <Route path="listing" element={<Listing />} />
           <Route path="post" element={<Post />} />
@@ -66,7 +63,6 @@ function App() {
           <Route path="dashboard/users" element={<Users />} />
         </Route>
       </Routes>
-      <ToastContainer position="top-center" autoClose={5000} />
     </BrowserRouter>
   );
 }

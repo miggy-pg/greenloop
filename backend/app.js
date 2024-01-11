@@ -21,6 +21,7 @@ const {
   fetchUserWaste,
   updateProfile,
   fetchUsers,
+  deleteUser,
 } = require("./controllers/user");
 const { registerUser, loginUser } = require("./controllers/auth");
 const {
@@ -139,7 +140,12 @@ app.get("/api/message/:conversationId", conversationMessage);
 
 // GET USER
 app.get("/api/users/:userId", fetchUser);
+
+// GET ALL USERS
 app.get("/api/users", fetchUsers);
+
+// DELETE USER
+app.delete("/api/users/:userId", deleteUser);
 
 // GET WASTE FROM USER
 app.get("/api/wastes/:userId", fetchUserWaste);

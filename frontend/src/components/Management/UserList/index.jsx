@@ -1,52 +1,67 @@
 import { useNavigate } from "react-router-dom";
+
+import Table from "../../Table";
 import StyledButton from "../../Button/StyledButton";
-import Row from "../../Common/Row";
 
-export default function UserList({ props }) {
-  // const { email, organizationType, password, province, username } = props;
-
-  console.log("props: ", props);
-
+export default function UserList({
+  image,
+  companyName,
+  email,
+  organizationType,
+  password,
+  province,
+  username,
+  cityMunicipality,
+  setShowModal,
+  userId,
+  getUserData,
+  onDelete,
+}) {
   const navigate = useNavigate();
 
   return (
     <tr className="hover:bg-gray-100">
-      <Row type="name">
-        <div className="md:text-md text-sm font-semibold text-gray-900 sm:text-sm lg:text-lg">
-          Company Name
+      <Table.Row type="default">{image}</Table.Row>
+      <Table.Row type="name">
+        <div className="text-sm font-semibold text-gray-900 sm:text-md md:text-sm lg:text-sm">
+          {companyName}
         </div>
-      </Row>
-      <Row type="default">Name</Row>
-      <Row type="default">Test</Row>
-      <Row type="default">Price</Row>
-      <Row type="default">Status</Row>
-      <Row type="default">IsAdmin</Row>
+      </Table.Row>
+      <Table.Row type="default">{email}</Table.Row>
+      <Table.Row type="default">{username}</Table.Row>
+      <Table.Row type="default">{password}</Table.Row>
+      <Table.Row type="default">{organizationType}</Table.Row>
+      <Table.Row type="default">{province}</Table.Row>
+      <Table.Row type="default">{cityMunicipality}</Table.Row>
 
-      <Row type="actionButton">
+      <Table.Row type="actionButton">
         <StyledButton
           $variations="primaryBlue"
-          $size="medium"
-          // onClick={() => setExpandedUpdate((curr) => !curr)}
+          $size="small"
+          onClick={() => {
+            setShowModal(userId);
+            getUserData(userId);
+          }}
         >
           Update
         </StyledButton>
         <StyledButton
           $variations="danger"
-          $size="medium"
-          // onClick={() => setExpandDelete((curr) => !curr)}
+          $size="small"
+          onClick={() => onDelete(userId)}
         >
           Delete
         </StyledButton>
-      </Row>
-      <Row>
+      </Table.Row>
+      <Table.Row>
         <StyledButton
           $variations="primaryBlue"
-          $size="medium"
-          // onClick={() => navigate(`/bookings/${id}`)}
+          $size="small"
+          onClick={() => navigate(`/profile/${userId}`)}
         >
-          Detail
+          Details
         </StyledButton>
-      </Row>
+      </Table.Row>
     </tr>
   );
 }
