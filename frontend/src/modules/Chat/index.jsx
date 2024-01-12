@@ -1,20 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import Input from "../../components/Input";
+import { getConversations, getMessages } from "../../api/conversation";
+import { sendUserMessage } from "../../api/message";
+import { useSearchParams } from "react-router-dom";
+
+import { TbSend } from "react-icons/tb";
+import { TbCirclePlus } from "react-icons/tb";
 
 const Chat = () => {
-  const token = localStorage.getItem("user:token");
-  const [showModal, setShowModal] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [showFile, setShowFile] = useState(false);
 
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user:detail"))
-  );
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState({});
   const [message, setMessage] = useState("");
   const [users, setUsers] = useState([]);
   const [socket, setSocket] = useState(null);
   const messageRef = useRef(null);
+
+  const user = JSON.parse(localStorage.getItem("user:detail"));
+  const receiverId = searchParams.get("id");
 
   useEffect(() => {
     setSocket(io("http://localhost:8080"));
@@ -42,19 +48,10 @@ const Chat = () => {
 
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
-    console.log("loggedInUser: ", loggedInUser);
     const fetchConversations = async () => {
-      const res = await fetch(
-        `http://localhost:8000/api/conversations/${loggedInUser?.id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const resData = await res.json();
-      setConversations(resData);
+      const { data } = await getConversations(loggedInUser?.id);
+      setConversations(data);
+      console.log("conversationData: ", data);
     };
     fetchConversations();
   }, []);
@@ -73,23 +70,37 @@ const Chat = () => {
     };
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    const getConversation = async () => {
+      if (receiverId) {
+        const conversationId = conversations[0].conversationId;
+        const receiverId = conversations[0].receiverId;
+        const { data } = await getMessages(
+          conversationId,
+          user?.id,
+          receiverId
+        );
+        setMessages({ messages: data, receiverId, conversationId });
+      } else {
+        setMessages({});
+      }
+    };
+    getConversation();
+  }, [conversations, receiverId]);
   console.log("usersChat: ", users);
 
   const fetchMessages = async (conversationId, receiver) => {
-    console.log("conversationId: ", conversationId);
-    console.log("receiver: ", receiver);
-    console.log("user: ", user);
-    const res = await fetch(
-      `http://localhost:8000/api/message/${conversationId}?senderId=${user?.id}&&receiverId=${receiver?.receiverId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+    searchParams.set("id", receiver.receiverId);
+    setSearchParams(searchParams);
+
+    const { data } = await getMessages(
+      conversationId,
+      user?.id,
+      receiver?.receiverId
     );
-    const resData = await res.json();
-    setMessages({ messages: resData, receiver, conversationId });
+    console.log("dataFetch: ", data);
+    setMessages({ messages: data, receiver, conversationId });
   };
 
   const sendMessage = async (e) => {
@@ -114,8 +125,6 @@ const Chat = () => {
     });
   };
 
-  console.log("messages: ", messages);
-  console.log("conversations: ", conversations);
   return (
     <div
       className="w-full h-screen pt-[4rem] overflow-x-hidden bg-[#F8F8F8]"
@@ -190,6 +199,7 @@ const Chat = () => {
                 <div>
                   {conversations.length > 0 ? (
                     conversations.map(({ conversationId, user }) => {
+                      console.log("conversationMap: ", user);
                       return (
                         <div
                           key={conversationId}
@@ -329,7 +339,9 @@ const Chat = () => {
                 <div className="py-2 px-3">
                   <div className="flex justify-center mb-2">
                     <div className="rounded py-2 px-4">
-                      <p className="text-sm uppercase">February 20, 2018</p>
+                      <p className="text-sm uppercase">
+                        {new Date().toUTCString().slice(5, 16)}
+                      </p>
                     </div>
                   </div>
 
@@ -359,7 +371,6 @@ const Chat = () => {
                           </h3>
                           <p className="text-sm font-light text-gray-600">
                             {messages?.receiver?.email}
-                            <h1>Test</h1>
                           </p>
                         </div>
                         <div className="cursor-pointer">
@@ -413,9 +424,10 @@ const Chat = () => {
                   )}
                 </div>
               </div>
-              {messages?.receiver?.companyName && (
+              {messages?.conversationId && (
                 <div className="p-14 w-full flex items-center">
                   <Input
+                    id="message"
                     placeholder="Type a message..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
@@ -428,46 +440,24 @@ const Chat = () => {
                     }`}
                     onClick={() => sendMessage()}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="icon icon-tabler icon-tabler-send"
-                      width="30"
-                      height="30"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="#2c3e50"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <line x1="10" y1="14" x2="21" y2="3" />
-                      <path d="M21 3l-6.5 18a0.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a0.55 .55 0 0 1 0 -1l18 -6.5" />
-                    </svg>
+                    <TbSend className="h-8 w-8" />
                   </div>
-                  <div
-                    className={`ml-4 p-2 cursor-pointer bg-light rounded-full ${
-                      !message && "pointer-events-none"
-                    }`}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="icon icon-tabler icon-tabler-circle-plus"
-                      width="30"
-                      height="30"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="#2c3e50"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <circle cx="12" cy="12" r="9" />
-                      <line x1="9" y1="12" x2="15" y2="12" />
-                      <line x1="12" y1="9" x2="12" y2="15" />
-                    </svg>
+                  <div className="ml-4 p-2 cursor-pointer bg-light rounded-full">
+                    <TbCirclePlus
+                      className="h-8 w-8"
+                      onClick={() => setShowFile((showFile) => !showFile)}
+                    />
                   </div>
+                  {showFile && (
+                    <div className="z-50 fixed bottom-[7.5rem] right-[10rem] my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow">
+                      <div
+                        className="px-4 py-3 cursor-pointer hover:bg-gray-100"
+                        onClick={() => console.log("Attaching file.....")}
+                      >
+                        Attach image
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 const initialState = {
   user: {},
+  receiverid: "",
 };
 
 export const userSlice = createSlice({
@@ -10,8 +11,8 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     successLogin: (state, action) => {
-      // state.user = action.payload;
-      toast("You have successfully logged in!");
+      state.user = action.payload;
+      // toast("You have successfully logged in!");
     },
     errorLoginUser: (state, action) => {
       toast.error(action.payload);
@@ -41,15 +42,15 @@ export const userSlice = createSlice({
 });
 
 export const {
-  successLogin, 
-  errorLoginUser, 
-  logoutUser, 
-  successUpdateUser, 
-  errorUpdateUser, 
-  successDeleteListing, 
-  errorDeleteListing, 
-  successCreateAccount, 
-  errorCreateAccount
+  successLogin,
+  errorLoginUser,
+  logoutUser,
+  successUpdateUser,
+  errorUpdateUser,
+  successDeleteListing,
+  errorDeleteListing,
+  successCreateAccount,
+  errorCreateAccount,
 } = userSlice.actions;
 
 export default userSlice.reducer;

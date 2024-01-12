@@ -38,8 +38,13 @@ exports.conversationMessage = async (req, res) => {
       const messageUserData = Promise.all(
         messages.map(async (message) => {
           const user = await Users.findById(message.senderId);
+          console.log("message: ", user);
           return {
-            user: { id: user._id, email: user.email, fullName: user.fullName },
+            user: {
+              id: user._id,
+              email: user.email,
+              companyName: user.companyName,
+            },
             message: message.message,
           };
         })

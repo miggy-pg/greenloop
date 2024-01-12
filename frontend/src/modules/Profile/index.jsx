@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { IoFilter, IoSwapVerticalSharp } from "react-icons/io5";
 
@@ -111,9 +111,12 @@ const Profile = () => {
                 Edit Profile
               </span>
             ) : (
-              <span className="text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full text-sm px-10 py-1 text-center inline-flex items-center">
+              <Link
+                to={`/chats?id=${id}`}
+                className="text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full text-sm px-10 py-1 text-center inline-flex items-center"
+              >
                 Message
-              </span>
+              </Link>
             )}
 
             {showModal ? (

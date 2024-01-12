@@ -20,17 +20,21 @@ exports.userConversations = async (req, res) => {
     const conversations = await Conversations.find({
       members: { $in: [userId] },
     });
+    console.log("userId", userId);
+    console.log("conversations", conversations);
     const conversationUserData = Promise.all(
       conversations.map(async (conversation) => {
         const receiverId = conversation.members.find(
           (member) => member !== userId
         );
         const user = await Users.findById(receiverId);
+        console.log("receivedId: ", receiverId);
+        console.log("user", user);
         return {
           user: {
             receiverId: user._id,
             email: user.email,
-            fullName: user.fullName,
+            companyName: user.companyName,
           },
           conversationId: conversation._id,
         };

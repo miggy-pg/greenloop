@@ -8,6 +8,7 @@ const Input = ({
   inputClassName = "",
   isRequired = true,
   placeholder = "",
+  value = "",
   onChange = () => {},
 }) => {
   return (
@@ -18,6 +19,7 @@ const Input = ({
       <input
         type={type}
         id={name}
+        value={value}
         className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 ${inputClassName}`}
         placeholder={placeholder}
         required={isRequired}
