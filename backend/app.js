@@ -37,7 +37,11 @@ const {
 
 // app Use
 const app = express();
-app.use(express.json());
+app.use(
+  express.json({
+    limit: "50mb",
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
@@ -61,8 +65,10 @@ io.on("connection", (socket) => {
     async ({ senderId, receiverId, message, conversationId }) => {
       const receiver = users.find((user) => user.userId === receiverId);
       const sender = users.find((user) => user.userId === senderId);
+      console.log("sender: ", sender);
       const user = await Users.findById(senderId);
       console.log("sender :>> ", sender, receiver);
+      console.log("message: ", message);
       if (receiver) {
         io.to(receiver.socketId)
           .to(sender.socketId)

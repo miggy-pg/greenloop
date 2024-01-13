@@ -10,8 +10,9 @@ import { TbCirclePlus } from "react-icons/tb";
 
 const Chat = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [showFile, setShowFile] = useState(false);
 
+  const [file, setFile] = useState([]);
+  const [showFile, setShowFile] = useState(false);
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState({});
   const [message, setMessage] = useState("");
@@ -25,7 +26,7 @@ const Chat = () => {
   useEffect(() => {
     setSocket(io("http://localhost:8080"));
   }, []);
-
+  console.log("socket: ", socket);
   useEffect(() => {
     socket?.emit("addUser", user?.id);
     socket?.on("getUsers", (users) => {
@@ -81,6 +82,7 @@ const Chat = () => {
           user?.id,
           receiverId
         );
+        console.log("data: ", data);
         setMessages({ messages: data, receiverId, conversationId });
       } else {
         setMessages({});
@@ -89,6 +91,17 @@ const Chat = () => {
     getConversation();
   }, [conversations, receiverId]);
   console.log("usersChat: ", users);
+
+  const fetchImage = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setFile(reader.result);
+    };
+  };
+
+  console.log("file: ", file);
 
   const fetchMessages = async (conversationId, receiver) => {
     searchParams.set("id", receiver.receiverId);
@@ -109,20 +122,19 @@ const Chat = () => {
       senderId: user?.id,
       receiverId: messages?.receiver?.receiverId,
       message,
+      image: file,
       conversationId: messages?.conversationId,
     });
-    const res = await fetch(`http://localhost:8000/api/message`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        conversationId: messages?.conversationId,
-        senderId: user?.id,
-        message,
-        receiverId: messages?.receiver?.receiverId,
-      }),
-    });
+    const messageForm = {
+      conversationId: messages?.conversationId,
+      senderId: user?.id,
+      message,
+      image: file,
+      receiverId: messages?.receiver?.receiverId,
+    };
+    const { data } = await sendUserMessage(messageForm);
+    console.log("data: ", data);
+    setFile([]);
   };
 
   return (
@@ -449,13 +461,39 @@ const Chat = () => {
                     />
                   </div>
                   {showFile && (
-                    <div className="z-50 fixed bottom-[7.5rem] right-[10rem] my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow">
-                      <div
-                        className="px-4 py-3 cursor-pointer hover:bg-gray-100"
-                        onClick={() => console.log("Attaching file.....")}
+                    <div className="z-50 fixed bottom-[7.5rem] right-[12rem] my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow">
+                      <input
+                        type="file"
+                        id="image-upload"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={(e) => fetchImage(e)}
+                      />
+                      <label
+                        htmlFor="image-upload"
+                        className="px-4 cursor-pointer hover:bg-gray-100"
                       >
-                        Attach image
-                      </div>
+                        {/* <IoAddSharp className="w-14 h-14 bg-[#F1F1F1] text-slate-400 rounded-lg m-2" /> */}
+                        Attach file
+                        {/* {data.image ? "Replace" : "Update Profile Picture"} */}
+                      </label>
+                      {/* <input
+                        id="imageUpload"
+                        name="image"
+                        type="file"
+                        className="px-4 py-3 cursor-pointer hover:bg-gray-100"
+                        onClick={(e) => fetchImage(e)}
+                      />
+                      <label
+                        htmlFor="imageUpload"
+                        className="absolute cursor-pointer"
+                      >
+                        <IoAddSharp className="w-14 h-14 bg-[#F1F1F1] text-slate-400 rounded-lg m-2" />
+                        <p className="text-slate-400">
+                          Attach file
+                          {data.image ? "Replace" : "Update Profile Picture"}
+                        </p>
+                      </label> */}
                     </div>
                   )}
                 </div>
