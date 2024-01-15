@@ -35,6 +35,7 @@ exports.userConversations = async (req, res) => {
             receiverId: user._id,
             email: user.email,
             companyName: user.companyName,
+            image: user.image,
           },
           conversationId: conversation._id,
         };

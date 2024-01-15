@@ -17,6 +17,8 @@ import {
 import greenLoopLogo from "../../assets/images/greenLoop.png";
 import Notification from "../Notification";
 
+import { getConversations, getMessages } from "../../api/conversation";
+
 const Header = () => {
   const [activeLink, setActiveLink] = useState(false);
   const [scrollActive, setScrollActive] = useState(false);
@@ -26,6 +28,68 @@ const Header = () => {
   const [isHoveredNotif, setIsHoveredNotif] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [isHoveredSettings, setHoveredSettings] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [conversations, setConversations] = useState([]);
+  const [messages, setMessages] = useState({});
+  const [users, setUsers] = useState([]);
+  const user = JSON.parse(localStorage.getItem("user:detail"));
+
+  useEffect(() => {
+    const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
+    const fetchConversations = async () => {
+      const { data } = await getConversations(loggedInUser?.id);
+      setConversations(data);
+      console.log("conversationData: ", data);
+    };
+    fetchConversations();
+  }, []);
+
+  useEffect(() => {
+    try {
+      const fetchUsers = async () => {
+        const res = await fetch("http://localhost:8000/api/users", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const resData = await res.json();
+        console.log("resData: ", resData);
+        setUsers(resData);
+        setIsLoading(false);
+      };
+      fetchUsers();
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      const getConversation = async () => {
+        // if (receiverId) {
+        const conversationId = conversations[0].conversationId;
+        const receiverId = conversations[0].receiverId;
+        const { data } = await getMessages(
+          conversationId,
+          user?.id,
+          receiverId
+        );
+        setMessages({ messages: data, receiverId, conversationId });
+        // } else {
+        //   setMessages({});
+        // }
+        setIsLoading(false);
+      };
+      getConversation();
+    } catch (err) {
+      console.log(err);
+    }
+  }, [conversations]);
+
+  console.log("messagesNavbar: ", messages);
+  console.log("notificationNavbar: ", conversations);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -188,14 +252,22 @@ const Header = () => {
                     <IoNotificationsSharp className="mb-1 mx-auto w-7 h-7 hover:font-white" />
                   )}
                   <span className="absolute top-0 right-2 bg-red-500 text-white w-5 h-5 text-center justify-between rounded-full font-medium text-xs">
-                    5
+                    {!isLoading &&
+                      messages?.messages?.filter((message) => !message.hasRead)
+                        .length}
                   </span>
                   <span className="hover:font-white  transition-opacity duration-300">
                     Notifications
                   </span>
                 </span>
               </div>
-              {showNotification && <Notification scrollActive={scrollActive} />}
+              {showNotification && (
+                <Notification
+                  scrollActive={scrollActive}
+                  messages={messages}
+                  conversations={conversations}
+                />
+              )}
 
               <div
                 className={

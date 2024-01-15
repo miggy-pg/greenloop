@@ -12,11 +12,9 @@ const Chat = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [file, setFile] = useState([]);
-  const [showFile, setShowFile] = useState(false);
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState({});
   const [message, setMessage] = useState("");
-  // const [messageImage, setMessageImage] = useState("");
   const [users, setUsers] = useState([]);
   const [socket, setSocket] = useState(null);
   const messageRef = useRef(null);
@@ -128,15 +126,15 @@ const Chat = () => {
       conversationId: messages?.conversationId,
       senderId: user?.id,
       message,
-      image: file,
       receiverId: messages?.receiver?.receiverId,
     };
+    file.length > 0 && (messageForm.image = file);
+
     const { data } = await sendUserMessage(messageForm);
     setFile([]);
   };
 
   console.log("user: ", user);
-
   return (
     <div
       className="w-full h-[100dvh]   overflow-hidden bg-[#F8F8F8]"
@@ -241,10 +239,7 @@ const Chat = () => {
                             <div className="flex text-left justify-end">
                               <span className="bg-gray-200 rounded-3xl px-5">
                                 <p className="text-sm text-blue py-3">
-                                  {/* {message.msg} */}
-                                  {
-                                    "Ipsum irure nulla sit dolore exercitation nostrud irure commodo."
-                                  }
+                                  {message.msg}
                                 </p>
                               </span>
                             </div>

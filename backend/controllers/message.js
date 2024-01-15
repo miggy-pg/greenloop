@@ -12,12 +12,14 @@ exports.message = async (req, res) => {
       image,
       receiverId = "",
     } = req.body;
-
-    const result = await Cloudinary.uploader.upload(image, {
-      folder: "conversations/messages",
-      width: 300,
-      crop: "scale",
-    });
+    let result = null;
+    if (image?.length > 0) {
+      result = await Cloudinary.uploader.upload(image, {
+        folder: "conversations/messages",
+        width: 300,
+        crop: "scale",
+      });
+    }
 
     if (!senderId || !message)
       return res.status(400).send("Please fill all required fields");
@@ -29,13 +31,16 @@ exports.message = async (req, res) => {
       const newMessage = new Messages({
         conversationId: newCoversation._id,
         senderId,
-        image: {
-          public_id: result.public_id,
-          url: result.secure_url,
-        },
+
         message,
       });
-      console.log("newMessage: ", newMessage);
+      if (image?.length) {
+        newMessage.image = {
+          public_id: result.public_id,
+          url: result.secure_url,
+        };
+      }
+
       await newMessage.save();
       return res.status(200).send("Message sent successfully");
     } else if (!conversationId && !receiverId) {
@@ -45,11 +50,13 @@ exports.message = async (req, res) => {
       conversationId,
       senderId,
       message,
-      image: {
+    });
+    if (image?.length) {
+      newMessage.image = {
         public_id: result.public_id,
         url: result.secure_url,
-      },
-    });
+      };
+    }
     await newMessage.save();
     res.status(200).send("Message sent successfully");
   } catch (error) {
@@ -64,14 +71,17 @@ exports.conversationMessage = async (req, res) => {
       const messageUserData = Promise.all(
         messages.map(async (message) => {
           const user = await Users.findById(message.senderId);
-          console.log("message: ", message);
+          console.log("userConversationMessage: ", user);
+          console.log("messageConversationMessage: ", message);
           return {
             user: {
               id: user._id,
               email: user.email,
               companyName: user.companyName,
+              image: user.image,
             },
-            message: { msg: message.message, msgImage: message.image },
+            hasRead: message.hasRead,
+            message: { msg: message.message, msgImage: message?.image },
           };
         })
       );

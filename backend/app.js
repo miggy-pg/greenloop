@@ -68,7 +68,7 @@ io.on("connection", (socket) => {
       console.log("sender: ", sender);
       const user = await Users.findById(senderId);
       console.log("sender :>> ", sender, receiver);
-      console.log("message: ", message);
+      console.log("messageSocket: ", message);
       if (receiver) {
         io.to(receiver.socketId)
           .to(sender.socketId)
