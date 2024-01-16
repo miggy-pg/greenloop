@@ -21,9 +21,10 @@ const Notification = ({ scrollActive, messages, conversations }) => {
         Notifications
       </div>
       <div>
-        {conversations
-          .map((conversation) => conversation.conversationId)
-          .includes(messages.conversationId) &&
+        {conversations.length > 0 &&
+          conversations
+            .map((conversation) => conversation.conversationId)
+            .includes(messages.conversationId) &&
           messages.messages.map((message) => {
             console.log("messageChat: ", message);
             return (
@@ -66,6 +67,15 @@ const Notification = ({ scrollActive, messages, conversations }) => {
               )
             );
           })}
+        {!conversations.length && (
+          <div className="flex px-4 py-3">
+            <div className="w-full pl-3">
+              <div className="text-gray-500 font-normal text-sm mb-1.5 text-center">
+                No new notifications
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

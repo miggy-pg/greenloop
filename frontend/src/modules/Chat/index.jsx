@@ -48,12 +48,12 @@ const Chat = () => {
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
     const fetchConversations = async () => {
-      const { data } = await getConversations(loggedInUser?.id);
+      const { data } = await getConversations(loggedInUser?.id, receiverId);
       setConversations(data);
       console.log("conversationData: ", data);
     };
     fetchConversations();
-  }, []);
+  }, [receiverId]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -135,6 +135,7 @@ const Chat = () => {
   };
 
   console.log("user: ", user);
+  console.log("conversationChecking: ", conversations);
   return (
     <div
       className="w-full h-[100dvh]   overflow-hidden bg-[#F8F8F8]"

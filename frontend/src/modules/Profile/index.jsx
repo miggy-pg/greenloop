@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { IoFilter, IoSwapVerticalSharp } from "react-icons/io5";
 
@@ -9,9 +9,11 @@ import SortByCard from "../../components/SortByCard";
 import defaultImage from "../../assets/default-image.jpg";
 import { fetchUser } from "../../api/user";
 import { updateProfile } from "../../api/user";
+import { createConversation } from "../../api/conversation";
 
 const Profile = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [userData, setUser] = useState({
     companyName: "",
@@ -40,6 +42,12 @@ const Profile = () => {
 
   const onChange = (e) => {
     setUser({ ...userData, [e.target.name]: e.target.value });
+  };
+
+  const messageCompany = () => {
+    createConversation(jwtDecode(token).userId, id);
+
+    navigate(`/chats?id=${id}`);
   };
 
   const onSubmit = async (e) => {
@@ -111,12 +119,12 @@ const Profile = () => {
                 Edit Profile
               </span>
             ) : (
-              <Link
-                to={`/chats?id=${id}`}
+              <span
+                onClick={messageCompany}
                 className="text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full text-sm px-10 py-1 text-center inline-flex items-center"
               >
                 Message
-              </Link>
+              </span>
             )}
 
             {showModal ? (

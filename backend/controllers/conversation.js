@@ -1,19 +1,37 @@
 const Conversations = require("../models/Conversations");
 const Users = require("../models/Users");
 
+/**
+ *
+ * @returns {Conversations} object with members: [senderId, receiverId]
+ *
+ * NOTE: This function is not used for this project
+ */
 exports.conversation = async (req, res) => {
   try {
     const { senderId, receiverId } = req.body;
-    const newCoversation = new Conversations({
-      members: [senderId, receiverId],
+    const conversations = await Conversations.find({
+      members: { $in: [receiverId] },
     });
-    await newCoversation.save();
-    res.status(200).send("Conversation created successfully");
+    console.log("creatingConversation: ", conversations);
+    if (!conversations.length) {
+      const newCoversation = new Conversations({
+        members: [senderId, receiverId],
+      });
+      await newCoversation.save();
+      res.status(200).send("Conversation created successfully");
+    }
   } catch (error) {
     console.log(error, "Error");
   }
 };
 
+/**
+ * Generate conversation between sender and receiver without selecting a user
+ *
+ * @param {receivedId} request query sent to url directly without form
+ * @returns {any}
+ */
 exports.userConversations = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -21,7 +39,7 @@ exports.userConversations = async (req, res) => {
       members: { $in: [userId] },
     });
     console.log("userId", userId);
-    console.log("conversations", conversations);
+    console.log("conversationsIn Converastion", conversations);
     const conversationUserData = Promise.all(
       conversations.map(async (conversation) => {
         const receiverId = conversation.members.find(
