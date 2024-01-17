@@ -9,7 +9,12 @@ const Notification = ({ scrollActive, messages, conversations }) => {
 
   const user = JSON.parse(localStorage.getItem("user:detail"));
 
-  console.log("NotificationUser: ", user);
+  const userConversation = conversations
+    .map((conversation) => conversation.conversationId)
+    .includes(messages.conversationId);
+
+  console.log("userConversation: ", userConversation);
+  console.log("userMessages: ", messages);
   return (
     <div
       className={`z-50 max-w-sm my-4 fixed ${
@@ -22,9 +27,7 @@ const Notification = ({ scrollActive, messages, conversations }) => {
       </div>
       <div>
         {conversations.length > 0 &&
-          conversations
-            .map((conversation) => conversation.conversationId)
-            .includes(messages.conversationId) &&
+          userConversation &&
           messages.messages.map((message) => {
             console.log("messageChat: ", message);
             return (

@@ -12,6 +12,7 @@ exports.message = async (req, res) => {
       image,
       receiverId = "",
     } = req.body;
+
     let result = null;
     if (image?.length > 0) {
       result = await Cloudinary.uploader.upload(image, {
@@ -68,6 +69,8 @@ exports.conversationMessage = async (req, res) => {
   try {
     const checkMessages = async (conversationId) => {
       const messages = await Messages.find({ conversationId });
+      console.log("messagesConversationMessage: ", messages);
+      console.log("messagesconversationId: ", conversationId);
       const messageUserData = Promise.all(
         messages.map(async (message) => {
           const user = await Users.findById(message.senderId);
@@ -88,6 +91,7 @@ exports.conversationMessage = async (req, res) => {
       res.status(200).json(await messageUserData);
     };
     const conversationId = req.params.conversationId;
+    console.log("");
     if (conversationId === "new") {
       const checkConversation = await Conversations.find({
         members: { $all: [req.query.senderId, req.query.receiverId] },

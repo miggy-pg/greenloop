@@ -19,14 +19,14 @@ const organizationType = [
 const Form = ({ isSignInPage = true }) => {
   const [orgtype, setOrgType] = useState(organizationType[0].value);
   const [userSignUp, setUserSignUp] = useState({
-      companyName: "",
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      province: "",
-      cityMunicipality: "",
-      organizationType: orgtype,
+    companyName: "",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    province: "",
+    cityMunicipality: "",
+    organizationType: orgtype,
   });
 
   const dispatch = useDispatch();
@@ -61,12 +61,11 @@ const Form = ({ isSignInPage = true }) => {
       if (res.data.token) {
         localStorage.setItem("user:token", res.data.token);
         localStorage.setItem("user:detail", JSON.stringify(res.data.user));
-        
-        dispatch(successLogin(res.data.user))
+
+        dispatch(successLogin(res.data.user));
         navigate("/");
       }
       if (res.status === 200) {
-
         setUserSignUp({
           companyName: "",
           username: "",
@@ -76,12 +75,11 @@ const Form = ({ isSignInPage = true }) => {
           province: "",
           cityMunicipality: "",
           organizationType: orgtype,
-        })
-      } 
+        });
+      }
     }
   };
-
-
+  console.log("userSignIn: ", userSignIn);
   return (
     <div className="h-screen flex items-center">
       <div className="flex flex-col shadow-lg justify-center w-2/4 h-4/5 items-center md:flex-row md:items-start max-w-6xl mx-auto">
@@ -116,34 +114,45 @@ const Form = ({ isSignInPage = true }) => {
               className="flex flex-col items-center w-full  "
               onSubmit={(e) => handleSubmit(e)}
             >
-             { isSignInPage && <>
-             <Input
-                id="username"
-                type="text"
-                name="username"
-                placeholder="username"
-                className="mb-6 w-[75%]"
-                defaultValue={userSignIn.username}
-                onChange={(e) => setUserSignIn(currSign=> ({...currSign, [e.target.id]: e.target.value}))}
-              />
-              <Input
-                id="password"
-                type="password"
-                name="password"
-                placeholder="password"
-                className="mb-1 w-[75%]"
-                defaultValue={userSignIn.password}
-                onChange={(e) => setUserSignIn(currSign=> ({...currSign, [e.target.id]: e.target.value}))}
-                />
+              {isSignInPage && (
+                <>
+                  <Input
+                    id="username"
+                    type="text"
+                    name="username"
+                    placeholder="username"
+                    className="mb-6 w-[75%]"
+                    value={userSignIn.username}
+                    onChange={(e) =>
+                      setUserSignIn((currSign) => ({
+                        ...currSign,
+                        [e.target.id]: e.target.value,
+                      }))
+                    }
+                  />
+                  <Input
+                    id="password"
+                    type="password"
+                    name="password"
+                    placeholder="password"
+                    className="mb-1 w-[75%]"
+                    value={userSignIn.password}
+                    onChange={(e) =>
+                      setUserSignIn((currSign) => ({
+                        ...currSign,
+                        [e.target.id]: e.target.value,
+                      }))
+                    }
+                  />
                 </>
-                }
+              )}
               {!isSignInPage && (
                 <>
                   <Input
                     name="companyName"
                     placeholder="company name"
                     className="mb-6 w-[75%]"
-                    defaultValue={userSignUp.companyName}
+                    value={userSignUp.companyName}
                     onChange={(e) => formOnChange(e)}
                   />
                   <Input
@@ -151,7 +160,7 @@ const Form = ({ isSignInPage = true }) => {
                     type="email"
                     placeholder="email"
                     className="mb-6 w-[75%]"
-                    defaultValue={userSignUp.email}
+                    value={userSignUp.email}
                     onChange={(e) => formOnChange(e)}
                   />
                   <Input
@@ -160,7 +169,7 @@ const Form = ({ isSignInPage = true }) => {
                     name="username"
                     placeholder="username"
                     className="mb-6 w-[75%]"
-                    defaultValue={userSignUp.username}
+                    value={userSignUp.username}
                     onChange={(e) => formOnChange(e)}
                   />
                   <Input
@@ -169,7 +178,7 @@ const Form = ({ isSignInPage = true }) => {
                     name="password"
                     placeholder="password"
                     className="mb-1 w-[75%]"
-                    defaultValue={userSignUp.password}
+                    value={userSignUp.password}
                     onChange={(e) => formOnChange(e)}
                   />
                   <Input
@@ -178,14 +187,14 @@ const Form = ({ isSignInPage = true }) => {
                     name="confirmPassword"
                     placeholder="confirm password"
                     className="mt-5 w-[75%]"
-                    defaultValue={userSignUp.confirmPassword}
+                    value={userSignUp.confirmPassword}
                     onChange={(e) => formOnChange(e)}
                   />
                   <select
                     id="organization-type"
                     name="organizationType"
                     onChange={(event) => handleSelectChange(event)}
-                    defaultValue={orgtype}
+                    value={orgtype}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block w-[75%] p-1.5 mt-5"
                   >
                     {organizationType.map((item, index) => (
@@ -200,7 +209,7 @@ const Form = ({ isSignInPage = true }) => {
                     name="province"
                     placeholder="province"
                     className="mt-6 w-[75%]"
-                    defaultValue={userSignUp.province}
+                    value={userSignUp.province}
                     onChange={(e) => formOnChange(e)}
                   />
 
@@ -210,7 +219,7 @@ const Form = ({ isSignInPage = true }) => {
                     name="cityMunicipality"
                     placeholder="city/municipality"
                     className="mt-6 w-[75%]"
-                    defaultValue={userSignUp.cityMunicipality}
+                    value={userSignUp.cityMunicipality}
                     onChange={(e) => formOnChange(e)}
                   />
                 </>
@@ -243,7 +252,7 @@ const Form = ({ isSignInPage = true }) => {
               )}{" "}
               <span
                 className="text-xs font-medium cursor-pointer  text-[#86A16E] no-underline"
-                onClick={() => 
+                onClick={() =>
                   navigate(`/users/${isSignInPage ? "sign-up" : "sign-in"}`)
                 }
               >
