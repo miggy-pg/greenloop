@@ -45,6 +45,8 @@ const Profile = () => {
   };
 
   const messageCompany = () => {
+    console.log("message company: ", id);
+    console.log("message userId: ", jwtDecode(token).userId);
     createConversation(jwtDecode(token).userId, id);
 
     navigate(`/chats?id=${id}`);
