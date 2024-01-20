@@ -14,6 +14,8 @@ exports.conversation = async (req, res) => {
       members: { $in: [receiverId] },
     });
     console.log("creatingConversation: ", conversations);
+    console.log("creatingConversationReceiverId: ", receiverId);
+    console.log("creatingConversationSenderId: ", senderId);
     if (!conversations.length) {
       const newCoversation = new Conversations({
         members: [senderId, receiverId],
