@@ -44,12 +44,9 @@ const Profile = () => {
     setUser({ ...userData, [e.target.name]: e.target.value });
   };
 
-  const messageCompany = () => {
-    console.log("message company: ", id);
-    console.log("message userId: ", jwtDecode(token).userId);
-    createConversation(jwtDecode(token).userId, id);
-
-    navigate(`/chats?id=${id}`);
+  const messageCompany = async () => {
+    const { data } = await createConversation(jwtDecode(token).userId, id);
+    navigate(`/chats?id=${data._id || data[0]._id}`);
   };
 
   const onSubmit = async (e) => {

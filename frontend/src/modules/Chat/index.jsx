@@ -20,7 +20,7 @@ const Chat = () => {
   const messageRef = useRef(null);
 
   const user = JSON.parse(localStorage.getItem("user:detail"));
-  const receiverId = searchParams.get("id");
+  const conversationId = searchParams.get("id");
 
   useEffect(() => {
     setSocket(io("http://localhost:8080"));
@@ -48,12 +48,12 @@ const Chat = () => {
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
     const fetchConversations = async () => {
-      const { data } = await getConversations(loggedInUser?.id, receiverId);
+      const { data } = await getConversations(loggedInUser?.id);
       setConversations(data);
       console.log("conversationData: ", data);
     };
     fetchConversations();
-  }, [receiverId]);
+  }, []);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -72,21 +72,26 @@ const Chat = () => {
 
   useEffect(() => {
     const getConversation = async () => {
-      if (receiverId) {
-        const conversationId = conversations[0].conversationId;
-        const receiverId = conversations[0].receiverId;
+      if (conversationId) {
+        const receiver = conversations.find(
+          (convo) => convo.conversationId === conversationId
+        );
         const { data } = await getMessages(
           conversationId,
           user?.id,
-          receiverId
+          receiver?.receiverId
         );
-        setMessages({ messages: data, receiverId, conversationId });
+        setMessages({
+          messages: data,
+          receiver: receiver.user,
+          conversationId,
+        });
       } else {
         setMessages({});
       }
     };
     getConversation();
-  }, [conversations, receiverId]);
+  }, [conversationId, conversations]);
   console.log("usersChat: ", users);
 
   const fetchImage = (e) => {
@@ -101,7 +106,7 @@ const Chat = () => {
   console.log("file: ", file);
 
   const fetchMessages = async (conversationId, receiver) => {
-    searchParams.set("id", receiver.receiverId);
+    searchParams.set("id", conversationId);
     setSearchParams(searchParams);
 
     const { data } = await getMessages(
@@ -110,6 +115,7 @@ const Chat = () => {
       receiver?.receiverId
     );
     console.log("dataFetch: ", data);
+    console.log("dataFetchReceiver: ", receiver);
     setMessages({ messages: data, receiver, conversationId });
   };
 
@@ -136,6 +142,7 @@ const Chat = () => {
 
   console.log("user: ", user);
   console.log("conversationChecking: ", conversations);
+  console.log("conversationmessages: ", messages);
   return (
     <div
       className="w-full h-[100dvh]   overflow-hidden bg-[#F8F8F8]"
@@ -153,6 +160,8 @@ const Chat = () => {
             <div>
               {conversations.length > 0 ? (
                 conversations.map(({ conversationId, user }) => {
+                  console.log("conversationIduser: ", user);
+                  console.log("conversatioconversationId: ", conversationId);
                   return (
                     <div
                       key={conversationId}

@@ -68,15 +68,20 @@ const Header = () => {
   useEffect(() => {
     try {
       const getConversation = async () => {
+        const allMessages = [];
+        const conv = conversations.map(
+          (convo) => !isLoading && console.log("convo: ", convo)
+        );
+        console.log("convgegs: ", conv);
         // if (receiverId) {
-        const conversationId = conversations[0].conversationId;
+        // const conversationId = conversations[0].conversationId;
         const receiverId = conversations[0].receiverId;
         const { data } = await getMessages(
           conversationId,
           user?.id,
           receiverId
         );
-        setMessages({ messages: data, receiverId, conversationId });
+        // setMessages({ messages: data, receiverId, conversationId });
         // } else {
         //   setMessages({});
         // }

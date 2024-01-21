@@ -4,25 +4,26 @@ const Users = require("../models/Users");
 /**
  *
  * @returns {Conversations} object with members: [senderId, receiverId]
- *
- * NOTE: This function is not used for this project
  */
 exports.conversation = async (req, res) => {
   try {
     const { senderId, receiverId } = req.body;
-    const conversations = await Conversations.find({
-      members: { $in: [receiverId] },
+    let conversations = await Conversations.find({
+      $or: [
+        { members: { $eq: [senderId, receiverId] } },
+        { members: { $eq: [receiverId, senderId] } },
+      ],
     });
-    console.log("creatingConversation: ", conversations);
-    console.log("creatingConversationReceiverId: ", receiverId);
-    console.log("creatingConversationSenderId: ", senderId);
     if (!conversations.length) {
-      const newCoversation = new Conversations({
+      const conversations = new Conversations({
         members: [senderId, receiverId],
       });
-      await newCoversation.save();
-      res.status(200).send("Conversation created successfully");
+      await conversations.save();
+      console.log("conversationsCreating", conversations);
+      res.status(200).json(conversations);
     }
+    console.log("conversationsGetting", conversations);
+    res.status(200).json(conversations);
   } catch (error) {
     console.log(error, "Error");
   }
