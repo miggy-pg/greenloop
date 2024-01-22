@@ -12,7 +12,6 @@ const Pagination = ({
     pageNumbers.push(i);
   }
 
-  console.log("pageCount: ", pageCount);
   return (
     <nav className="flex row-span-1">
       <button

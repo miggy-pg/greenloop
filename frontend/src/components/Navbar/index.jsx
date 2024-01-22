@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import {
@@ -18,6 +18,7 @@ import greenLoopLogo from "../../assets/images/greenLoop.png";
 import Notification from "../Notification";
 
 import { getConversations, getMessages } from "../../api/conversation";
+// import useOutsideClick from "../../hooks/useOutsideClick";
 
 const Header = () => {
   const [activeLink, setActiveLink] = useState(false);
@@ -31,9 +32,11 @@ const Header = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [conversations, setConversations] = useState([]);
-  const [messages, setMessages] = useState({});
+  const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const user = JSON.parse(localStorage.getItem("user:detail"));
+
+  const countMessages = useRef(0);
 
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
@@ -69,19 +72,21 @@ const Header = () => {
     try {
       const getConversation = async () => {
         const allMessages = [];
-        const conv = conversations.map(
-          (convo) => !isLoading && console.log("convo: ", convo)
-        );
-        console.log("convgegs: ", conv);
-        // if (receiverId) {
-        // const conversationId = conversations[0].conversationId;
-        const receiverId = conversations[0].receiverId;
-        const { data } = await getMessages(
-          conversationId,
-          user?.id,
-          receiverId
-        );
-        // setMessages({ messages: data, receiverId, conversationId });
+        !isLoading &&
+          conversations.map(async (convo) => {
+            const { data } = await getMessages(
+              convo.conversationId,
+              user?.id,
+              convo.receiverId
+            );
+            data.map((message) => {
+              if (!message.hasRead) {
+                allMessages.push(message);
+                countMessages.current = countMessages.current + 1;
+              }
+            });
+          });
+        setMessages(allMessages);
         // } else {
         //   setMessages({});
         // }
@@ -95,12 +100,15 @@ const Header = () => {
 
   console.log("messagesNavbar: ", messages);
   console.log("notificationNavbar: ", conversations);
+  console.log("countMessages: ", countMessages);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
       setScrollActive(window.scrollY > 10);
     });
   }, []);
+
+  console.log("scrollActive: ", showNotification);
 
   return (
     <>
@@ -257,9 +265,7 @@ const Header = () => {
                     <IoNotificationsSharp className="mb-1 mx-auto w-7 h-7 hover:font-white" />
                   )}
                   <span className="absolute top-0 right-2 bg-red-500 text-white w-5 h-5 text-center justify-between rounded-full font-medium text-xs">
-                    {!isLoading &&
-                      messages?.messages?.filter((message) => !message.hasRead)
-                        .length}
+                    {!isLoading && countMessages.current}
                   </span>
                   <span className="hover:font-white  transition-opacity duration-300">
                     Notifications
@@ -271,6 +277,7 @@ const Header = () => {
                   scrollActive={scrollActive}
                   messages={messages}
                   conversations={conversations}
+                  setShowNotification={setShowNotification}
                 />
               )}
 

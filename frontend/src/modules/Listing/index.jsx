@@ -7,7 +7,6 @@ import ListingCard from "../../components/ListingCard";
 import FilterCard from "../../components/FilterCard";
 import SortByCard from "../../components/SortByCard";
 import { fetchWastes } from "../../api/waste";
-import useOutsideClick from "../../../hooks/useOutsideClick";
 
 const PAGE_SIZE = 6;
 
@@ -111,11 +110,7 @@ const Listing = () => {
     getUser();
   }, []);
 
-  const close = () => setOpenName("");
-  // const ref = useOutsideClick(close);
-
-  if (pageCount <= 1) return null;
-  console.log("currentPosts: ", currentPosts);
+  // console.log("origWaste: ", origWaste.length?);
 
   return (
     <>
@@ -180,7 +175,7 @@ const Listing = () => {
 
         <div className="flex justify-center px-6">
           <div className="w-4/5 mt-10 grid gap-10 md:grid-cols-2 lg:gap-10 xl:grid-cols-3">
-            {origWaste.length > 0 ? (
+            {currentPosts.length ? (
               currentPosts.map((waste, index) => (
                 <ListingCard key={index} props={waste} />
               ))

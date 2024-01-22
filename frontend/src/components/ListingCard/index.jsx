@@ -2,7 +2,7 @@ import plasticColors from "../../utils/plasticColors";
 
 const ListingCard = ({ props }) => {
   const { image, post, wasteCategory } = props.waste;
-
+  console.log("propsWaste: ", props);
   const getColorClass = (text) => {
     return `[#4b443e}]` || "bg-[#E27A00]";
   };

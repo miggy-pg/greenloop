@@ -1,11 +1,21 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+// import useOutsideClick from "../../hooks/useOutsideClick";
 
-const Notification = ({ scrollActive, messages, conversations }) => {
+const Notification = ({
+  scrollActive,
+  messages,
+  conversations,
+  setShowNotification,
+}) => {
+  const ref = useRef();
+
   console.log("notificationsNavbar: ", conversations);
   // console.log(
   //   "conversationsNavbar: ",
   //   messages.map((conversation) => console.log())
   // );
+  // useOutsideClick(setShowNotification(false), ref);
 
   const user = JSON.parse(localStorage.getItem("user:detail"));
 
@@ -15,12 +25,25 @@ const Notification = ({ scrollActive, messages, conversations }) => {
 
   console.log("userConversation: ", userConversation);
   console.log("userMessages: ", messages);
+  console.log("refNotif: ", ref);
+
+  // useEffect(() => {
+  //   function handleClick(e) {
+  //     if (ref.current && !ref.current.contains(e.target)) {
+  //       setShowNotification(false);
+  //     }
+  //   }
+  //   document.addEventListener("click", handleClick, true);
+  //   return () => document.removeEventListener("click", handleClick, true);
+  // }, []);
+
   return (
     <div
+      id="notification-dropdown"
       className={`z-50 max-w-sm my-4 fixed ${
         scrollActive ? "top-[4.5rem]" : "top-[5rem]"
       } border h-96 overflow-y-auto text-base w-full list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg`}
-      id="notification-dropdown"
+      ref={ref}
     >
       <div className="block px-4 py-2 text-base font-medium text-center text-gray-700 bg-gray-50 ">
         Notifications
