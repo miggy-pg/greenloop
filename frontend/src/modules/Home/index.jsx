@@ -43,8 +43,8 @@ const Home = () => {
   console.log("sortedWaste: ", sortedWaste);
   if (isLoading) return;
   return (
-    <div className="bg-[#F8F8F8] w-full h-screen mt-12 py-14" id="homepage">
-      <div className="max-w-screen-md px-6 sm:px-8 lg:px-16 mx-auto flex flex-col text-center justify-center">
+    <div className="bg-[#F8F8F8]  w-full h-[100dvh] mt-12 py-14" id="homepage">
+      <div className="max-w-screen-md px-6 mx-auto flex flex-col text-center justify-center w-[40%] 2xl:w-[45%] xl:w-[55%] lg:w-[80%] lg:px-16 md:w-[90%] sm:px-8">
         {isLoggedIn && <GreetingCard user={user} />}
         <Link to="listing">
           <Card />

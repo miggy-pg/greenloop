@@ -126,66 +126,39 @@ const Header = () => {
       setScrollActive(window.scrollY > 10);
     });
 
-    width >= 767 ? setHideNotification(true) : setHideNotification(false);
+    width > 639 ? setHideNotification(true) : setHideNotification(false);
   }, [width]);
 
+  console.log("scrollActive: ", showNotification);
+  console.log("hideNotification: ", hideNotification);
   return (
     <>
       <header
-        className={`fixed lg:top-0 w-screen z-50 transition-all ${
-          !hideNotification && "bg-[#F8F8F8]"
+        className={
+          "fixed lg:top-0 w-screen z-50 transition-all" +
+          (scrollActive ? " shadow-md pt-0" : " pt-2")
         }
-        } ${scrollActive ? " shadow-md pt-0" : " pt-2"}`}
       >
-        <nav className="fixed grid z-30 px-6 md:border-0 sm:border-0 sm:justify-center border-gray-200 w-screen bg-[#F8F8F8]">
-          {!hideNotification && (
-            <div
-              className={`col-start-1 col-end-4 flex items-center pt-2 ${
-                hideNotification && " fixed z-100"
-              }`}
-            >
-              <img
-                src={greenLoopLogo}
-                className="h-[3.5rem] w-auto"
-                alt="green-loop logo"
+        <nav className="fixed grid z-30 px-6 md:border-b sm:border-0 w-screen sm:justify-center border-gray-200">
+          <div className="col-start-1 col-end-4 flex items-center pt-2">
+            <img
+              src={greenLoopLogo}
+              className="h-[3.5rem] w-auto"
+              alt="green-loop logo"
+            />
+            <div className="relative ml-5">
+              <input
+                type="text"
+                id="header-searchbox"
+                name="searchbox"
+                placeholder="Search here ..."
+                className="w-[20rem] sm:max-w-xs bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-grey-300 focus:outline-none h-10 p-4 pl-8 placeholder-grey-500 rounded-full text-sm"
               />
-              <div className="relative ml-5">
-                <input
-                  type="text"
-                  id="header-searchbox"
-                  name="searchbox"
-                  placeholder="Search here ..."
-                  className="w-[20rem] sm:max-w-xs bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-grey-300 focus:outline-none h-10 p-4 pl-8 placeholder-grey-500 rounded-full text-sm"
-                />
-                <FaSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none" />
-              </div>
+              <FaSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none" />
             </div>
-          )}
+          </div>
 
-          <div className="bg-[#31572C] max-h-[4.7rem] text-xl w-screen px-6 flex fixed md:py-1 md:text-2xl md:text-center md:justify-center md:h-[4rem] md:bottom-0 sm:h-[5rem] sm:items-center ">
-            {hideNotification && (
-              <div
-                className={`col-start-1 col-end-4 flex items-center pt-2 ${
-                  hideNotification ? " fixed z-100" : ""
-                }`}
-              >
-                <img
-                  src={greenLoopLogo}
-                  className="h-[3.5rem] w-auto"
-                  alt="green-loop logo"
-                />
-                <div className="relative ml-5">
-                  <input
-                    type="text"
-                    id="header-searchbox"
-                    name="searchbox"
-                    placeholder="Search here ..."
-                    className="w-[20rem] sm:max-w-xs bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-grey-300 focus:outline-none h-10 p-4 pl-8 placeholder-grey-500 rounded-full text-sm"
-                  />
-                  <FaSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none" />
-                </div>
-              </div>
-            )}
+          <div className="bg-[#31572C] max-h-[4.7rem] text-xl w-screen px-6 flex fixed md:py-1 md:text-2xl md:text-center md:justify-end md:h-[4rem] sm:h-[5rem] sm:items-center sm:justify-center sm:bottom-0">
             <ul className="flex relative">
               {Menus.map((menu, i) => {
                 if (
@@ -196,7 +169,7 @@ const Header = () => {
                     <div
                       key={i}
                       onClick={() => console.log("Button clicking")}
-                      className="md:px-[1.7rem] xsm:px-[1.5rem] text-[#8fb58b]"
+                      className="md:px-[1.3rem] sm:px-[2rem] xsm:px-[1.5rem] text-[#8fb58b]"
                     >
                       <span className="flex flex-col text-center items-center justify-center h-[4.7rem] sm:h-[5rem] sm:text-3xl lg:h-[3rem] w-full sm:w-auto">
                         {menu.icon}
@@ -208,7 +181,7 @@ const Header = () => {
                     <NavLink
                       key={i}
                       to={menu.route}
-                      className="md:px-[1.7rem] xsm:px-[1.5rem] text-[#8fb58b]"
+                      className="md:px-[1.3rem] sm:px-[2rem] xsm:px-[1.5rem] text-[#8fb58b]"
                     >
                       <span className="flex flex-col text-center items-center justify-center h-[4.7rem] sm:h-[5rem] sm:text-3xl lg:h-[3rem] w-full sm:w-auto">
                         {menu.icon}

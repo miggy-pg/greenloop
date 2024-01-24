@@ -1,15 +1,17 @@
-import Form from "./modules/Form";
-import Layout from "./components/Layout";
 import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom";
+
+import { ToastContainer } from "react-toastify";
+
+import Layout from "./components/Layout";
+import Form from "./modules/Form";
 import Home from "./modules/Home";
-import "./App.css";
 import Listing from "./modules/Listing";
 import Post from "./modules/Post";
 import Profile from "./modules/Profile";
-import { ToastContainer } from "react-toastify";
-import { useContext } from "react";
 import Chat from "./modules/Chat";
 import Users from "./modules/Users";
+
+import "./App.css";
 
 const ProtectedRoute = ({ children, auth = false }) => {
   const isLoggedIn = localStorage.getItem("user:token") !== null || false;
