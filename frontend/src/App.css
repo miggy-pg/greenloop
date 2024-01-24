@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .active {
-  @apply block text-white;
+  @apply bg-[#31572C] text-white max-h-[5rem] h-[5rem] md:rounded-t-lg md:h-[5rem] sm:pt-0 hover:text-white;
 }

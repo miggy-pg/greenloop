@@ -44,7 +44,8 @@ const Menus = [
 const Header = () => {
   const [scrollActive, setScrollActive] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
-  const [hideNotification, setHideNotification] = useState(false);
+  const [hideModals, setHideModals] = useState(false);
+  const [hideMenuLabels, setHideMenuLabels] = useState(false);
   const [isHoveredSettings, setHoveredSettings] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -126,22 +127,27 @@ const Header = () => {
       setScrollActive(window.scrollY > 10);
     });
 
-    width >= 767 ? setHideNotification(true) : setHideNotification(false);
+    width > 767 ? setHideModals(true) : setHideModals(false);
+    width > 900 ? setHideMenuLabels(true) : setHideMenuLabels(false);
   }, [width]);
 
   return (
     <>
       <header
         className={`fixed lg:top-0 w-screen z-50 transition-all ${
-          !hideNotification && "bg-[#F8F8F8]"
-        }
-        } ${scrollActive ? " shadow-md pt-0" : " pt-2"}`}
+          !hideModals && "bg-[#F8F8F8] "
+        } ${scrollActive && " shadow-md pt-0"} 
+        }`}
       >
-        <nav className="fixed grid z-30 px-6 md:border-0 sm:border-0 sm:justify-center border-gray-200 w-screen bg-[#F8F8F8]">
-          {!hideNotification && (
+        <nav
+          className={`fixed grid z-30 px-6 h-[5rem] text-center top-0 border-gray-200 w-screen bg-[#F8F8F8] md:justify-center md:border-0 ${
+            scrollActive && " shadow-md pt-0"
+          } `}
+        >
+          {!hideModals && (
             <div
-              className={`col-start-1 col-end-4 flex items-center pt-2 ${
-                hideNotification && " fixed z-100"
+              className={`col-start-1 col-end-4 flex items-center ${
+                hideModals && " fixed z-100"
               }`}
             >
               <img
@@ -155,51 +161,59 @@ const Header = () => {
                   id="header-searchbox"
                   name="searchbox"
                   placeholder="Search here ..."
-                  className="w-[20rem] sm:max-w-xs bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-grey-300 focus:outline-none h-10 p-4 pl-8 placeholder-grey-500 rounded-full text-sm"
+                  className="w-[20rem] sm:max-w-xs bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-sm"
                 />
                 <FaSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none" />
               </div>
             </div>
           )}
 
-          <div className="bg-[#31572C] max-h-[4.7rem] text-xl w-screen px-6 flex fixed md:py-1 md:text-2xl md:text-center md:justify-center md:h-[4rem] md:bottom-0 sm:h-[5rem] sm:items-center ">
-            {hideNotification && (
+          <div className="bg-white max-h-[5rem] items-center h-[5rem] text-xl w-screen px-6 flex fixed md:border-t-[1px] md:shadow-md md:py-1 md:text-2xl md:text-center md:justify-center md:h-[5rem] md:bottom-0 sm:items-center ">
+            {hideModals && (
               <div
-                className={`col-start-1 col-end-4 flex items-center pt-2 ${
-                  hideNotification ? " fixed z-100" : ""
+                className={`flex items-center md:pt-2 h-[5rem] ${
+                  hideModals ? " fixed z-100" : ""
                 }`}
               >
                 <img
                   src={greenLoopLogo}
-                  className="h-[3.5rem] w-auto"
+                  className="h-[3.5rem] w-auto items-center lg:h-12"
                   alt="green-loop logo"
                 />
-                <div className="relative ml-5">
+                <div className="relative items-center lg:pt-1 ml-5 lg:h-12">
                   <input
                     type="text"
                     id="header-searchbox"
                     name="searchbox"
                     placeholder="Search here ..."
-                    className="w-[20rem] sm:max-w-xs bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-grey-300 focus:outline-none h-10 p-4 pl-8 placeholder-grey-500 rounded-full text-sm"
+                    className="w-[20rem] h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-sm bg-[#FEFEFE] border border-[#CACACA] md:max-w-xs lg:w-[15rem] lg:h-6 focus:bg-white focus:border-gray-300 focus:outline-none"
                   />
-                  <FaSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none" />
+                  <FaSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none lg:top-4" />
                 </div>
               </div>
             )}
-            <ul className="flex relative">
+
+            <ul className="flex relative justify-end w-screen h-[5rem] items-center md:justify-center md:text-2xl">
               {Menus.map((menu, i) => {
                 if (
-                  (hideNotification && menu.name.includes("Notifications")) ||
-                  (hideNotification && menu.name.includes("Settings"))
+                  (hideModals && menu.name.includes("Notifications")) ||
+                  (hideModals && menu.name.includes("Settings"))
                 ) {
                   return (
                     <div
                       key={i}
                       onClick={() => console.log("Button clicking")}
-                      className="md:px-[1.7rem] xsm:px-[1.5rem] text-[#8fb58b]"
+                      className="px-6 text-[#31572C] cursor-pointer lg:px-6 md:px-[1.7rem] xsm:px-[1.5rem] hover:text-white hover:bg-[#5e8759] duration-200"
                     >
-                      <span className="flex flex-col text-center items-center justify-center h-[4.7rem] sm:h-[5rem] sm:text-3xl lg:h-[3rem] w-full sm:w-auto">
+                      <span className="flex flex-col text-center items-center justify-center w-full  h-[5rem] sm:text-3xl">
                         {menu.icon}
+                        {hideMenuLabels && (
+                          <span
+                            className={`text-sm lg:text-[0.7rem] translate-y-1 duration-200`}
+                          >
+                            {menu.name}
+                          </span>
+                        )}
                       </span>
                     </div>
                   );
@@ -208,10 +222,18 @@ const Header = () => {
                     <NavLink
                       key={i}
                       to={menu.route}
-                      className="md:px-[1.7rem] xsm:px-[1.5rem] text-[#8fb58b]"
+                      className="px-6 text-[#31572C] h-[5rem] lg:px-6 md:h-[5rem] md:px-[1.7rem] xsm:px-[1.5rem] hover:text-white hover:bg-[#5e8759] duration-200"
                     >
-                      <span className="flex flex-col text-center items-center justify-center h-[4.7rem] sm:h-[5rem] sm:text-3xl lg:h-[3rem] w-full sm:w-auto">
+                      <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] md:h-[5rem] sm:text-3xl">
                         {menu.icon}
+
+                        {hideMenuLabels && (
+                          <span
+                            className={`text-sm lg:text-[0.7rem] translate-y-1 duration-200`}
+                          >
+                            {menu.name}
+                          </span>
+                        )}
                       </span>
                     </NavLink>
                   );

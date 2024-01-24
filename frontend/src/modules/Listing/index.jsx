@@ -115,16 +115,10 @@ const Listing = () => {
   return (
     <>
       <div className="grid w-full py-6 overflow-x-hidden bg-white" id="listing">
-        <div className="max-w-screen-lg flex flex-col text-center justify-center">
-          <div className="bg-[#4F772D] w-screen shadow-sm">
-            <div className="items-center justify-between lg:flex">
-              <div className="flex h-[13rem] pl-[8rem] pt-14 px-4 lg:mb-0 text-left justify-center items-center">
-                <p className="text-6xl font-normal ml-20 text-white">
-                  WASTE LISTING
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="bg-[#4F772D] w-screen shadow-sm flex h-[13rem] pt-14 px-4 text-left justify-start items-center pl-[5rem] lg:mb-0 md:pl-0">
+          <p className="text-6xl font-normal lg:ml-20 text-white md:text-[3rem]">
+            WASTE LISTING
+          </p>
         </div>
         <div className="flex justify-center pt-10">
           <div className="w-4/5 mt-10 grid md:grid-cols-2">
@@ -173,8 +167,8 @@ const Listing = () => {
           </div>
         </div>
 
-        <div className="flex justify-center px-6">
-          <div className="w-4/5 mt-10 grid gap-10 md:grid-cols-2 lg:gap-10 xl:grid-cols-3">
+        <div className="flex justify-center px-6 md:px-0">
+          <div className="w-4/5 mt-10 grid gap-10 lg:grid-cols-1 2xl:w-[45%] xl:grid-cols-3 xl:w-[55%] lg:w-[80%] md:w-[90%] lg:px-16 lg:gap-10">
             {currentPosts.length ? (
               currentPosts.map((waste, index) => (
                 <ListingCard key={index} props={waste} />
