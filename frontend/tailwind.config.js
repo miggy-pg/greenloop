@@ -10,6 +10,7 @@ export default {
       sm: { max: "639px" },
       xsm: { max: "522px" },
     },
+
     extend: {},
   },
   plugins: [],

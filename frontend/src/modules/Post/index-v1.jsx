@@ -63,13 +63,10 @@ const Post = () => {
   };
 
   return (
-    <div
-      className="bg-[#F8F8F8] w-screen h-screen pt-[9rem] pb-11 md:pt-[7rem] md:pb-7"
-      id="post"
-    >
-      <div className="w-screen px-[15rem] flex flex-col text-center justify-center xl:px-[12rem] lg:px-[9rem] md:px-[5rem] sm:px-[2rem]">
+    <div className="bg-[#F8F8F8] w-full h-screen pt-[9rem] pb-11" id="post">
+      <div className="max-w-screen-md px-6 mx-auto flex flex-col w-full text-center justify-center lg:px-16 sm:px-8">
         <form onSubmit={(e) => handleSubmit(e)} encType="multipart/form-data">
-          <div className="bg-white border w-[60%] justify-center items-center mx-auto border-gray-200 px-12 shadow-sm rounded-3xl xl:w-[80%] lg:w-[90%] md:w-full md:px-4 ">
+          <div className="bg-white border border-gray-200 px-12 shadow-sm rounded-3xl  ">
             <article className="p-6">
               <footer className="flex justify-center items-center">
                 <div className="flex items-center mb-5">
@@ -91,7 +88,7 @@ const Post = () => {
               <div className="grid">
                 <select
                   id="postCategory"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-2/5 p-2.5 md:w-[10rem]"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-2/5 p-2.5"
                   onChange={handleCategoryChange}
                 >
                   <option value="">Select an option</option>
@@ -112,7 +109,7 @@ const Post = () => {
               />
             ) : (
               <>
-                <div className="relative w-full h-[20rem] border-dashed border-[#e9e4e4] border-2 bg-white rounded-lg flex justify-center items-center mb-5 md:h-[12rem]">
+                <div className="relative w-full h-[20rem] border-dashed border-[#e9e4e4] border-2 bg-white rounded-lg flex justify-center items-center mb-5">
                   <input
                     type="file"
                     id="image-upload"
