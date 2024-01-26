@@ -30,13 +30,13 @@ const PostCard = ({ props }) => {
               <p className="inline-flex items-center mr-3 text-sm font-semibold text-black">
                 <Link to={`profile/${user?._id}`}>
                   <img
-                    className="w-11 h-11 mr-5 rounded-full cursor-pointer hover:opacity-80"
+                    className="w-11 h-11 mr-5 rounded-full cursor-pointer hover:opacity-80 xsm:w-9 xsm:h-9 xsm:mr-3"
                     src=""
                     alt="Jese avatar"
                   />
                 </Link>
                 <Link
-                  className="hover:underline cursor-pointer"
+                  className="hover:underline cursor-pointer xsm:text-[0.8rem]"
                   to={`profile/${user?._id}`}
                 >
                   {user?.companyName ? user.companyName : "User"}
@@ -44,22 +44,22 @@ const PostCard = ({ props }) => {
               </p>
             </div>
           </footer>
-          <p className="text-gray-900 text-left">{post}</p>
-          <div className="w-4/5 flex flex-wrap mt-3">
+          <p className="text-gray-900 text-left xsm:text-[0.7rem]">{post}</p>
+          <div className="flex flex-wrap mt-3">
             <p
-              className={`text-black text-left py-1 text-[0.7rem] mx-3 rounded-full border ${transformedTexts} m-1 p-3`}
+              className={`text-black text-left py-1 text-[0.7rem] rounded-full border ${transformedTexts} p-3 xsm:text-[0.6rem]`}
             >
               {wasteCategory}
             </p>
           </div>
         </article>
-        <div className="h-[18rem] flex items-center justify-between lg:justify-evenly">
+        <div className="h-[18rem] flex items-center justify-between lg:justify-evenly xsm:h-[10rem] 2xsm:h-[8rem]">
           <div className="w-screen border rounded-b-3xl">
             <img
               src={`http://localhost:8000/images/waste/${
                 image ? image : "defaultimage.jpg"
               }`}
-              className="object-cover w-full h-[18rem] rounded-b-3xl"
+              className="object-cover w-full h-[18rem] rounded-b-3xl xsm:h-[10rem] 2xsm:h-[8rem]"
             />
           </div>
         </div>

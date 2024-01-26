@@ -152,7 +152,7 @@ const Header = () => {
             >
               <img
                 src={greenLoopLogo}
-                className="h-[3.5rem] w-auto"
+                className="h-[3.5rem] w-auto 2xsm:w-[3rem] 2xsm:h-[3rem]"
                 alt="green-loop logo"
               />
               <div className="relative ml-5">
@@ -161,14 +161,14 @@ const Header = () => {
                   id="header-searchbox"
                   name="searchbox"
                   placeholder="Search here ..."
-                  className="w-[20rem] sm:max-w-xs bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-sm"
+                  className="w-[20rem] bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-sm sm:max-w-xs xsm:w-[13rem] 2xsm:w-[12rem] 2xsm:h-4"
                 />
-                <FaSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none" />
+                <FaSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none 2xsm:top-2.5" />
               </div>
             </div>
           )}
 
-          <div className="bg-white max-h-[5rem] items-center h-[5rem] text-xl w-fill px-2 flex fixed md:border-t-[1px] md:shadow-md md:py-1 md:text-2xl md:text-center md:justify-center md:h-[5rem] md:bottom-0 sm:h-[3rem] sm:items-center ">
+          <div className="bg-white max-h-[5rem] items-center h-[5rem] text-xl w-fill px-2 flex fixed md:border-t-[1px] md:shadow-md md:py-1 md:text-2xl md:text-center md:justify-center md:h-[5rem] md:bottom-0 sm:h-[3rem] sm:items-center xsm:px-0 2xsm:px-0">
             {hideModals && (
               <div
                 className={`flex items-center md:pt-2 h-[5rem] ${
@@ -186,7 +186,7 @@ const Header = () => {
                     id="header-searchbox"
                     name="searchbox"
                     placeholder="Search here ..."
-                    className="w-[20rem] h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-sm bg-[#FEFEFE] border border-[#CACACA] md:max-w-xs lg:w-[15rem] lg:h-6 focus:bg-white focus:border-gray-300 focus:outline-none"
+                    className="w-[20rem] h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-sm bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none md:max-w-xs lg:w-[15rem] lg:h-6"
                   />
                   <FaSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none lg:top-4" />
                 </div>
@@ -203,7 +203,7 @@ const Header = () => {
                     <div
                       key={i}
                       onClick={() => console.log("Button clicking")}
-                      className="px-6 text-[#31572C] cursor-pointer lg:px-6 md:px-[1.7rem] sm:h-[3rem] xsm:px-[1.5rem] 2xsm:px-[1rem] hover:text-white hover:bg-[#5e8759] duration-200"
+                      className="px-6 text-[#31572C] h-[5rem] cursor-pointer lg:px-6 md:h-[5rem] md:px-[1.7rem] sm:h-[3rem] xsm:px-[1.5rem] 2xsm:px-[1rem] hover:text-white hover:bg-[#5e8759] duration-200"
                     >
                       <span className="flex flex-col text-center items-center justify-center w-full  h-[5rem] sm:text-3xl">
                         {menu.icon}
@@ -222,7 +222,7 @@ const Header = () => {
                     <NavLink
                       key={i}
                       to={menu.route}
-                      className="px-6 text-[#31572C] h-[5rem] lg:px-6 md:h-[5rem] md:px-[1.7rem] sm:h-[3rem] xsm:px-[1.5rem] 2xsm:px-[1rem] hover:text-white hover:bg-[#5e8759] duration-200"
+                      className="px-6 text-[#31572C] h-[5rem] cursor-pointer lg:px-6 md:h-[5rem] md:px-[1.7rem] sm:h-[3rem] xsm:px-[1.5rem] 2xsm:px-[1rem] hover:text-white hover:bg-[#5e8759] duration-200"
                     >
                       <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] md:h-[5rem] sm:h-[3rem] sm:text-xl">
                         {menu.icon}

@@ -1,20 +1,20 @@
-const GreetingCard = ({user}) =>{
+const GreetingCard = ({ user }) => {
   return (
     <div className="p-4 bg-gradient-to-r from-[#50792D] to-[#66A62E] border border-gray-200 shadow-sm rounded-3xl my-2">
       <div className="items-center justify-between lg:flex">
-        <div className="flex h-[10rem] py-5 px-4 lg:mb-0 text-left justify-center items-center">
+        <div className="flex h-[12rem] py-5 px-8 text-left justify-start items-center lg:mb-0 lg:px-3 sm:h-[5rem] xsm:px-3 xsm:h-[4rem]">
           <div>
-            <h3 className="mb-2 text-2xl font-normal text-white">
+            <h3 className="text-3xl font-normal text-white lg:text-2xl sm:text-xl xsm:text-sm xsm:leading-3">
               Welcome back,
             </h3>
-            <span className="text-4xl font-bold text-white">
+            <h2 className="text-5xl font-bold text-white sm:text-3xl sm:leading-8 xsm:text-2xl">
               {user?.companyName}
-            </span>
+            </h2>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default GreetingCard
+export default GreetingCard;

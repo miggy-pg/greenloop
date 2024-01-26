@@ -124,7 +124,7 @@ const Listing = () => {
           </p>
         </div>
         <div className="flex justify-center pt-10 md:pt-3 2xsm:pt-0">
-          <div className="mt-10 grid md:grid-cols-2">
+          <div className="w-4/5 mt-10 grid md:grid-cols-2">
             <div className="flex ml-5 py-3">
               {filterValue && (
                 <>
@@ -135,7 +135,7 @@ const Listing = () => {
                       className="absolute pl-2 pt-1 focus:outline-none"
                       onClick={handleClearFilter}
                     >
-                      <IoClose className="text-gray-500" />
+                      <IoClose className="text-gray-500 hover:text-red-500" />
                     </button>
                   </span>
                 </>
@@ -157,13 +157,13 @@ const Listing = () => {
             </div>
 
             {isFilter && (
-              <div className="absolute right-[30rem] top-[23rem] border border-green-500 sm:right-[20rem] sm:top-[15rem]">
+              <div className="absolute right-[30rem] top-[23rem] border border-green-500">
                 <FilterCard handleOnChangeFilter={handleOnChangeFilter} />
               </div>
             )}
 
             {isSortBy && (
-              <div className="absolute right-[30rem] top-[23rem] border border-green-500 sm:right-[20rem] sm:top-[15rem]">
+              <div className="absolute right-[30rem] top-[23rem] border border-green-500">
                 <SortByCard handleSortBy={handleSortBy} />
               </div>
             )}
@@ -171,7 +171,7 @@ const Listing = () => {
         </div>
 
         <div className="flex justify-center md:px-0">
-          <div className="mt-10 grid gap-10 px-32 grid-cols-3 lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:gap-2 md:grid-cols-1 sm:px-4">
+          <div className="w-screen mt-10 grid gap-10 px-32 grid-cols-3 lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:gap-2 md:grid-cols-1 sm:px-4">
             {currentPosts.length ? (
               currentPosts.map((waste, index) => (
                 <ListingCard key={index} props={waste} />
@@ -183,22 +183,22 @@ const Listing = () => {
             )}
           </div>
         </div>
-        {origWaste.length > 2 ? (
-          <div className="justify-center px-6 pb-10 sm:px-0 sm:pb-0 ">
-            <div className="items-center">
-              <Pagination
-                postsPerPage={postsPerPage}
-                totalPosts={origWaste.length}
-                paginate={paginate}
-                nextPage={nextPage}
-                prevPage={prevPage}
-                currentPage={currentPage}
-                pageCount={pageCount}
-              />
-            </div>
-          </div>
-        ) : null}
       </div>
+      {origWaste.length > 2 ? (
+        <div className="flex justify-center px-6 pb-10">
+          <div className="items-center">
+            <Pagination
+              postsPerPage={postsPerPage}
+              totalPosts={origWaste.length}
+              paginate={paginate}
+              nextPage={nextPage}
+              prevPage={prevPage}
+              currentPage={currentPage}
+              pageCount={pageCount}
+            />
+          </div>
+        </div>
+      ) : null}
     </>
   );
 };
