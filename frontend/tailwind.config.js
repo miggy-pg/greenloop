@@ -5,10 +5,11 @@ export default {
     screens: {
       "2xl": { max: "1535px" },
       xl: { max: "1279px" },
-      lg: { max: "1023px" },
-      md: { max: "767px" },
-      sm: { max: "639px" },
-      xsm: { max: "522px" },
+      lg: { max: "64em" },
+      md: { max: "48em" },
+      sm: { max: "40em" },
+      xsm: { max: "32em" },
+      "2xsm": { max: "24em" },
     },
 
     extend: {},

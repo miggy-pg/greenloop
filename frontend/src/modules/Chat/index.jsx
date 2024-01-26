@@ -21,6 +21,7 @@ const Chat = () => {
 
   const user = JSON.parse(localStorage.getItem("user:detail"));
   const conversationId = searchParams.get("id");
+  const mobile = true;
 
   useEffect(() => {
     setSocket(io("http://localhost:8080"));
@@ -144,224 +145,261 @@ const Chat = () => {
   console.log("conversationChecking: ", conversations);
   console.log("conversationmessages: ", messages);
   return (
-    <div
-      className="w-full h-[100dvh]   overflow-hidden bg-[#F8F8F8]"
-      id="profile"
-    >
-      <div className="flex border h-[100dvh] pt-20 border-grey rounded overflow-hidden shadow-lg">
-        <div className="w-1/4 border flex flex-col ">
-          <div className="py-2 px-2 bg-grey-lightest">
-            <span className="text-5xl text-gray-700 float-left px-5 py-5 font-semibold">
-              Chats
-            </span>
-          </div>
-
-          <div className="bg-grey-lighter flex-1">
-            <div>
-              {conversations.length > 0 ? (
-                conversations.map(({ conversationId, user }) => {
-                  console.log("conversationIduser: ", user);
-                  console.log("conversatioconversationId: ", conversationId);
-                  return (
-                    <div
-                      key={conversationId}
-                      className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => fetchMessages(conversationId, user)}
-                    >
-                      <img
-                        src=""
-                        className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                      />
-                      <div className="ml-6">
-                        <h3 className="text-lg font-semibold">
-                          {user?.companyName}
-                        </h3>
+    <div className="w-full h-[100dvh] bg-[#F8F8F8]" id="profile">
+      <div className="flex border h-[100dvh] pt-20 border-grey rounded shadow-lg">
+        {mobile ? (
+          <>
+            <div className="h-full">
+              <div className="relative mx-auto shadow-lg rounded-lg">
+                <div className="py-3 px-5 h-full">
+                  <h3 className="text-md font-semibold uppercase text-gray-400 mb-1">
+                    Chats
+                  </h3>
+                  <div className="divide-y divide-gray-200">
+                    <button className="w-full text-left py-8 sm:py-2 xsm:justify-start overflow-x-hidden">
+                      <div className="flex w-full items-center">
+                        <img
+                          className="rounded-full items-start flex-shrink-0 mr-5"
+                          src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
+                          width="64"
+                          height="64"
+                          alt="Marie Zulfikar"
+                        />
+                        <div>
+                          <h4 className="text-md font-semibold text-gray-900 2xsm:text-[0.7em] justify-start flex">
+                            Marie Zulfikar
+                          </h4>
+                          <div className="text-md 2xsm:text-[0.7em]">
+                            The video chat ended · 2hrs
+                          </div>
+                        </div>
                       </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="w-1/4 border flex flex-col ">
+              <div className="py-2 px-2 bg-grey-lightest">
+                <span className="text-5xl text-gray-700 float-left px-5 py-5 font-semibold">
+                  Chats
+                </span>
+              </div>
+
+              <div className="bg-grey-lighter flex-1">
+                <div>
+                  {conversations.length > 0 ? (
+                    conversations.map(({ conversationId, user }) => {
+                      console.log("conversationIduser: ", user);
+                      console.log(
+                        "conversatioconversationId: ",
+                        conversationId
+                      );
+                      return (
+                        <div
+                          key={conversationId}
+                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => fetchMessages(conversationId, user)}
+                        >
+                          <img
+                            src=""
+                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
+                          />
+                          <div className="ml-6">
+                            <h3 className="text-lg font-semibold">
+                              {user?.companyName}
+                            </h3>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center text-lg font-semibold mt-24">
+                      No Conversations
                     </div>
-                  );
-                })
-              ) : (
-                <div className="text-center text-lg font-semibold mt-24">
-                  No Conversations
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full overflow-hidden border flex flex-col ">
+              <div className="py-2 px-3 bg-grey-lighter flex flex-row justify-between items-center border-b">
+                <div className="flex items-center">
+                  <div className="flex mb-2">
+                    {messages?.receiver?.companyName && (
+                      <>
+                        <div className="cursor-pointer">
+                          <img
+                            src=""
+                            width={60}
+                            height={60}
+                            className="rounded-full"
+                          />
+                        </div>
+                        <div className="ml-6 mr-auto">
+                          <h3 className="text-lg">
+                            {messages?.receiver?.companyName}
+                          </h3>
+                        </div>
+                        <div className="cursor-pointer"></div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="h-[100dvh] w-full overflow-x-hidden shadow-sm">
+                <div className="py-2 px-3">
+                  <div className="flex justify-center mb-2">
+                    <p className="text-sm uppercase">
+                      {new Date().toUTCString().slice(5, 16)}
+                    </p>
+                  </div>
+
+                  <div className="flex justify-center mb-4">
+                    <div className="rounded py-2 px-4">
+                      <p className="text-xs">
+                        Messages to this chat and calls are now secured with
+                        end-to-end encryption.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-14">
+                  {messages?.messages?.length > 0 ? (
+                    messages.messages.map(({ message, user: { id } = {} }) => {
+                      return (
+                        <>
+                          {id === user?.id ? (
+                            <>
+                              <div
+                                className={`max-w-[35%]  rounded-b-xl p-2 mb-2 ${
+                                  id === user?.id
+                                    ? "bg-primary text-blue rounded-tl-xl ml-auto"
+                                    : "bg-secondary rounded-tr-xl"
+                                } `}
+                              >
+                                <div className="flex text-left justify-end">
+                                  <span className="bg-gray-200 rounded-3xl px-5">
+                                    <p className="text-sm text-blue py-3">
+                                      {message.msg}
+                                    </p>
+                                  </span>
+                                </div>
+                              </div>
+                              <div
+                                className={`max-w-[35%]  rounded-b-xl p-2 mb-2 ${
+                                  id === user?.id
+                                    ? "bg-primary text-blue rounded-tl-xl ml-auto"
+                                    : "bg-secondary rounded-tr-xl"
+                                } `}
+                              >
+                                <div className="flex text-right justify-end">
+                                  <img
+                                    src={message?.msgImage?.url}
+                                    className="rounded-lg"
+                                  />
+                                </div>
+                              </div>
+
+                              <div ref={messageRef}></div>
+                            </>
+                          ) : (
+                            <>
+                              <div
+                                className={`max-w-[35%] rounded-b-xl p-4 mb-6 ${
+                                  id === user?.id
+                                    ? "bg-primary text-blue rounded-tl-xl ml-auto"
+                                    : "bg-secondary rounded-tr-xl"
+                                } `}
+                              >
+                                <div className="flex flex-col-2 gap-4 text-right justify-start">
+                                  <span className="bg-green-500 text-sm">
+                                    <img
+                                      src="https://www.shutterstock.com/image-vector/young-man-anime-style-character-600nw-2313503433.jpg"
+                                      className="rounded-full w-12 h-12"
+                                    />
+                                  </span>
+                                  <span className="bg-yellow-500">
+                                    <p className="text-sm text-blue py-3">
+                                      {message.msg}
+                                    </p>
+                                  </span>
+                                </div>
+                              </div>
+                              <div
+                                className={`max-w-[35%] bg-red-500 rounded-b-xl p-4 mb-6 ${
+                                  id === user?.id
+                                    ? "bg-primary text-blue rounded-tl-xl ml-auto"
+                                    : "bg-secondary rounded-tr-xl"
+                                } `}
+                              >
+                                <div className="flex flex-col-2 gap-4 text-right justify-start">
+                                  <span className="bg-green-500 text-sm">
+                                    <img
+                                      src="https://www.shutterstock.com/image-vector/young-man-anime-style-character-600nw-2313503433.jpg"
+                                      className="rounded-full w-12 h-12"
+                                    />
+                                  </span>
+                                  <span className="bg-yellow-500">
+                                    <img
+                                      src={message?.msgImage?.url}
+                                      className="rounded-lg"
+                                    />
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div ref={messageRef}></div>
+                            </>
+                          )}
+                        </>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center text-lg font-semibold mt-24">
+                      No Messages or No Conversation Selected
+                    </div>
+                  )}
+                </div>
+              </div>
+              {messages?.conversationId && (
+                <div className="p-8 w-full flex items-center">
+                  <input
+                    type="file"
+                    id="image-upload"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => fetchImage(e)}
+                  />
+                  <label htmlFor="image-upload" className="cursor-pointer mr-2">
+                    <TbCirclePlus className="h-8 w-8 cursor-pointer" />
+                  </label>
+                  <Input
+                    id="message"
+                    placeholder="Type a message..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="w-[75%]"
+                    inputClassName="p-4 border-0 shadow-md rounded-full bg-light focus:ring-0 focus:border-0 outline-none"
+                  />
+                  <div
+                    className={`ml-4 p-2 cursor-pointer bg-light rounded-full ${
+                      !message && "pointer-events-none"
+                    }`}
+                    onClick={() => sendMessage()}
+                  >
+                    <TbSend className="h-8 w-8" />
+                  </div>
+                  <div className="ml-4 p-2 cursor-pointer bg-light rounded-full"></div>
                 </div>
               )}
             </div>
-          </div>
-        </div>
-
-        <div className="w-full overflow-hidden border flex flex-col ">
-          <div className="py-2 px-3 bg-grey-lighter flex flex-row justify-between items-center border-b">
-            <div className="flex items-center">
-              <div className="flex mb-2">
-                {messages?.receiver?.companyName && (
-                  <>
-                    <div className="cursor-pointer">
-                      <img
-                        src=""
-                        width={60}
-                        height={60}
-                        className="rounded-full"
-                      />
-                    </div>
-                    <div className="ml-6 mr-auto">
-                      <h3 className="text-lg">
-                        {messages?.receiver?.companyName}
-                      </h3>
-                    </div>
-                    <div className="cursor-pointer"></div>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="h-[100dvh] w-full overflow-x-hidden shadow-sm">
-            <div className="py-2 px-3">
-              <div className="flex justify-center mb-2">
-                <p className="text-sm uppercase">
-                  {new Date().toUTCString().slice(5, 16)}
-                </p>
-              </div>
-
-              <div className="flex justify-center mb-4">
-                <div className="rounded py-2 px-4">
-                  <p className="text-xs">
-                    Messages to this chat and calls are now secured with
-                    end-to-end encryption.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="p-14">
-              {messages?.messages?.length > 0 ? (
-                messages.messages.map(({ message, user: { id } = {} }) => {
-                  return (
-                    <>
-                      {id === user?.id ? (
-                        <>
-                          <div
-                            className={`max-w-[35%]  rounded-b-xl p-2 mb-2 ${
-                              id === user?.id
-                                ? "bg-primary text-blue rounded-tl-xl ml-auto"
-                                : "bg-secondary rounded-tr-xl"
-                            } `}
-                          >
-                            <div className="flex text-left justify-end">
-                              <span className="bg-gray-200 rounded-3xl px-5">
-                                <p className="text-sm text-blue py-3">
-                                  {message.msg}
-                                </p>
-                              </span>
-                            </div>
-                          </div>
-                          <div
-                            className={`max-w-[35%]  rounded-b-xl p-2 mb-2 ${
-                              id === user?.id
-                                ? "bg-primary text-blue rounded-tl-xl ml-auto"
-                                : "bg-secondary rounded-tr-xl"
-                            } `}
-                          >
-                            <div className="flex text-right justify-end">
-                              <img
-                                src={message?.msgImage?.url}
-                                className="rounded-lg"
-                              />
-                            </div>
-                          </div>
-
-                          <div ref={messageRef}></div>
-                        </>
-                      ) : (
-                        <>
-                          <div
-                            className={`max-w-[35%] rounded-b-xl p-4 mb-6 ${
-                              id === user?.id
-                                ? "bg-primary text-blue rounded-tl-xl ml-auto"
-                                : "bg-secondary rounded-tr-xl"
-                            } `}
-                          >
-                            <div className="flex flex-col-2 gap-4 text-right justify-start">
-                              <span className="bg-green-500 text-sm">
-                                <img
-                                  src="https://www.shutterstock.com/image-vector/young-man-anime-style-character-600nw-2313503433.jpg"
-                                  className="rounded-full w-12 h-12"
-                                />
-                              </span>
-                              <span className="bg-yellow-500">
-                                <p className="text-sm text-blue py-3">
-                                  {message.msg}
-                                </p>
-                              </span>
-                            </div>
-                          </div>
-                          <div
-                            className={`max-w-[35%] bg-red-500 rounded-b-xl p-4 mb-6 ${
-                              id === user?.id
-                                ? "bg-primary text-blue rounded-tl-xl ml-auto"
-                                : "bg-secondary rounded-tr-xl"
-                            } `}
-                          >
-                            <div className="flex flex-col-2 gap-4 text-right justify-start">
-                              <span className="bg-green-500 text-sm">
-                                <img
-                                  src="https://www.shutterstock.com/image-vector/young-man-anime-style-character-600nw-2313503433.jpg"
-                                  className="rounded-full w-12 h-12"
-                                />
-                              </span>
-                              <span className="bg-yellow-500">
-                                <img
-                                  src={message?.msgImage?.url}
-                                  className="rounded-lg"
-                                />
-                              </span>
-                            </div>
-                          </div>
-
-                          <div ref={messageRef}></div>
-                        </>
-                      )}
-                    </>
-                  );
-                })
-              ) : (
-                <div className="text-center text-lg font-semibold mt-24">
-                  No Messages or No Conversation Selected
-                </div>
-              )}
-            </div>
-          </div>
-          {messages?.conversationId && (
-            <div className="p-8 w-full flex items-center">
-              <input
-                type="file"
-                id="image-upload"
-                className="hidden"
-                accept="image/*"
-                onChange={(e) => fetchImage(e)}
-              />
-              <label htmlFor="image-upload" className="cursor-pointer mr-2">
-                <TbCirclePlus className="h-8 w-8 cursor-pointer" />
-              </label>
-              <Input
-                id="message"
-                placeholder="Type a message..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="w-[75%]"
-                inputClassName="p-4 border-0 shadow-md rounded-full bg-light focus:ring-0 focus:border-0 outline-none"
-              />
-              <div
-                className={`ml-4 p-2 cursor-pointer bg-light rounded-full ${
-                  !message && "pointer-events-none"
-                }`}
-                onClick={() => sendMessage()}
-              >
-                <TbSend className="h-8 w-8" />
-              </div>
-              <div className="ml-4 p-2 cursor-pointer bg-light rounded-full"></div>
-            </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
