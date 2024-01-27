@@ -1,11 +1,13 @@
-import Card from "../../components/Card";
-import PostCard from "../../components/PostCard";
-import GreetingCard from "../../components/GreetingCard";
 import { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
-import { fetchUser } from "../../api/user";
-import { fetchWastes } from "../../api/waste";
 import { Link } from "react-router-dom";
+
+import { jwtDecode } from "jwt-decode";
+
+import Card from "../../components/Card";
+import GreetingCard from "../../components/GreetingCard";
+import PostCard from "../../components/PostCard";
+import { fetchWastes } from "../../api/waste";
+import { fetchUser } from "../../api/user";
 
 const Home = () => {
   const [user, setUser] = useState({});
@@ -35,12 +37,8 @@ const Home = () => {
       new Date(b.waste.createdAt).getTime() -
       new Date(a.waste.createdAt).getTime()
     );
-    // return new Date(a.waste.createdAt) - new Date(b.waste.createdAt);
   });
 
-  // console.log("sortedWaste: ", sortedWaste);
-  console.log("waste: ", waste);
-  console.log("sortedWaste: ", sortedWaste);
   if (isLoading) return;
   return (
     <div className="bg-[#F8F8F8] w-full h-full mt-12 py-14" id="homepage">

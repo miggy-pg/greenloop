@@ -1,18 +1,6 @@
 import { Link } from "react-router-dom";
-import "./styles.css";
 
-function hasWhiteSpace(s) {
-  return /\s/.test(s);
-}
-
-function transformText(text) {
-  // Split the text by space and join with '-'
-  if (text && hasWhiteSpace(text)) {
-    const transformedText = text.split(" ").join("-").toLowerCase();
-    return transformedText;
-  }
-  return text.toLowerCase();
-}
+import { transformText } from "../../utils/plasticColors";
 
 const PostCard = ({ props }) => {
   const {
@@ -20,7 +8,7 @@ const PostCard = ({ props }) => {
   } = props;
 
   const transformedTexts = transformText(wasteCategory);
-  console.log("user: ");
+
   return (
     <>
       <div className="bg-white border border-gray-200 shadow-sm rounded-3xl my-2">

@@ -168,7 +168,7 @@ const Header = () => {
             </div>
           )}
 
-          <div className="bg-white max-h-[5rem] items-center h-[5rem] text-xl w-fill px-2 flex fixed md:border-t-[1px] md:shadow-md md:py-1 md:text-2xl md:text-center md:justify-center md:h-[5rem] md:bottom-0 sm:h-[3rem] sm:items-center xsm:px-0 2xsm:px-0">
+          <div className="bg-white max-h-[5rem] items-center h-[5rem] text-xl w-fill px-2 flex fixed md:border-t-[1px] md:shadow-md md:py-1 md:text-2xl md:text-center md:justify-center md:h-[4rem] md:bottom-0 sm:h-[3rem] sm:items-center xsm:px-0 2xsm:px-0">
             {hideModals && (
               <div
                 className={`flex items-center md:pt-2 h-[5rem] ${
@@ -193,7 +193,7 @@ const Header = () => {
               </div>
             )}
 
-            <ul className="flex relative justify-end w-screen h-[5rem] items-center md:justify-center md:text-2xl sm:h-[3rem]">
+            <ul className="flex relative justify-end w-screen h-[5rem] items-center md:justify-center md:text-2xl md:h-[4rem] sm:h-[3rem]">
               {Menus.map((menu, i) => {
                 if (
                   (hideModals && menu.name.includes("Notifications")) ||
@@ -203,7 +203,7 @@ const Header = () => {
                     <div
                       key={i}
                       onClick={() => console.log("Button clicking")}
-                      className="px-6 text-[#31572C] h-[5rem] cursor-pointer lg:px-6 md:h-[5rem] md:px-[1.7rem] sm:h-[3rem] xsm:px-[1.5rem] 2xsm:px-[1rem] hover:text-white hover:bg-[#5e8759] duration-200"
+                      className="px-6 text-[#31572C] h-[5rem] cursor-pointer lg:px-6 md:h-[4rem] md:px-[1.7rem] sm:h-[3rem] xsm:px-[1.5rem] 2xsm:px-[1rem] hover:text-white hover:bg-[#5e8759] duration-200"
                     >
                       <span className="flex flex-col text-center items-center justify-center w-full  h-[5rem] sm:text-3xl">
                         {menu.icon}
@@ -222,9 +222,9 @@ const Header = () => {
                     <NavLink
                       key={i}
                       to={menu.route}
-                      className="px-6 text-[#31572C] h-[5rem] cursor-pointer lg:px-6 md:h-[5rem] md:px-[1.7rem] sm:h-[3rem] xsm:px-[1.5rem] 2xsm:px-[1rem] hover:text-white hover:bg-[#5e8759] duration-200"
+                      className="px-6 text-[#31572C] h-[5rem] cursor-pointer lg:px-6 md:h-[4rem] md:px-[1.7rem] sm:h-[3rem] xsm:px-[1.5rem] 2xsm:px-[1rem] hover:text-white hover:bg-[#5e8759] duration-200"
                     >
-                      <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] md:h-[5rem] sm:h-[3rem] sm:text-xl">
+                      <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] md:h-[4rem] sm:h-[3rem] sm:text-xl">
                         {menu.icon}
 
                         {hideMenuLabels && (

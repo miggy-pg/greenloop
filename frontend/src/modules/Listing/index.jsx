@@ -110,21 +110,19 @@ const Listing = () => {
     getUser();
   }, []);
 
-  // console.log("origWaste: ", origWaste.length?);
-
   return (
     <>
       <div
         className="grid w-full h-full py-6 overflow-x-hidden bg-white"
         id="listing"
       >
-        <div className="bg-[#4F772D] w-full shadow-sm flex h-[13rem] pt-14 text-left justify-start items-center lg:mb-0 lg:pl-[5rem] md:pl-0 sm:h-[8rem]">
-          <p className="text-6xl font-normal text-white ml-32 w-screen lg:ml-10 lg:text-[3rem] md:text-center md:ml-0 md:justify-center sm:text-[1rem] 2xsm:text-[1.2rem] ">
+        <div className="bg-[#4F772D] w-full shadow-sm flex h-[13rem] pt-14 text-left justify-start items-center md:h-[10rem] sm:h-[9rem] xsm:h-[8rem]">
+          <p className="text-6xl font-normal text-white ml-32 w-screen lg:ml-10 lg:text-[3rem] md:ml-0 md:pl-16 md:text-[2rem] md:justify-center sm:text-left sm:pl-14 sm:text-[1.7rem] xsm:text-[1.3rem] xsm:pl-11 2xsm:text-[1.2rem] ">
             WASTE LISTING
           </p>
         </div>
-        <div className="flex justify-center pt-10 md:pt-3 2xsm:pt-0">
-          <div className="mt-10 grid md:grid-cols-2">
+        <div className="flex justify-center bg-green-500 2xsm:pt-0">
+          <div className="w-screen mt-10 grid md:grid-cols-2 bg-red-500 md:mt-1">
             <div className="flex ml-5 py-3">
               {filterValue && (
                 <>
@@ -141,7 +139,7 @@ const Listing = () => {
                 </>
               )}
             </div>
-            <div className="flex flex-row-reverse relative">
+            <div className="flex flex-row-reverse relative ">
               <span
                 className="p-2 m-2 rounded-lg bg-[#31572C] cursor-pointer"
                 onClick={() => setIsSortBy((sortby) => !sortby)}
@@ -157,13 +155,13 @@ const Listing = () => {
             </div>
 
             {isFilter && (
-              <div className="absolute right-[30rem] top-[23rem] border border-green-500 sm:right-[20rem] sm:top-[15rem]">
+              <div className="absolute right-[30rem] top-[23rem] border border-green-500 md:top-[15rem] md:right-[21rem] sm:right-[20rem] sm:top-[14rem] xsm:top-[15rem]">
                 <FilterCard handleOnChangeFilter={handleOnChangeFilter} />
               </div>
             )}
 
             {isSortBy && (
-              <div className="absolute right-[30rem] top-[23rem] border border-green-500 sm:right-[20rem] sm:top-[15rem]">
+              <div className="absolute right-[30rem] top-[23rem] border border-green-500 md:top-[15rem] md:right-[21rem] sm:right-[20rem] sm:top-[14rem] xsm:top-[15rem]">
                 <SortByCard handleSortBy={handleSortBy} />
               </div>
             )}
@@ -171,7 +169,7 @@ const Listing = () => {
         </div>
 
         <div className="flex justify-center md:px-0">
-          <div className="mt-10 grid gap-10 px-32 grid-cols-3 lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:gap-2 md:grid-cols-1 sm:px-4">
+          <div className="mt-10 grid gap-10 px-32 grid-cols-3 lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:gap-2 md:grid-cols-1 md:px-24 sm:px-16 xsm:px-4">
             {currentPosts.length ? (
               currentPosts.map((waste, index) => (
                 <ListingCard key={index} props={waste} />
@@ -184,18 +182,16 @@ const Listing = () => {
           </div>
         </div>
         {origWaste.length > 2 ? (
-          <div className="justify-center px-6 pb-10 sm:px-0 sm:pb-0 ">
-            <div className="items-center">
-              <Pagination
-                postsPerPage={postsPerPage}
-                totalPosts={origWaste.length}
-                paginate={paginate}
-                nextPage={nextPage}
-                prevPage={prevPage}
-                currentPage={currentPage}
-                pageCount={pageCount}
-              />
-            </div>
+          <div className="flex justify-center px-6 mb-16 mt-10 sm:px-0 sm:pb-0 ">
+            <Pagination
+              postsPerPage={postsPerPage}
+              totalPosts={origWaste.length}
+              paginate={paginate}
+              nextPage={nextPage}
+              prevPage={prevPage}
+              currentPage={currentPage}
+              pageCount={pageCount}
+            />
           </div>
         ) : null}
       </div>
