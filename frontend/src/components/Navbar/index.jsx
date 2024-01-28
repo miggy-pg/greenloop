@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useSearchParams } from "react-router-dom";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { FaSearch } from "react-icons/fa";
 import {
@@ -56,6 +56,9 @@ const Header = () => {
   const [active, setActive] = useState(0);
 
   const countMessages = useRef(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const conversationId = searchParams.get("id");
+
   const { width } = useWindowSize();
 
   useEffect(() => {
@@ -131,6 +134,9 @@ const Header = () => {
     width > 900 ? setHideMenuLabels(true) : setHideMenuLabels(false);
   }, [width]);
 
+  console.log("checkingconversationId", searchParams);
+  console.log("checkingconversationId", conversationId);
+
   return (
     <>
       <header
@@ -141,7 +147,7 @@ const Header = () => {
       >
         <nav
           className={`fixed grid z-30 px-6 h-[5rem] text-center top-0 border-gray-200 w-screen bg-[#F8F8F8] md:justify-center md:border-0 sm:h-[4rem] ${
-            scrollActive && " shadow-md pt-0"
+            scrollActive && `${!conversationId && "shadow-md"} pt-0`
           } `}
         >
           {!hideModals && (
