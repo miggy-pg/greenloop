@@ -116,14 +116,14 @@ const Listing = () => {
         className="grid w-full h-full py-6 overflow-x-hidden bg-white"
         id="listing"
       >
-        <div className="bg-[#4F772D] w-full shadow-sm flex h-[13rem] pt-14 text-left justify-start items-center md:h-[10rem] sm:h-[9rem] xsm:h-[8rem]">
-          <p className="text-6xl font-normal text-white ml-32 w-screen lg:ml-10 lg:text-[3rem] md:ml-0 md:pl-16 md:text-[2rem] md:justify-center sm:text-left sm:pl-14 sm:text-[1.7rem] xsm:text-[1.3rem] xsm:pl-11 2xsm:text-[1.2rem] ">
+        <div className="bg-[#4F772D] w-full shadow-sm flex h-[12rem] pt-14 text-left justify-start items-center lg:h-[11rem] md:h-[10rem] sm:h-[9rem] xsm:h-[8rem]">
+          <p className="w-screen text-5xl font-normal text-white pl-24 lg:pl-20 lg:text-[2.5rem] md:pl-16 md:text-[2rem] md:justify-center sm:text-left sm:pl-14 sm:text-[2rem] xsm:text-[1.3rem] xsm:pl-11 2xsm:text-[1.2rem] ">
             WASTE LISTING
           </p>
         </div>
-        <div className="flex justify-center bg-green-500 2xsm:pt-0">
-          <div className="w-screen mt-10 grid md:grid-cols-2 bg-red-500 md:mt-1">
-            <div className="flex ml-5 py-3">
+        <div className="flex justify-center ">
+          <div className="w-screen px-28 grid md:grid-cols-2 md:px-0">
+            <div className="flex ml-5">
               {filterValue && (
                 <>
                   <span className="text-lg mr-5">Applied Filter:</span>
@@ -141,13 +141,13 @@ const Listing = () => {
             </div>
             <div className="flex flex-row-reverse relative ">
               <span
-                className="p-2 m-2 rounded-lg bg-[#31572C] cursor-pointer"
+                className="p-2 m-4 rounded-lg bg-[#31572C] cursor-pointer"
                 onClick={() => setIsSortBy((sortby) => !sortby)}
               >
                 <IoSwapVerticalSharp className="text-white" />
               </span>
               <span
-                className="p-2 m-2 rounded-lg bg-[#31572C] cursor-pointer"
+                className="p-2 m-4 rounded-lg bg-[#31572C] cursor-pointer"
                 onClick={() => setIsFilter((filter) => !filter)}
               >
                 <IoFilter className="text-white" />
@@ -169,7 +169,7 @@ const Listing = () => {
         </div>
 
         <div className="flex justify-center md:px-0">
-          <div className="mt-10 grid gap-10 px-32 grid-cols-3 lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:gap-2 md:grid-cols-1 md:px-24 sm:px-16 xsm:px-4">
+          <div className="mt-7 grid gap-10 px-32 grid-cols-3 lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:mt-4 md:gap-2 md:grid-cols-1 md:px-24 sm:px-16 xsm:px-4">
             {currentPosts.length ? (
               currentPosts.map((waste, index) => (
                 <ListingCard key={index} props={waste} />
@@ -182,7 +182,7 @@ const Listing = () => {
           </div>
         </div>
         {origWaste.length > 2 ? (
-          <div className="flex justify-center px-6 mb-16 mt-10 sm:px-0 sm:pb-0 ">
+          <div className="flex justify-center px-6 mb-4 mt-10 lg:mb-16 sm:px-0 sm:pb-0 ">
             <Pagination
               postsPerPage={postsPerPage}
               totalPosts={origWaste.length}

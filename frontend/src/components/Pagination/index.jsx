@@ -19,7 +19,9 @@ const Pagination = ({
       <TbCaretLeftFilled
         onClick={prevPage}
         disabled={currentPage === 1}
-        className="hover:bg-primary-800 focus:ring-primary-300 h-12 w-12 rounded-lg items-center justify-center mr-4 bg-[#698c4e] py-2 text-center text-lg font-normal text-white focus:ring-4"
+        className={`hover:bg-primary-800 focus:ring-primary-300 h-12 w-12 cursor-pointer items-center justify-center text-center text-lg font-normal text-[#698c4e] ${
+          currentPage === 1 && "cursor-no-drop"
+        }`}
       />
       <ul className="pagination flex justify-center items-center">
         {pageNumbers.map((number) => (
@@ -36,7 +38,9 @@ const Pagination = ({
       <TbCaretRightFilled
         onClick={nextPage}
         disabled={currentPage === pageCount}
-        className="hover:bg-primary-800 focus:ring-primary-300 h-12 w-12 rounded-lg items-center justify-center ml-4 bg-[#698c4e] px-3 py-2 text-center text-lg font-normal text-white focus:ring-4"
+        className={`hover:bg-primary-800 focus:ring-primary-300 h-12 w-12 cursor-pointer items-center justify-center text-center text-lg font-normal text-[#698c4e] ${
+          currentPage === pageCount && "cursor-no-drop"
+        }`}
       />
     </nav>
   );

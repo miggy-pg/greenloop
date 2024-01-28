@@ -240,7 +240,7 @@ const Chat = () => {
                       {id === user?.id ? (
                         <>
                           <div
-                            className={`max-w-[35%]  rounded-b-xl p-2 mb-2 ${
+                            className={`max-w-[35%] rounded-b-xl p-2 mb-2 ${
                               id === user?.id
                                 ? "bg-primary text-blue rounded-tl-xl ml-auto"
                                 : "bg-secondary rounded-tr-xl"

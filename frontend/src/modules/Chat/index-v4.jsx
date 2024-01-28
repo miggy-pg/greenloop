@@ -233,14 +233,14 @@ const Chat = () => {
                               {/* Receiver Side */}
                               {id === user?.id ? (
                                 <>
-                                  <div className="w-full flex justify-end text-left py-8 sm:px-3 sm:py-1 sm:my-2 overflow-x-hidden">
-                                    <div className="flex items-center">
-                                      <h4 className="text-xs text-blue py-3 px-3 bg-gray-200 rounded-xl">
+                                  <div className="w-full flex justify-end text-left py-8 sm:px-5 sm:py-1 sm:my-2 xsm:justify-start overflow-x-hidden">
+                                    <div className="flex bg-red-500 items-center">
+                                      <h4 className="text-md font-semibold text-gray-900 2xsm:text-[0.7em]">
                                         {message.msg}
                                         Receive Test
                                       </h4>
                                       <img
-                                        className="rounded-full flex-shrink-0 sm:ml-3"
+                                        className="rounded-full flex-shrink-0 mr-5"
                                         src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
                                         width="48"
                                         height="48"
@@ -271,11 +271,11 @@ const Chat = () => {
                               ) : (
                                 <>
                                   {/* Sender Side */}
-                                  <div className="w-full flex justify-start text-left py-8 xsm:pr-16 sm:py-1 sm:my-2 overflow-x-hidden">
-                                    <span className="flex items-center">
+                                  <div className="w-full flex justify-start text-left py-8 xsm:pl-2 xsm:pr-16 sm:py-1 sm:my-2 overflow-x-hidden">
+                                    <span className="flex items-center text-sm">
                                       <img
                                         src="https://www.shutterstock.com/image-vector/young-man-anime-style-character-600nw-2313503433.jpg"
-                                        className="rounded-full w-12 h-12 sm:ml-3"
+                                        className="rounded-full w-12 h-12 sm:mr-3"
                                       />
                                       <p className="text-xs text-blue py-3 px-3 bg-gray-200 rounded-xl">
                                         {message.msg}
@@ -286,7 +286,7 @@ const Chat = () => {
 
                                   {message?.msgImage?.url && (
                                     <div
-                                      className={`max-w-[35%] rounded-b-xl p-4 mb-6 ${
+                                      className={`max-w-[35%] bg-red-500 rounded-b-xl p-4 mb-6 ${
                                         id === user?.id
                                           ? "bg-primary text-blue rounded-tl-xl ml-auto"
                                           : "bg-secondary rounded-tr-xl"
