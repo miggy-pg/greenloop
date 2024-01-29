@@ -21,7 +21,8 @@ const Chat = () => {
   const [users, setUsers] = useState([]);
   const [socket, setSocket] = useState(null);
   const [openConvo, setOpenConvo] = useState(false);
-  const [isMobile, setIsMobile] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTable] = useState(false);
 
   const messageRef = useRef(null);
   const { width } = useWindowSize();
@@ -51,6 +52,7 @@ const Chat = () => {
   useEffect(() => {
     messageRef?.current?.scrollIntoView({ behavior: "smooth" });
     width < 512 ? setIsMobile(true) : setIsMobile(false);
+    width > 512 && width < 768 ? setIsTable(true) : setIsTable(false);
   }, [messages?.messages, width]);
 
   useEffect(() => {
@@ -177,7 +179,7 @@ const Chat = () => {
                         onClick={() => setOpenConvo(false)}
                       />
                       <img
-                        className="rounded-full items-start flex-shrink-0 ml-4 mr-3"
+                        className="rounded-full items-start flex-shrink-0 ml-4 mr-3 border border-primary"
                         src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
                         width="40"
                         height="40"
@@ -205,7 +207,7 @@ const Chat = () => {
                           >
                             <div className="flex items-center">
                               <img
-                                className="rounded-full flex-shrink-0 mr-5"
+                                className="rounded-full flex-shrink-0 mr-5 border border-primary"
                                 src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
                                 width="48"
                                 height="48"
@@ -243,24 +245,9 @@ const Chat = () => {
                                       <div className="flex items-center">
                                         <h4 className="text-xs text-blue py-3 px-3 bg-gray-200 rounded-xl">
                                           {message.msg}
-                                          Receive Test
                                         </h4>
                                         <img
-                                          className="rounded-full flex-shrink-0 sm:ml-2"
-                                          src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
-                                          width="48"
-                                          height="48"
-                                          alt={user?.companyName}
-                                        />
-                                      </div>
-                                    </div>
-                                    <div className="w-full flex justify-end text-left py-8 sm:px-2 sm:py-1 sm:my-2 overflow-x-hidden">
-                                      <div className="flex items-center">
-                                        <h4 className="text-xs text-blue py-3 px-3 bg-gray-200 rounded-xl">
-                                          Receive Test
-                                        </h4>
-                                        <img
-                                          className="rounded-full flex-shrink-0 sm:ml-2"
+                                          className="rounded-full flex-shrink-0 sm:ml-2 border border-primary"
                                           src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
                                           width="48"
                                           height="48"
@@ -280,7 +267,7 @@ const Chat = () => {
                                           </div>
                                           <div>
                                             <img
-                                              className="rounded-full flex-shrink-0 sm:ml-2"
+                                              className="rounded-full flex-shrink-0 sm:ml-2 border border-primary"
                                               src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
                                               width="48"
                                               height="48"
@@ -304,18 +291,6 @@ const Chat = () => {
                                         />
                                         <p className="text-xs text-blue py-3 px-3 bg-gray-200 rounded-xl">
                                           {message.msg}
-                                          Sender test
-                                        </p>
-                                      </span>
-                                    </div>
-                                    <div className="w-full flex justify-start text-left py-8 xsm:pr-16 sm:px-2 sm:py-1 sm:my-2 overflow-x-hidden">
-                                      <span className="flex items-center">
-                                        <img
-                                          src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
-                                          className="rounded-full w-12 h-12 sm:mr-2"
-                                        />
-                                        <p className="text-xs text-blue py-3 px-3 bg-gray-200 rounded-xl">
-                                          Sender testTEST
                                         </p>
                                       </span>
                                     </div>
@@ -397,7 +372,7 @@ const Chat = () => {
           <>
             <div className="w-1/4 border flex flex-col ">
               <div className="py-2 bg-grey-lightest">
-                <span className="text-5xl text-gray-700 float-left px-5 py-5 font-semibold">
+                <span className="text-5xl text-gray-700 float-left px-5 py-5 font-semibold sm:text-2xl">
                   Chats
                 </span>
               </div>
@@ -418,12 +393,12 @@ const Chat = () => {
                           onClick={() => fetchMessages(conversationId, user)}
                         >
                           <img
-                            src=""
+                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
                             className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
                           />
                           <div className="ml-6">
                             <h3 className="text-lg font-semibold">
-                              {user?.companyName}
+                              {!isTablet && user?.companyName}
                             </h3>
                           </div>
                         </div>
@@ -464,7 +439,7 @@ const Chat = () => {
                 </div>
               </div>
 
-              <div className="h-[100dvh] w-full overflow-x-hidden shadow-sm">
+              <div className="h-full w-full overflow-x-hidden shadow-sm">
                 <div className="py-2 px-3">
                   <div className="flex justify-center mb-2">
                     <p className="text-sm uppercase">
