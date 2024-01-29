@@ -243,7 +243,7 @@ const Chat = () => {
                                   <>
                                     <div className="w-full flex justify-end text-left py-8 sm:px-2 sm:py-1 sm:my-2 overflow-x-hidden">
                                       <div className="flex items-center">
-                                        <h4 className="text-xs text-blue py-3 px-3 bg-gray-200 rounded-xl">
+                                        <h4 className="text-xs text-blue p-3 bg-gray-200 rounded-xl">
                                           {message.msg}
                                         </h4>
                                         <img
@@ -289,7 +289,7 @@ const Chat = () => {
                                           src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
                                           className="rounded-full w-12 h-12 sm:mr-2"
                                         />
-                                        <p className="text-xs text-blue py-3 px-3 bg-gray-200 rounded-xl">
+                                        <p className="text-xs text-blue p-3 bg-gray-200 rounded-xl">
                                           {message.msg}
                                         </p>
                                       </span>
@@ -369,141 +369,55 @@ const Chat = () => {
             </div>
           </>
         ) : (
+          // Desktop View
           <>
-            <div className="w-1/4 border h-full overflow-scroll">
-              <div className="py-2 bg-grey-lightest">
-                <span className="text-5xl text-gray-700 float-left px-5 py-5 font-semibold sm:text-2xl">
-                  Chats
-                </span>
+            <div className="grid grid-cols-4 grid-rows-chat gap-0 md:h-[88vh] pt-[3.8rem] md:pt-0 h-[90dvh] w-full">
+              <div className="h-full">
+                <div className=" py-2 bg-grey-lightest">
+                  <span className="text-5xl text-gray-700 float-left px-5 font-semibold text-clamp">
+                    Chats
+                  </span>
+                </div>
               </div>
-              {/* <div className="fixed top-13 w-full bg-white flex items-center mb-5 py-3 shadow-md">
-                <TbArrowLeft
-                  className="flex text-md font-semibold uppercase text-gray-800 cursor-pointer pl-2 w-9 h-9"
-                  onClick={() => setOpenConvo(false)}
-                />
-                <img
-                  className="rounded-full items-start flex-shrink-0 ml-4 mr-3 border border-primary"
-                  src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
-                  width="40"
-                  height="40"
-                  alt="Marie Zulfikar"
-                />
-                <h4 className="text-sm font-semibold text-gray-900">
-                  Marie Zulfikar
-                </h4>
-              </div> */}
-              <div className="bg-grey-lighter bg-green-500">
-                {conversations.length > 0 ? (
-                  conversations.map(({ conversationId, user }) => {
-                    console.log("conversationIduser: ", user);
-                    console.log("conversatioconversationId: ", conversationId);
-                    return (
-                      <>
-                        <div
-                          key={conversationId}
-                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => fetchMessages(conversationId, user)}
-                        >
-                          <img
-                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
-                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                          />
-                          <div className="ml-6">
-                            <h3 className="text-lg font-semibold">
-                              {!isTablet && user?.companyName}
-                            </h3>
+              <div className="row-start-2 row-span-3 col-start-1 h-full border border-b-0">
+                <div className="bg-grey-lighter overflow-y-auto">
+                  {conversations.length > 0 ? (
+                    conversations.map(({ conversationId, user }) => {
+                      console.log("conversationIduser: ", user);
+                      console.log(
+                        "conversatioconversationId: ",
+                        conversationId
+                      );
+                      return (
+                        <>
+                          <div
+                            className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => fetchMessages(conversationId, user)}
+                          >
+                            <img
+                              src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
+                              className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
+                            />
+                            <div className="ml-6">
+                              <h3 className="text-clamp-to-desktop font-semibold">
+                                {!isTablet && user?.companyName}
+                              </h3>
+                            </div>
                           </div>
-                        </div>
-                        <div
-                          key={conversationId}
-                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => fetchMessages(conversationId, user)}
-                        >
-                          <img
-                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
-                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                          />
-                          <div className="ml-6">
-                            <h3 className="text-lg font-semibold">
-                              {!isTablet && user?.companyName}
-                            </h3>
-                          </div>
-                        </div>
-                        <div
-                          key={conversationId}
-                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => fetchMessages(conversationId, user)}
-                        >
-                          <img
-                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
-                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                          />
-                          <div className="ml-6">
-                            <h3 className="text-lg font-semibold">
-                              {!isTablet && user?.companyName}
-                            </h3>
-                          </div>
-                        </div>
-                        <div
-                          key={conversationId}
-                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => fetchMessages(conversationId, user)}
-                        >
-                          <img
-                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
-                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                          />
-                          <div className="ml-6">
-                            <h3 className="text-lg font-semibold">
-                              {!isTablet && user?.companyName}
-                            </h3>
-                          </div>
-                        </div>
-                        <div
-                          key={conversationId}
-                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => fetchMessages(conversationId, user)}
-                        >
-                          <img
-                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
-                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                          />
-                          <div className="ml-6">
-                            <h3 className="text-lg font-semibold">
-                              {!isTablet && user?.companyName}
-                            </h3>
-                          </div>
-                        </div>
-                        <div
-                          key={conversationId}
-                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => fetchMessages(conversationId, user)}
-                        >
-                          <img
-                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
-                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                          />
-                          <div className="ml-6">
-                            <h3 className="text-lg font-semibold">
-                              {!isTablet && user?.companyName}
-                            </h3>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })
-                ) : (
-                  <div className="text-center text-lg font-semibold mt-24">
-                    No Conversations
-                  </div>
-                )}
+                        </>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center text-lg font-semibold mt-24">
+                      No Conversations
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <div className="w-full overflow-hidden border flex flex-col ">
-              <div className="py-2 px-3 bg-grey-lighter flex flex-row justify-between items-center border-b">
+              <div className="row-start-1 col-start-2 col-span-3 px-3 bg-grey-lighter flex flex-row justify-between items-center border-b">
                 <div className="flex items-center">
-                  <div className="flex mb-2">
+                  <div className="flex">
                     {messages?.receiver?.companyName && (
                       <>
                         <div className="cursor-pointer">
@@ -514,8 +428,8 @@ const Chat = () => {
                             className="rounded-full"
                           />
                         </div>
-                        <div className="ml-6 mr-auto">
-                          <h3 className="text-lg">
+                        <div className="ml-6 mr-auto  py-5">
+                          <h3 className="text-clamp-to-desktop">
                             {messages?.receiver?.companyName}
                           </h3>
                         </div>
@@ -525,8 +439,8 @@ const Chat = () => {
                   </div>
                 </div>
               </div>
-
-              <div className="h-full w-full overflow-x-hidden shadow-sm">
+              <div></div>
+              <div className="row-start-2 col-span-3 w-full overflow-y-auto">
                 <div className="py-2 px-3">
                   <div className="flex justify-center mb-2">
                     <p className="text-sm uppercase">
@@ -543,7 +457,7 @@ const Chat = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className="p-14 sm:p-2 bg-yellow-500">
+                <div className="p-14 sm:p-2">
                   {messages?.messages?.length > 0 ? (
                     messages.messages.map(({ message, user: { id } = {} }) => {
                       return (
@@ -593,41 +507,41 @@ const Chat = () => {
                                 } `}
                               >
                                 <div className="flex flex-col-2 gap-4 text-right justify-start">
-                                  <span className="bg-green-500 text-sm">
+                                  <span className="text-sm">
                                     <img
                                       src="https://www.shutterstock.com/image-vector/young-man-anime-style-character-600nw-2313503433.jpg"
                                       className="rounded-full w-12 h-12"
                                     />
                                   </span>
-                                  <span className="bg-yellow-500">
-                                    <p className="text-sm text-blue py-3">
-                                      {message.msg}
-                                    </p>
-                                  </span>
+                                  <p className="text-sm text-blue p-3 bg-gray-200 rounded-xl">
+                                    {message.msg}
+                                  </p>
                                 </div>
                               </div>
-                              <div
-                                className={`max-w-[35%] bg-red-500 rounded-b-xl p-4 mb-6 ${
-                                  id === user?.id
-                                    ? "bg-primary text-blue rounded-tl-xl ml-auto"
-                                    : "bg-secondary rounded-tr-xl"
-                                } `}
-                              >
-                                <div className="flex flex-col-2 gap-4 text-right justify-start">
-                                  <span className="bg-green-500 text-sm">
-                                    <img
-                                      src="https://www.shutterstock.com/image-vector/young-man-anime-style-character-600nw-2313503433.jpg"
-                                      className="rounded-full w-12 h-12"
-                                    />
-                                  </span>
-                                  <span className="bg-yellow-500">
-                                    <img
-                                      src={message?.msgImage?.url}
-                                      className="rounded-lg"
-                                    />
-                                  </span>
+                              {message?.msgImage?.url && (
+                                <div
+                                  className={`max-w-[35%] rounded-b-xl p-4 mb-6 ${
+                                    id === user?.id
+                                      ? "bg-primary text-blue rounded-tl-xl ml-auto"
+                                      : "bg-secondary rounded-tr-xl"
+                                  } `}
+                                >
+                                  <div className="flex flex-col-2 gap-4 text-right justify-start">
+                                    <span className="text-sm">
+                                      <img
+                                        src="https://www.shutterstock.com/image-vector/young-man-anime-style-character-600nw-2313503433.jpg"
+                                        className="rounded-full w-12 h-12"
+                                      />
+                                    </span>
+                                    <span className="bg-yellow-500">
+                                      <img
+                                        src={message?.msgImage?.url}
+                                        className="rounded-lg"
+                                      />
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
+                              )}
 
                               <div ref={messageRef}></div>
                             </>
@@ -636,14 +550,16 @@ const Chat = () => {
                       );
                     })
                   ) : (
-                    <div className="text-center text-lg font-semibold mt-24">
+                    <div className="text-center text-lg  font-semibold mt-24">
                       No Messages or No Conversation Selected
                     </div>
                   )}
-                </div> */}
+                </div>
               </div>
+              <div></div>
+
               {messages?.conversationId && (
-                <div className="p-8 w-full flex items-center">
+                <div className="row-start-3 col-start-2 col-span-3 px-10 w-full flex justify-center items-center md:pb-8 sm:pb-4">
                   <input
                     type="file"
                     id="image-upload"
@@ -652,25 +568,24 @@ const Chat = () => {
                     onChange={(e) => fetchImage(e)}
                   />
                   <label htmlFor="image-upload" className="cursor-pointer mr-2">
-                    <TbCirclePlus className="h-8 w-8 cursor-pointer" />
+                    <TbCirclePlus className="h-6 w-6 mr-2 cursor-pointer" />
                   </label>
                   <Input
                     id="message"
                     placeholder="Type a message..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    className="w-[75%]"
-                    inputClassName="p-4 border-0 shadow-md rounded-full bg-light focus:ring-0 focus:border-0 outline-none"
+                    className="w-2/3 xsm:w-full"
+                    inputClassName="p-2 pl-5 border-0 shadow-md rounded-full bg-light h-[3rem] focus:ring-0 focus:border-0 outline-none xsm:h-[1.5rem]"
                   />
                   <div
-                    className={`ml-4 p-2 cursor-pointer bg-light rounded-full ${
+                    className={`ml-2 p-2 cursor-pointer bg-light rounded-full ${
                       !message && "pointer-events-none"
                     }`}
                     onClick={() => sendMessage()}
                   >
-                    <TbSend className="h-8 w-8" />
+                    <TbSend className="h-6 w-6" />
                   </div>
-                  <div className="ml-4 p-2 cursor-pointer bg-light rounded-full"></div>
                 </div>
               )}
             </div>

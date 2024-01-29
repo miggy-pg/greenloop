@@ -12,7 +12,15 @@ export default {
       "2xsm": { max: "24em" },
     },
 
-    extend: {},
+    extend: {
+      fontSize: {
+        clamp: "clamp(1rem, 4vw, 1.8rem)",
+        "clamp-to-desktop": "clamp(0.5rem, 4vw, 1rem)",
+      },
+      gridTemplateRows: {
+        chat: "4rem minmax(1rem, 6fr) 6rem",
+      },
+    },
   },
   plugins: [],
 };
