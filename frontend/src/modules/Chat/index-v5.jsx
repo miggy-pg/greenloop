@@ -370,7 +370,7 @@ const Chat = () => {
           </>
         ) : (
           <>
-            <div className="w-1/4 border h-full overflow-scroll">
+            <div className="w-1/4 border flex flex-col ">
               <div className="py-2 bg-grey-lightest">
                 <span className="text-5xl text-gray-700 float-left px-5 py-5 font-semibold sm:text-2xl">
                   Chats
@@ -392,13 +392,16 @@ const Chat = () => {
                   Marie Zulfikar
                 </h4>
               </div> */}
-              <div className="bg-grey-lighter bg-green-500">
-                {conversations.length > 0 ? (
-                  conversations.map(({ conversationId, user }) => {
-                    console.log("conversationIduser: ", user);
-                    console.log("conversatioconversationId: ", conversationId);
-                    return (
-                      <>
+              <div className="bg-grey-lighter flex-1">
+                <div>
+                  {conversations.length > 0 ? (
+                    conversations.map(({ conversationId, user }) => {
+                      console.log("conversationIduser: ", user);
+                      console.log(
+                        "conversatioconversationId: ",
+                        conversationId
+                      );
+                      return (
                         <div
                           key={conversationId}
                           className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
@@ -414,89 +417,14 @@ const Chat = () => {
                             </h3>
                           </div>
                         </div>
-                        <div
-                          key={conversationId}
-                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => fetchMessages(conversationId, user)}
-                        >
-                          <img
-                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
-                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                          />
-                          <div className="ml-6">
-                            <h3 className="text-lg font-semibold">
-                              {!isTablet && user?.companyName}
-                            </h3>
-                          </div>
-                        </div>
-                        <div
-                          key={conversationId}
-                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => fetchMessages(conversationId, user)}
-                        >
-                          <img
-                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
-                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                          />
-                          <div className="ml-6">
-                            <h3 className="text-lg font-semibold">
-                              {!isTablet && user?.companyName}
-                            </h3>
-                          </div>
-                        </div>
-                        <div
-                          key={conversationId}
-                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => fetchMessages(conversationId, user)}
-                        >
-                          <img
-                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
-                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                          />
-                          <div className="ml-6">
-                            <h3 className="text-lg font-semibold">
-                              {!isTablet && user?.companyName}
-                            </h3>
-                          </div>
-                        </div>
-                        <div
-                          key={conversationId}
-                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => fetchMessages(conversationId, user)}
-                        >
-                          <img
-                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
-                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                          />
-                          <div className="ml-6">
-                            <h3 className="text-lg font-semibold">
-                              {!isTablet && user?.companyName}
-                            </h3>
-                          </div>
-                        </div>
-                        <div
-                          key={conversationId}
-                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => fetchMessages(conversationId, user)}
-                        >
-                          <img
-                            src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
-                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                          />
-                          <div className="ml-6">
-                            <h3 className="text-lg font-semibold">
-                              {!isTablet && user?.companyName}
-                            </h3>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })
-                ) : (
-                  <div className="text-center text-lg font-semibold mt-24">
-                    No Conversations
-                  </div>
-                )}
+                      );
+                    })
+                  ) : (
+                    <div className="text-center text-lg font-semibold mt-24">
+                      No Conversations
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -543,7 +471,7 @@ const Chat = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className="p-14 sm:p-2 bg-yellow-500">
+                <div className="p-14 sm:p-2 bg-yellow-500">
                   {messages?.messages?.length > 0 ? (
                     messages.messages.map(({ message, user: { id } = {} }) => {
                       return (
@@ -640,7 +568,7 @@ const Chat = () => {
                       No Messages or No Conversation Selected
                     </div>
                   )}
-                </div> */}
+                </div>
               </div>
               {messages?.conversationId && (
                 <div className="p-8 w-full flex items-center">

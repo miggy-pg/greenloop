@@ -12,7 +12,7 @@ import {
 } from "react-icons/io5";
 
 import greenLoopLogo from "../../assets/images/greenLoop.png";
-import Notification from "../Notification";
+import Notification from "../../modules/Notification";
 
 import { getConversations, getMessages } from "../../api/conversation";
 // import useOutsideClick from "../../hooks/useOutsideClick";
