@@ -103,12 +103,13 @@ const Header = () => {
               convo.receiverId
             );
             data.map((message) => {
-              if (!message.hasRead) {
+              if (!message.hasRead && message.user.id !== user?.id) {
                 allMessages.push(message);
                 countMessages.current = countMessages.current + 1;
               }
             });
           });
+        console.log("allMessages: ", allMessages);
         setMessages(allMessages);
         // } else {
         //   setMessages({});
@@ -130,7 +131,13 @@ const Header = () => {
       setScrollActive(window.scrollY > 10);
     });
 
-    width > 768 ? setHideModals(true) : setHideModals(false);
+    if (width > 768) {
+      setHideModals(true);
+    } else {
+      setHideModals(false);
+      setShowNotification(false);
+      setHoveredSettings(false);
+    }
     width > 900 ? setHideMenuLabels(true) : setHideMenuLabels(false);
   }, [width]);
 
@@ -210,9 +217,18 @@ const Header = () => {
                   return (
                     <div
                       key={i}
-                      onClick={() => console.log("Button clicking")}
+                      onClick={() =>
+                        menu.name.includes("Notifications")
+                          ? setShowNotification(!showNotification)
+                          : setHoveredSettings(!isHoveredSettings)
+                      }
                       className="px-6 text-[#31572C] h-[5rem] cursor-pointer lg:px-6 md:h-[4rem] md:px-[1.7rem] sm:h-[3rem] xsm:px-[1.5rem] 2xsm:px-[1rem] hover:text-white hover:bg-[#5e8759] duration-200"
                     >
+                      {menu.name.includes("Notifications") && (
+                        <span className="absolute top-5 right-17 bg-red-500 text-white w-5 h-5 text-center justify-between rounded-full font-medium text-xs">
+                          {!isLoading && countMessages.current}
+                        </span>
+                      )}
                       <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] sm:text-3xl">
                         {menu.icon}
                         {hideMenuLabels && (
@@ -247,6 +263,47 @@ const Header = () => {
                   );
                 }
               })}
+              {showNotification && (
+                <Notification
+                  scrollActive={scrollActive}
+                  messages={messages}
+                  isLoading={isLoading}
+                  conversations={conversations}
+                  setShowNotification={setShowNotification}
+                />
+              )}
+              {isHoveredSettings && (
+                <div
+                  className="z-50 fixed top-[4.5rem] right-2 my-4 text-clamp-xs leading-5 list-none bg-white divide-y divide-gray-100 rounded shadow"
+                  id="dropdown-2"
+                >
+                  <Link to="profile">
+                    <div className="px-4 py-3 cursor-pointer hover:bg-gray-100">
+                      <p role="none">My Account</p>
+                    </div>
+                  </Link>
+                  <ul className="py-1" role="none">
+                    <li>
+                      <Link to="dashboard/users">
+                        <span
+                          className="block px-4 py-4 cursor-pointer hover:bg-gray-100"
+                          role="menuitem"
+                        >
+                          Users
+                        </span>
+                      </Link>
+                    </li>
+                    <li>
+                      <span
+                        className="block px-4 py-4 cursor-pointer hover:bg-gray-100"
+                        role="menuitem"
+                      >
+                        Sign out
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </ul>
           </div>
         </nav>

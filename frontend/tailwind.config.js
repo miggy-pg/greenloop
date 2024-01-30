@@ -16,6 +16,8 @@ export default {
       fontSize: {
         clamp: "clamp(1rem, 4vw, 1.8rem)",
         "clamp-to-desktop": "clamp(0.5rem, 4vw, 1rem)",
+        "clamp-base": "clamp(0.8rem, 1vw, 0.9rem)",
+        "clamp-xs": "clamp(0.8rem, 1vw, 0.9rem)",
       },
       gridTemplateRows: {
         chat: "4rem minmax(1rem, 6fr) 6rem",

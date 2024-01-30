@@ -2,12 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 // import useOutsideClick from "../../hooks/useOutsideClick";
 
-const Notification = ({
-  scrollActive,
-  messages,
-  conversations,
-  setShowNotification,
-}) => {
+const Notification = ({ scrollActive, messages, conversations, isLoading }) => {
   const ref = useRef();
 
   console.log("notificationsNavbar: ", conversations);
@@ -19,13 +14,15 @@ const Notification = ({
 
   const user = JSON.parse(localStorage.getItem("user:detail"));
 
-  const userConversation = conversations
-    .map((conversation) => conversation.conversationId)
-    .includes(messages.conversationId);
+  // const userConversation = conversations.map((conversation) => {
+  //   console.log("checking Conversation: ", conversation);
+  //   return conversation.conversationId.includes(messages.conversationId);
+  // });
 
-  console.log("userConversation: ", userConversation);
+  // console.log("userConversation: ", userConversation);
   console.log("userMessages: ", messages);
   console.log("refNotif: ", ref);
+  console.log("refNotifisLoading: ", isLoading);
 
   // useEffect(() => {
   //   function handleClick(e) {
@@ -40,23 +37,21 @@ const Notification = ({
   return (
     <div
       id="notification-dropdown"
-      className={`z-50 max-w-sm my-4 fixed ${
-        scrollActive ? "top-[4.5rem]" : "top-[5rem]"
-      } border h-96 overflow-y-auto text-base w-full list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg`}
+      className="z-50 max-w-xs my-4 fixed top-[4.5rem] right-20 overflow-y-auto border h-96 w-72 list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg lg:w-56 lg:h-72"
       ref={ref}
     >
-      <div className="block px-4 py-2 text-base font-medium text-center text-gray-700 bg-gray-50 ">
+      <div className="py-2 justify-center text-clamp-base font-medium text-center text-gray-700 bg-gray-100 ">
         Notifications
       </div>
       <div>
         {conversations.length > 0 &&
-          userConversation &&
-          messages.messages.map((message) => {
+          !isLoading &&
+          messages.map((message) => {
             console.log("messageChat: ", message);
             return (
               user.id !== message.user.id && (
                 <Link
-                  to={`chats?id=${messages.conversationId}`}
+                  to={`chats?id=${message.conversationId}`}
                   className="flex px-4 py-3 border-b hover:bg-gray-100"
                 >
                   <div className="flex-shrink-0">
@@ -77,14 +72,14 @@ const Notification = ({
                       </svg>
                     </div>
                   </div>
-                  <div className="w-full pl-3">
-                    <div className="text-gray-500 font-normal text-sm mb-1.5 ">
+                  <div className="w-full pl-3 text-left">
+                    <div className="text-gray-500 font-normal text-clamp-xs mb-1.5 ">
                       New message from{" "}
                       <span className="font-semibold text-gray-900">
                         {message.user.companyName}
                       </span>
                       : {message.message.msg}
-                      <blockquote className="text-sm text-gray-500 font-light">
+                      <blockquote className="text-clamp-xs text-gray-500 font-light">
                         {message.message.msgImage.url && "Attached an image"}
                       </blockquote>
                     </div>

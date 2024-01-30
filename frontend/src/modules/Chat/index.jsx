@@ -154,6 +154,8 @@ const Chat = () => {
 
   const handleMoveBack = () => {
     console.log("HereAtConversationAgain: ", conversationId);
+    setOpenConvo(false);
+    setMessages({});
   };
 
   console.log("user: ", user);
@@ -176,7 +178,7 @@ const Chat = () => {
                     <div className="fixed top-13 w-full bg-white flex items-center mb-5 py-3 shadow-md">
                       <TbArrowLeft
                         className="flex text-md font-semibold uppercase text-gray-800 cursor-pointer pl-2 w-9 h-9"
-                        onClick={() => setOpenConvo(false)}
+                        onClick={handleMoveBack}
                       />
                       <img
                         className="rounded-full items-start flex-shrink-0 ml-4 mr-3 border border-primary"
