@@ -15,28 +15,40 @@ import greenLoopLogo from "../../assets/images/greenLoop.png";
 import Notification from "../../modules/Notification";
 
 import { getConversations, getMessages } from "../../api/conversation";
+import MobileNotification from "../../modules/Notification/MobileNotification";
 // import useOutsideClick from "../../hooks/useOutsideClick";
 
-{
-}
+const iconSizes = "h-4.5 w-4.5 lg:h-5 lg:w-5 md:h-5 md:w-5";
 
 const Menus = [
-  { name: "Home", icon: <IoHomeOutline />, route: "" },
-  { name: "Listing", icon: <IoListOutline />, route: "listing" },
-  { name: "Post", icon: <IoAddCircleOutline />, route: "post" },
+  {
+    name: "Home",
+    icon: <IoHomeOutline className={iconSizes} />,
+    route: "",
+  },
+  {
+    name: "Listing",
+    icon: <IoListOutline className={iconSizes} />,
+    route: "listing",
+  },
+  {
+    name: "Post",
+    icon: <IoAddCircleOutline className={iconSizes} />,
+    route: "post",
+  },
   {
     name: "Chats",
-    icon: <IoChatboxEllipsesOutline />,
+    icon: <IoChatboxEllipsesOutline className={iconSizes} />,
     route: "chats",
   },
   {
     name: "Notifications",
-    icon: <IoNotificationsOutline />,
+    icon: <IoNotificationsOutline className={iconSizes} />,
     route: "notifications",
   },
   {
     name: "Settings",
-    icon: <IoSettings />,
+    icon: <IoSettings className={iconSizes} />,
     route: "profile",
   },
 ];
@@ -131,7 +143,7 @@ const Header = () => {
       setScrollActive(window.scrollY > 10);
     });
 
-    if (width > 768) {
+    if (width > 640) {
       setHideModals(true);
     } else {
       setHideModals(false);
@@ -153,7 +165,7 @@ const Header = () => {
         }`}
       >
         <nav
-          className={`fixed grid z-30 px-6 h-[5rem] text-center top-0 border-gray-200 w-screen bg-[#F8F8F8] md:justify-center md:border-0 sm:h-[4rem] ${
+          className={`fixed grid z-30 px-6 h-[5rem] text-center top-0 border-gray-200 w-screen bg-[#F8F8F8] md:justify-between sm:justify-center md:border-0 md:h-[4rem] ${
             scrollActive && `${!conversationId && "shadow-md"} pt-0`
           } `}
         >
@@ -183,32 +195,30 @@ const Header = () => {
             </div>
           )}
 
-          <div className="bg-white justify-between  max-h-[5rem] items-center h-[5rem] text-xl w-screen flex fixed md:border-t-[1px] md:shadow-md md:py-1 md:text-2xl md:text-center md:justify-center md:h-[4rem] md:bottom-0 sm:h-[3rem] sm:items-center xsm:px-0 2xsm:px-0">
+          <div className="bg-white justify-between max-h-[5rem] items-center h-[5rem] text-xl w-screen flex fixed md:shadow-md md:py-1 md:text-2xl md:text-center md:justify-between md:h-[3.5rem] sm:justify-center sm:h-[3rem] sm:bottom-0 sm:items-center xsm:px-0 2xsm:px-0">
             {hideModals && (
-              <div
-                className={`flex items-center text-center md:pt-2 h-[5rem] px-5`}
-              >
+              <div className="flex items-center text-center px-5">
                 <Link to="/">
                   <img
                     src={greenLoopLogo}
-                    className="h-[3.5rem] w-auto items-center cursor-pointer lg:h-12"
+                    className="h-14 w-auto items-center cursor-pointer lg:h-12 md:h-9"
                     alt="green-loop logo"
                   />
                 </Link>
-                <div className="relative flex items-center ml-5 lg:h-12">
+                <div className="relative flex items-center ml-5 lg:h-12 md:h-9">
                   <input
                     type="text"
                     id="header-searchbox"
                     name="searchbox"
                     placeholder="Search here ..."
-                    className="w-[20rem] h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-sm bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none md:max-w-xs lg:w-[15rem] lg:h-6"
+                    className="w-[20rem] h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-sm bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none lg:h-6 lg:w-[15rem] md:h-2 md:w-[12rem] md:text-xs md:max-w-xs "
                   />
-                  <FaSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none lg:top-4" />
+                  <FaSearch className="absolute align-center left-3 top-3 h-3 w-3 text-gray-300 pointer-events-none lg:top-5 md:top-3" />
                 </div>
               </div>
             )}
 
-            <ul className="flex relative h-[5rem] items-center pl-5 md:pl-0 md:justify-center md:text-2xl md:h-[4rem] sm:h-[3rem]">
+            <ul className="flex relative h-[5rem] items-center pl-5 md:pl-0 md:justify-center md:text-2xl md:h-[3.5rem] sm:h-[3rem]">
               {Menus.map((menu, i) => {
                 if (
                   (hideModals && menu.name.includes("Notifications")) ||
@@ -222,14 +232,14 @@ const Header = () => {
                           ? setShowNotification(!showNotification)
                           : setHoveredSettings(!isHoveredSettings)
                       }
-                      className="px-6 text-[#31572C] h-[5rem] cursor-pointer lg:px-6 md:h-[4rem] md:px-[1.7rem] sm:h-[3rem] xsm:px-[1.5rem] 2xsm:px-[1rem] hover:text-white hover:bg-[#5e8759] duration-200"
+                      className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] md:px-[1.1rem] sm:h-[3rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
                     >
                       {menu.name.includes("Notifications") && (
-                        <span className="absolute top-5 right-17 bg-red-500 text-white w-5 h-5 text-center justify-between rounded-full font-medium text-xs">
+                        <span className="absolute top-3 right-17 bg-red-500 text-white w-4 h-4 text-center justify-between rounded-full font-medium text-xs">
                           {!isLoading && countMessages.current}
                         </span>
                       )}
-                      <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] sm:text-3xl">
+                      <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] sm:text-3xl md:h-[3.5rem] sm:h-[3rem]">
                         {menu.icon}
                         {hideMenuLabels && (
                           <span
@@ -246,9 +256,9 @@ const Header = () => {
                     <NavLink
                       key={i}
                       to={menu.route}
-                      className="px-6 text-[#31572C] h-[5rem] cursor-pointer lg:px-6 md:h-[4rem] md:px-[1.7rem] sm:h-[3rem] xsm:px-[1.5rem] 2xsm:px-[1rem] hover:text-white hover:bg-[#5e8759] duration-200"
+                      className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] sm:h-[3rem] md:px-[1.1rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
                     >
-                      <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] md:h-[4rem] sm:h-[3rem] sm:text-xl">
+                      <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] md:h-[3.5rem] sm:h-[3rem] sm:text-xl">
                         {menu.icon}
 
                         {hideMenuLabels && (
@@ -272,6 +282,7 @@ const Header = () => {
                   setShowNotification={setShowNotification}
                 />
               )}
+
               {isHoveredSettings && (
                 <div
                   className="z-50 fixed top-[4.5rem] right-2 my-4 text-clamp-xs leading-5 list-none bg-white divide-y divide-gray-100 rounded shadow"
@@ -308,6 +319,7 @@ const Header = () => {
           </div>
         </nav>
       </header>
+      {hideModals && <MobileNotification messages={messages} users={users} />}
     </>
   );
 };

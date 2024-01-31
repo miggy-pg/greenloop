@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .active {
-  @apply bg-[#31572C] text-white max-h-[5rem] h-[5rem] md:rounded-t-lg md:h-[4rem] sm:h-[3rem] sm:pt-0 hover:text-white;
+  @apply bg-[#31572C] text-white max-h-[5rem] h-[5rem] md:h-[3.5rem] sm:h-[3rem] sm:rounded-t-lg sm:pt-0 hover:text-white;
 }
 
 .plastic {

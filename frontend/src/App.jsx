@@ -3,12 +3,13 @@ import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import Layout from "./components/Layout";
+import Chat from "./modules/Chat";
 import Form from "./modules/Form";
 import Home from "./modules/Home";
 import Listing from "./modules/Listing";
+import MobileNotification from "./modules/Notification/MobileNotification.jsx";
 import Post from "./modules/Post";
 import Profile from "./modules/Profile";
-import Chat from "./modules/Chat";
 import Users from "./modules/Users";
 
 import "./App.css";
@@ -63,6 +64,7 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="chats" element={<Chat />} />
           <Route path="chats/:id" element={<Chat />} />
+          <Route path="notifications" element={<MobileNotification />} />
           <Route path="dashboard/users" element={<Users />} />
         </Route>
       </Routes>
