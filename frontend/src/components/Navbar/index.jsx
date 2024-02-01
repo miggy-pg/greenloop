@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useSearchParams } from "react-router-dom";
+
 import { useWindowSize } from "@uidotdev/usehooks";
 import { FaSearch } from "react-icons/fa";
 import {
@@ -11,11 +12,12 @@ import {
   IoSettings,
 } from "react-icons/io5";
 
-import greenLoopLogo from "../../assets/images/greenLoop.png";
 import Notification from "../../modules/Notification";
-
 import { getConversations, getMessages } from "../../api/conversation";
-import MobileNotification from "../../modules/Notification/MobileNotification";
+
+import greenLoopLogo from "../../assets/images/greenLoop.png";
+import { useDispatch } from "react-redux";
+
 // import useOutsideClick from "../../hooks/useOutsideClick";
 
 const iconSizes = "h-4.5 w-4.5 lg:h-5 lg:w-5 md:h-5 md:w-5";
@@ -54,6 +56,8 @@ const Menus = [
 ];
 
 const Header = () => {
+  const dispatch = useDispatch();
+
   const [scrollActive, setScrollActive] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [hideModals, setHideModals] = useState(false);
@@ -144,7 +148,7 @@ const Header = () => {
     });
 
     if (width > 640) {
-      setHideModals(true);
+      dispatch()
     } else {
       setHideModals(false);
       setShowNotification(false);
@@ -319,7 +323,6 @@ const Header = () => {
           </div>
         </nav>
       </header>
-      {hideModals && <MobileNotification messages={messages} users={users} />}
     </>
   );
 };

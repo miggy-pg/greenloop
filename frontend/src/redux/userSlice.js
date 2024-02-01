@@ -12,7 +12,6 @@ export const userSlice = createSlice({
   reducers: {
     successLogin: (state, action) => {
       state.user = action.payload;
-      // toast("You have successfully logged in!");
     },
     errorLoginUser: (state, action) => {
       toast.error(action.payload);

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 // import useOutsideClick from "../../hooks/useOutsideClick";
-import MobileNotification from "./MobileNotification";
 
 const Notification = ({ messages, conversations, isLoading }) => {
   const ref = useRef();
