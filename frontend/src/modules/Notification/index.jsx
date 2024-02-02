@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 // import useOutsideClick from "../../hooks/useOutsideClick";
 
-const Notification = ({ messages, conversations, isLoading }) => {
+const Notification = ({ conversations, isLoading }) => {
+  const messages = useSelector((state) => state.ui.messages);
   const ref = useRef();
 
   console.log("notificationsNavbar: ", conversations);

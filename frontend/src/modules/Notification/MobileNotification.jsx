@@ -1,10 +1,9 @@
 import { TbArrowLeft } from "react-icons/tb";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-const MobileNotification = ({ messages }) => {
-  const openConvo = false;
-
-  console.log("MobileNotification: ", messages);
+const MobileNotification = () => {
+  const messages = useSelector((state) => state.ui.messages);
 
   return (
     <div className="w-full h-full bg-[#6a2323]" id="profile">
@@ -18,7 +17,7 @@ const MobileNotification = ({ messages }) => {
             <div className="divide-y divide-gray-200">
               <div
                 // key={conversationId}
-                className="w-full flex justify-center text-left py-8 sm:px-5 sm:py-1 sm:my-2 xsm:justify-start overflow-x-hidden"
+                className="w-full flex justify-left text-left py-8 sm:px-5 sm:py-1 sm:my-2 xsm:justify-start overflow-x-hidden"
                 // onClick={() => fetchMessages(conversationId, user)}
               >
                 <div className="flex items-center">

@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { ToastContainer } from "react-toastify";
 
@@ -29,7 +30,9 @@ const ProtectedRoute = ({ children, auth = false }) => {
   return children;
 };
 
-function App() {
+const App = () => {
+  const hideModals = useSelector((state) => state.ui.hideModals);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -64,12 +67,14 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="chats" element={<Chat />} />
           <Route path="chats/:id" element={<Chat />} />
-          <Route path="notifications" element={<MobileNotification />} />
+          {!hideModals && (
+            <Route path="notifications" element={<MobileNotification />} />
+          )}
           <Route path="dashboard/users" element={<Users />} />
         </Route>
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default App;

@@ -1,22 +1,24 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, NavLink, useSearchParams } from "react-router-dom";
+import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useWindowSize } from "@uidotdev/usehooks";
-import { FaSearch } from "react-icons/fa";
 import {
-  IoHomeOutline,
-  IoListOutline,
   IoAddCircleOutline,
   IoChatboxEllipsesOutline,
+  IoHomeOutline,
+  IoListOutline,
   IoNotificationsOutline,
   IoSettings,
+  IoSearch,
 } from "react-icons/io5";
 
 import Notification from "../../modules/Notification";
+import { setHideModals, setMessages } from "../../redux/slices/uiSlice";
+import SettingModal from "../SettingModal";
 import { getConversations, getMessages } from "../../api/conversation";
 
 import greenLoopLogo from "../../assets/images/greenLoop.png";
-import { useDispatch } from "react-redux";
 
 // import useOutsideClick from "../../hooks/useOutsideClick";
 
@@ -55,18 +57,21 @@ const Menus = [
   },
 ];
 
-const Header = () => {
+const Navbar = () => {
+  const hideModals = useSelector((state) => state.ui.hideModals);
+  const messages = useSelector((state) => state.ui.messages);
+
   const dispatch = useDispatch();
 
   const [scrollActive, setScrollActive] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
-  const [hideModals, setHideModals] = useState(false);
+  // const [hideModals, setHideModals] = useState(false);
   const [hideMenuLabels, setHideMenuLabels] = useState(false);
   const [isHoveredSettings, setHoveredSettings] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const [conversations, setConversations] = useState([]);
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const user = JSON.parse(localStorage.getItem("user:detail"));
   const [active, setActive] = useState(0);
@@ -79,6 +84,7 @@ const Header = () => {
 
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
+
     const fetchConversations = async () => {
       const { data } = await getConversations(loggedInUser?.id);
       setConversations(data);
@@ -110,7 +116,7 @@ const Header = () => {
   useEffect(() => {
     try {
       const getConversation = async () => {
-        const allMessages = [];
+        // const allMessages = [];
         !isLoading &&
           conversations.map(async (convo) => {
             const { data } = await getMessages(
@@ -118,15 +124,16 @@ const Header = () => {
               user?.id,
               convo.receiverId
             );
+
             data.map((message) => {
               if (!message.hasRead && message.user.id !== user?.id) {
-                allMessages.push(message);
+                // allMessages.push(message);
                 countMessages.current = countMessages.current + 1;
               }
+              dispatch(setMessages(message));
             });
+            // console.log("allMessages: ", allMessages);
           });
-        console.log("allMessages: ", allMessages);
-        setMessages(allMessages);
         // } else {
         //   setMessages({});
         // }
@@ -148,15 +155,18 @@ const Header = () => {
     });
 
     if (width > 640) {
-      dispatch()
+      dispatch(setHideModals(true));
+      // setHideModals(true);
     } else {
-      setHideModals(false);
+      dispatch(setHideModals(false));
+      // setHideModals(false);
       setShowNotification(false);
       setHoveredSettings(false);
     }
     width > 900 ? setHideMenuLabels(true) : setHideMenuLabels(false);
   }, [width]);
 
+  console.log("messagesNavbar: ", messages);
   console.log("checkingconversationId", searchParams);
   console.log("checkingconversationId", conversationId);
 
@@ -194,7 +204,7 @@ const Header = () => {
                   placeholder="Search here ..."
                   className="w-[20rem] bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-xs sm:h-4 sm:w-[14rem] sm:p-3.5 sm:pl-8 sm:max-w-xs xsm:w-[13rem] 2xsm:w-[11rem] 2xsm:p-3 2xsm:pl-8 2xsm:h-4"
                 />
-                <FaSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none sm:top-2.5" />
+                <IoSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none sm:top-2.5" />
               </div>
             </div>
           )}
@@ -217,7 +227,7 @@ const Header = () => {
                     placeholder="Search here ..."
                     className="w-[20rem] h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-sm bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none lg:h-6 lg:w-[15rem] md:h-2 md:w-[12rem] md:text-xs md:max-w-xs "
                   />
-                  <FaSearch className="absolute align-center left-3 top-3 h-3 w-3 text-gray-300 pointer-events-none lg:top-5 md:top-3" />
+                  <IoSearch className="absolute align-center left-3 top-3 h-3 w-3 text-gray-300 pointer-events-none lg:top-5 md:top-3" />
                 </div>
               </div>
             )}
@@ -280,45 +290,14 @@ const Header = () => {
               {showNotification && (
                 <Notification
                   scrollActive={scrollActive}
-                  messages={messages}
+                  // messages={messages}
                   isLoading={isLoading}
                   conversations={conversations}
                   setShowNotification={setShowNotification}
                 />
               )}
 
-              {isHoveredSettings && (
-                <div
-                  className="z-50 fixed top-[4.5rem] right-2 my-4 text-clamp-xs leading-5 list-none bg-white divide-y divide-gray-100 rounded shadow"
-                  id="dropdown-2"
-                >
-                  <Link to="profile">
-                    <div className="px-4 py-3 cursor-pointer hover:bg-gray-100">
-                      <p role="none">My Account</p>
-                    </div>
-                  </Link>
-                  <ul className="py-1" role="none">
-                    <li>
-                      <Link to="dashboard/users">
-                        <span
-                          className="block px-4 py-4 cursor-pointer hover:bg-gray-100"
-                          role="menuitem"
-                        >
-                          Users
-                        </span>
-                      </Link>
-                    </li>
-                    <li>
-                      <span
-                        className="block px-4 py-4 cursor-pointer hover:bg-gray-100"
-                        role="menuitem"
-                      >
-                        Sign out
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              )}
+              {isHoveredSettings && <SettingModal />}
             </ul>
           </div>
         </nav>
@@ -327,4 +306,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Navbar;
