@@ -1,18 +1,21 @@
-import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
+
+import { useEffect, useRef, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+
 import Input from "../../components/Input";
+import { setConversations } from "../../redux/slices/userSlice";
 import { getConversations, getMessages } from "../../api/conversation";
 import { sendUserMessage } from "../../api/message";
-import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
 
-import { TbSend } from "react-icons/tb";
-import { TbCirclePlus } from "react-icons/tb";
-import { TbArrowLeft } from "react-icons/tb";
+import { TbSend, TbCirclePlus, TbArrowLeft } from "react-icons/tb";
 
 import { useWindowSize } from "@uidotdev/usehooks";
+import { useSelector } from "react-redux";
 
 const Chat = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const messagesStore = useSelector((state) => state.user.messages);
 
   const [file, setFile] = useState([]);
   const [conversations, setConversations] = useState([]);
@@ -113,8 +116,6 @@ const Chat = () => {
     };
   };
 
-  console.log("file: ", file);
-
   const fetchMessages = async (conversationId, receiver) => {
     searchParams.set("id", conversationId);
     setSearchParams(searchParams);
@@ -159,11 +160,11 @@ const Chat = () => {
   };
 
   console.log("user: ", user);
-  console.log("conversationChecking: ", conversations);
+  console.log("conversationChecking: ", messagesStore);
   console.log("conversationmessages: ", messages);
   console.log("messagesLengthHere: ", messages?.messages?.length > 0);
   return (
-    <div className="w-full h-full bg-[#ffffff]" id="profile">
+    <div className="w-full h-full bg-white" id="profile">
       <div className="flex pt-[3.8rem] border-grey rounded">
         {isMobile ? (
           <>
@@ -215,13 +216,23 @@ const Chat = () => {
                                 height="48"
                                 alt={user?.companyName}
                               />
-                              <div>
-                                <h4 className="text-md font-semibold text-gray-900 2xsm:text-[0.7em]">
+                              <div className="text-clamp-base">
+                                <h4 className="font-semibold text-gray-900 ">
                                   {user?.companyName}
                                 </h4>
-                                <div className="text-md 2xsm:text-[0.7em]">
-                                  The video chat ended · 2hrs
-                                </div>
+                                {messagesStore[
+                                  messagesStore.filter(
+                                    (message) =>
+                                      message.conversationId === conversationId
+                                  ).length - 1
+                                ].message?.msg ||
+                                  messagesStore[
+                                    messagesStore.filter(
+                                      (message) =>
+                                        message.conversationId ===
+                                        conversationId
+                                    ).length - 1
+                                  ].message?.img}
                               </div>
                             </div>
                           </Link>
@@ -327,7 +338,8 @@ const Chat = () => {
                           }
                         )
                       : messages?.messages?.length > 0 &&
-                        !openConvo && (
+                        !openConvo &&
+                        !conversationId && (
                           <div className="bg-red-500 text-center text-lg font-semibold mt-24">
                             No Messages or No Conversation Selected
                           </div>
@@ -477,7 +489,6 @@ const Chat = () => {
                                   <span className="bg-gray-200 rounded-3xl px-5">
                                     <p className="text-sm text-blue py-3">
                                       {message.msg}
-                                      Test22
                                     </p>
                                   </span>
                                 </div>

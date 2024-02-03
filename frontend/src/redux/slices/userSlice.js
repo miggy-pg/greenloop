@@ -4,12 +4,22 @@ import { toast } from "react-toastify";
 const initialState = {
   user: {},
   receiverid: "",
+  messages: [],
+  conversations: [],
 };
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    setMessages: (state, action) => {
+      console.log("setMesages: ", action.payload);
+      state.messages.push(action.payload);
+    },
+    setConversations: (state, action) => {
+      console.log("action.payload: ", action.payload);
+      state.conversations.push(action.payload);
+    },
     successLogin: (state, action) => {
       state.user = action.payload;
     },
@@ -41,6 +51,8 @@ export const userSlice = createSlice({
 });
 
 export const {
+  setMessages,
+  setConversations,
   successLogin,
   errorLoginUser,
   logoutUser,

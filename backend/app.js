@@ -2,10 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const io = require("socket.io")(8080, {
   cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
-    credentials: true,
+    origin: "*",
   },
 });
 const multer = require("multer");
@@ -28,7 +25,11 @@ const {
   conversation,
   userConversations,
 } = require("./controllers/conversation");
-const { message, conversationMessage } = require("./controllers/message");
+const {
+  message,
+  conversationMessage,
+  hasReadMessage,
+} = require("./controllers/message");
 const {
   fetchWastes,
   postWasteImage,
@@ -141,6 +142,8 @@ app.get("/api/conversations/:userId", userConversations);
 app.post("/api/message", message);
 
 app.get("/api/message/:conversationId", conversationMessage);
+
+app.patch("/api/message/:messageId", hasReadMessage);
 
 // ------------------------ END OF CHAT ROUTES --------------------------------
 

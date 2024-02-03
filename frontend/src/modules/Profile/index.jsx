@@ -12,7 +12,7 @@ import { updateProfile } from "../../api/user";
 import { createConversation } from "../../api/conversation";
 
 const Profile = () => {
-  const { id } = useParams();
+  const { id: profileId } = useParams();
   const navigate = useNavigate();
 
   const [userData, setUser] = useState({
@@ -25,6 +25,7 @@ const Profile = () => {
     province: "",
   });
   const [inputType, setInputType] = useState("password");
+  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState({
     image: "",
   });
@@ -45,7 +46,10 @@ const Profile = () => {
   };
 
   const messageCompany = async () => {
-    const { data } = await createConversation(jwtDecode(token).userId, id);
+    const { data } = await createConversation(
+      jwtDecode(token).userId,
+      profileId
+    );
     navigate(`/chats?id=${data._id || data[0]._id}`);
   };
 
@@ -70,16 +74,13 @@ const Profile = () => {
     }
   };
 
-  const profileType = isLoggedIn
-    ? String(id) === String(jwtDecode(token).userId)
-    : String(id) !== String(jwtDecode(token).userId);
-
   useEffect(() => {
     async function getUser() {
       try {
-        const userId = id ? id : jwtDecode(token).userId;
+        const userId = profileId ? profileId : jwtDecode(token).userId;
         const { data } = await fetchUser(userId);
         setUser(data[0].user);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
@@ -88,6 +89,11 @@ const Profile = () => {
     getUser();
     setData({ image: "" });
   }, [token, showModal]);
+
+  const profileType =
+    profileId && isLoggedIn
+      ? String(profileId) === String(jwtDecode(token).userId)
+      : String(profileId) !== String(jwtDecode(token).userId);
 
   return (
     <div
@@ -109,7 +115,7 @@ const Profile = () => {
             <p className="mb-5 text-normal font-normal text-black">
               {userData.cityMunicipality}
             </p>
-
+            {console.log("insideisLoggedIn: ", !isLoading && profileType)}
             {profileType ? (
               <span
                 onClick={() => setShowModal(true)}
@@ -337,10 +343,15 @@ const Profile = () => {
           )}
         </div>
       </div>
-
-      <div className="flex justify-center px-6">
-        <div className="w-4/5 mt-10 grid gap-10 md:grid-cols-2 lg:gap-10 xl:grid-cols-3">
-          {/* <ListingCard waste={waste} /> */}
+      <div className="flex justify-center md:px-0">
+        <div className="mt-7 grid gap-10 px-32 grid-cols-3 lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:mt-4 md:gap-2 md:grid-cols-1 md:px-24 sm:px-16 xsm:px-4">
+          {!isLoading && userData.wastes.length > 0 ? (
+            userData.wastes.map((waste, index) => (
+              <ListingCard key={index} isLoading={isLoading} props={waste} />
+            ))
+          ) : (
+            <p className="text-3xl font-semibold text-center">No Waste Found</p>
+          )}
         </div>
       </div>
     </div>

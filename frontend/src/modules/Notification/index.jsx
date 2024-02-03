@@ -1,18 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 // import useOutsideClick from "../../hooks/useOutsideClick";
 
-const Notification = ({ conversations, isLoading }) => {
-  const messages = useSelector((state) => state.ui.messages);
+const Notification = ({ isLoading }) => {
+  const messages = useSelector((state) => state.user.messages);
+  const conversations = useSelector((state) => state.user.conversations);
   const ref = useRef();
-
-  console.log("notificationsNavbar: ", conversations);
-  // console.log(
-  //   "conversationsNavbar: ",
-  //   messages.map((conversation) => console.log())
-  // );
-  // useOutsideClick(setShowNotification(false), ref);
 
   const user = JSON.parse(localStorage.getItem("user:detail"));
 
@@ -76,7 +70,7 @@ const Notification = ({ conversations, isLoading }) => {
                   </div>
                   <div className="w-full pl-3 text-left">
                     <div className="text-gray-500 font-normal text-clamp-xs mb-1.5 ">
-                      New message from{" "}
+                      New message from
                       <span className="font-semibold text-gray-900">
                         {message.user.companyName}
                       </span>

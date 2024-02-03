@@ -21,7 +21,6 @@ import {
 } from "../../redux/slices/userSlice";
 import SettingModal from "../SettingModal";
 import { getConversations, getMessages } from "../../api/conversation";
-import { fetchUsers } from "../../api/user";
 
 import greenLoopLogo from "../../assets/images/greenLoop.png";
 
@@ -82,6 +81,7 @@ const Navbar = () => {
   // const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const user = JSON.parse(localStorage.getItem("user:detail"));
+  const [active, setActive] = useState(0);
 
   const countMessages = useRef(0);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -90,24 +90,31 @@ const Navbar = () => {
   const { width } = useWindowSize();
 
   useEffect(() => {
+    const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
+
     const fetchConversations = async () => {
-      const { data: conversations } = await getConversations(user?.id);
-      setConversations(conversations);
-      dispatch(setConversationsStore(conversations));
+      const { data } = await getConversations(loggedInUser?.id);
+      setConversations(data);
+      dispatch(setConversationsStore(data));
     };
     fetchConversations();
   }, []);
 
   useEffect(() => {
     try {
-      const getUsers = async () => {
-        const { data: users } = await fetchUsers();
-        // const resData = await res.json();
-        // console.log("resData: ", resData);
-        setUsers(users);
+      const fetchUsers = async () => {
+        const res = await fetch("http://localhost:8000/api/users", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const resData = await res.json();
+        console.log("resData: ", resData);
+        setUsers(resData);
         setIsLoading(false);
       };
-      getUsers();
+      fetchUsers();
     } catch (err) {
       console.log(err);
     }
@@ -115,32 +122,39 @@ const Navbar = () => {
 
   useEffect(() => {
     try {
-      const getUserConversations = async () => {
-        conversations.map(async (conversation) => {
-          const { data: messages } = await getMessages(
-            conversation.conversationId,
-            user?.id,
-            conversation.receiverId
-          );
+      const getConversation = async () => {
+        // const allMessages = [];
+        !isLoading &&
+          conversations.map(async (convo) => {
+            const { data } = await getMessages(
+              convo.conversationId,
+              user?.id,
+              convo.receiverId
+            );
 
-          messages.map((message) => {
-            if (!message.hasRead && message.user.id !== user?.id) {
-              countMessages.current = countMessages.current + 1;
-            }
-            dispatch(setMessages(message));
+            data.map((message) => {
+              if (!message.hasRead && message.user.id !== user?.id) {
+                // allMessages.push(message);
+                countMessages.current = countMessages.current + 1;
+              }
+              dispatch(setMessages(message));
+            });
+            // console.log("allMessages: ", allMessages);
           });
-          // console.log("allMessages: ", allMessages);
-        });
         // } else {
         //   setMessages({});
         // }
         setIsLoading(false);
       };
-      getUserConversations();
+      getConversation();
     } catch (err) {
       console.log(err);
     }
   }, [conversationsStoreData]);
+
+  console.log("messagesNavbar: ", messages);
+  console.log("notificationNavbar: ", conversations);
+  console.log("countMessages: ", countMessages);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -241,13 +255,11 @@ const Navbar = () => {
                       }
                       className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] md:px-[1.1rem] sm:h-[3rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
                     >
-                      {menu.name.includes("Notifications") &&
-                        !isLoading &&
-                        countMessages.current > 0 && (
-                          <span className="absolute top-3 right-17 bg-red-500 text-white w-4 h-4 text-center justify-between rounded-full font-medium text-xs">
-                            {countMessages.current}
-                          </span>
-                        )}
+                      {menu.name.includes("Notifications") && (
+                        <span className="absolute top-3 right-17 bg-red-500 text-white w-4 h-4 text-center justify-between rounded-full font-medium text-xs">
+                          {!isLoading && countMessages.current}
+                        </span>
+                      )}
                       <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] sm:text-3xl md:h-[3.5rem] sm:h-[3rem]">
                         {menu.icon}
                         {hideMenuLabels && (

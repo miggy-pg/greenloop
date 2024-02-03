@@ -15,7 +15,7 @@ exports.message = async (req, res) => {
 
     let result = null;
     if (image?.length > 0) {
-      result = await Cloudinary.uploader.upload(image, {
+      result = await Cloudinary.loader.upload(image, {
         folder: "conversations/messages",
         width: 300,
         crop: "scale",
@@ -69,13 +69,13 @@ exports.conversationMessage = async (req, res) => {
   try {
     const checkMessages = async (conversationId) => {
       const messages = await Messages.find({ conversationId });
-      console.log("messagesConversationMessage: ", messages);
-      console.log("messagesconversationId: ", conversationId);
+      // console.log("messagesConversationMessage: ", messages);
+      // console.log("messagesconversationId: ", conversationId);
       const messageUserData = Promise.all(
         messages.map(async (message) => {
           const user = await Users.findById(message.senderId);
-          console.log("userConversationMessage: ", user);
-          console.log("messageConversationMessage: ", message);
+          // console.log("userConversationMessage: ", user);
+          // console.log("messageConversationMessage: ", message);
           return {
             user: {
               id: user._id,
@@ -84,7 +84,12 @@ exports.conversationMessage = async (req, res) => {
               image: user.image,
             },
             hasRead: message.hasRead,
-            message: { msg: message.message, msgImage: message?.image },
+            message: {
+              id: message._id,
+              msg: message.message,
+              msgImage: message?.image,
+            },
+            conversationId: conversationId,
           };
         })
       );
@@ -104,6 +109,19 @@ exports.conversationMessage = async (req, res) => {
     } else {
       checkMessages(conversationId);
     }
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+exports.hasReadMessage = async (req, res) => {
+  try {
+    await Messages.updateOne(
+      { _id: req.params.messageId },
+      {
+        $set: { hasRead: true },
+      }
+    );
   } catch (error) {
     console.log("Error", error);
   }

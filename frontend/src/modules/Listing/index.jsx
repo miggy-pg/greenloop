@@ -172,7 +172,7 @@ const Listing = () => {
           <div className="mt-7 grid gap-10 px-32 grid-cols-3 lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:mt-4 md:gap-2 md:grid-cols-1 md:px-24 sm:px-16 xsm:px-4">
             {currentPosts.length ? (
               currentPosts.map((waste, index) => (
-                <ListingCard key={index} props={waste} />
+                <ListingCard key={index} props={waste.waste} />
               ))
             ) : (
               <p className="text-3xl font-semibold text-center">

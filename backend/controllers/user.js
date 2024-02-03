@@ -1,9 +1,11 @@
 const Users = require("../models/Users");
+const Waste = require("../models/Waste");
 
 exports.fetchUser = async (req, res) => {
   try {
     const userId = req.params.userId;
     const users = await Users.find({ _id: userId });
+    const wastes = await Waste.find({ user: userId });
     const usersData = Promise.all(
       users.map(async (user) => {
         return {
@@ -16,11 +18,11 @@ exports.fetchUser = async (req, res) => {
             province: user.province,
             cityMunicipality: user.cityMunicipality,
             receiverId: user._id,
+            wastes: wastes,
           },
         };
       })
     );
-    console.log("usersData: ", usersData);
     res.status(200).json(await usersData);
   } catch (error) {
     console.log("Error", error);

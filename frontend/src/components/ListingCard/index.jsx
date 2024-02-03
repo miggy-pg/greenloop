@@ -1,8 +1,7 @@
 import { transformText } from "../../utils/plasticColors";
 
 const ListingCard = ({ props }) => {
-  const { image, post, wasteCategory } = props.waste;
-  console.log("propsWaste: ", props);
+  const { image, post, wasteCategory } = props;
   const transformedTexts = transformText(wasteCategory);
 
   return (
