@@ -1,13 +1,13 @@
 const categories = [
-  "Plastic", 
-  "Plastic Bottles", 
-  "Glass", 
-  "Scrap Metal", 
-  "E-waste", 
+  "Plastic",
+  "Plastic Bottle",
+  "Glass",
+  "Scrap Metal",
+  "E-waste",
   "Textitle",
   "Food waste",
-  "Biodegradable waste"
-]
+  "Biodegradable waste",
+];
 
 const FilterCard = ({ handleOnChangeFilter }) => {
   return (
@@ -20,16 +20,19 @@ const FilterCard = ({ handleOnChangeFilter }) => {
         Filter By
       </div>
       <div>
-          <div className="w-full rounded-full">
-            {categories.map((category, index) => (
-               <div key={index} onClick={(e)=> handleOnChangeFilter(e)} className={`text-${category} flex justify-center py-3 font-normal text-sm hover:bg-gray-100 cursor-pointer`}>
-               {category}
-               </div>
-            ))}
-            
-          </div>
+        <div className="w-full rounded-full">
+          {categories.map((category, index) => (
+            <div
+              key={index}
+              onClick={(e) => handleOnChangeFilter(e)}
+              className={`text-${category} flex justify-center py-3 font-normal text-sm hover:bg-gray-100 cursor-pointer`}
+            >
+              {category}
+            </div>
+          ))}
+        </div>
       </div>
-      </div>
+    </div>
   );
 };
 

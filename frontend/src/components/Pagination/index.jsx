@@ -1,7 +1,7 @@
 import { TbCaretRightFilled, TbCaretLeftFilled } from "react-icons/tb";
 
 const Pagination = ({
-  postsPerPage,
+  POST_PER_PAGE,
   totalPosts,
   paginate,
   nextPage,
@@ -10,7 +10,7 @@ const Pagination = ({
   pageCount,
 }) => {
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(totalPosts / POST_PER_PAGE); i++) {
     pageNumbers.push(i);
   }
 

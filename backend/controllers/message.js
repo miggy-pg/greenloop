@@ -15,7 +15,7 @@ exports.message = async (req, res) => {
 
     let result = null;
     if (image?.length > 0) {
-      result = await Cloudinary.loader.upload(image, {
+      result = await Cloudinary.uploader.upload(image, {
         folder: "conversations/messages",
         width: 300,
         crop: "scale",

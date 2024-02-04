@@ -37,8 +37,12 @@ const userSchema = mongoose.Schema({
     maxLength: 50,
   },
   image: {
-    type: String,
-    maxLength: 250,
+    public_id: {
+      type: String,
+    },
+    url: {
+      type: String,
+    },
   },
   token: {
     type: String,

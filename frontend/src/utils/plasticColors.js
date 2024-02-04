@@ -8,5 +8,5 @@ export function transformText(text) {
     const transformedText = text.split(" ").join("-").toLowerCase();
     return transformedText;
   }
-  return text.toLowerCase();
+  return text?.toLowerCase();
 }

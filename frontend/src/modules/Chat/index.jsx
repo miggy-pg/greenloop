@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 import Input from "../../components/Input";
-import { setConversations } from "../../redux/slices/userSlice";
 import { getConversations, getMessages } from "../../api/conversation";
 import { sendUserMessage } from "../../api/message";
 
@@ -36,6 +35,7 @@ const Chat = () => {
   useEffect(() => {
     setSocket(io("http://localhost:8080"));
   }, []);
+
   useEffect(() => {
     socket?.emit("addUser", user?.id);
     socket?.on("getUsers", (users) => {
@@ -119,7 +119,6 @@ const Chat = () => {
   const fetchMessages = async (conversationId, receiver) => {
     searchParams.set("id", conversationId);
     setSearchParams(searchParams);
-    console.log("HereAtConversationAgain: ", conversationId);
 
     const { data } = await getMessages(
       conversationId,

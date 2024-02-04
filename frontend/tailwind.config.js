@@ -13,11 +13,21 @@ export default {
     },
 
     extend: {
+      height: {
+        108: "30rem",
+      },
+      width: {
+        "clamp-form-input": "clamp(100%, 20vw, 20rem)",
+      },
       fontSize: {
         clamp: "clamp(1rem, 4vw, 1.8rem)",
+        "clamp-form-greenloop": "clamp(1rem, 40vw, 2.2rem)",
+        "clamp-form-header": "clamp(1.3rem, 40vw, 1.4rem)",
+        "clamp-profile": "clamp(0.8rem, 10vw, 1.4rem)",
         "clamp-to-desktop": "clamp(0.5rem, 4vw, 1rem)",
         "clamp-base": "clamp(0.9rem, 1vw, 1rem)",
         "clamp-xs": "clamp(0.8rem, 1vw, 0.9rem)",
+        "clamp-button": "clamp(0.5rem, 40vw, 0.7rem)",
       },
       gridTemplateRows: {
         chat: "4rem minmax(1rem, 6fr) 6rem",

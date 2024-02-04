@@ -10,8 +10,9 @@ import defaultImage from "../../assets/default-image.jpg";
 import { fetchUser } from "../../api/user";
 import { updateProfile } from "../../api/user";
 import { createConversation } from "../../api/conversation";
+import Listing from "../Listing";
 
-const Profile = () => {
+const Profile = ({ isProfile }) => {
   const { id: profileId } = useParams();
   const navigate = useNavigate();
 
@@ -26,9 +27,7 @@ const Profile = () => {
   });
   const [inputType, setInputType] = useState("password");
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState({
-    image: "",
-  });
+  const [image, setImage] = useState([]);
   const [isFilter, setIsFilter] = useState(false);
   const [isSortBy, setIsSortBy] = useState(false);
 
@@ -37,8 +36,13 @@ const Profile = () => {
 
   const isLoggedIn = token !== null || false;
 
-  const handleFileInputChange = (e) => {
-    setData({ ...data, image: e.target.files[0] });
+  const fetchImage = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
   };
 
   const onChange = (e) => {
@@ -57,16 +61,8 @@ const Profile = () => {
     e.preventDefault();
     console.log("btn clicked");
     try {
-      const profileData = new FormData();
-      profileData.append("image", data.image);
-      profileData.append("companyName", userData.companyName);
-      profileData.append("username", userData.username);
-      profileData.append("password", userData.password);
-      profileData.append("email", userData.email);
-      profileData.append("organizationType", userData.organizationType);
-      profileData.append("cityMunicipality", userData.cityMunicipality);
-      profileData.append("province", userData.province);
-      await updateProfile(jwtDecode(token).userId, profileData);
+      image.length > 0 && (userData.image = image);
+      await updateProfile(jwtDecode(token).userId, userData);
 
       setShowModal(false);
     } catch (err) {
@@ -87,7 +83,7 @@ const Profile = () => {
     }
 
     getUser();
-    setData({ image: "" });
+    setImage([]);
   }, [token, showModal]);
 
   const profileType =
@@ -95,38 +91,43 @@ const Profile = () => {
       ? String(profileId) === String(jwtDecode(token).userId)
       : String(profileId) !== String(jwtDecode(token).userId);
 
+  console.log("userData: ", userData);
+
   return (
     <div
       className="grid w-full py-6 overflow-x-hidden bg-[#F8F8F8]"
       id="profile"
     >
       <div className="max-w-screen-lg flex flex-col text-center justify-center">
-        <div className="flex justify-center items-center border bg-white px-6 w-screen h-[30rem] xl:px-0">
-          <div className="block md:max-w-lg py-10 h-80">
+        <div className="bg-white flex justify-center items-center border px-6 w-screen h-108 xl:px-0 sm:h-96">
+          <div className="block py-10 h-80 md:max-w-md">
             <span className="flex justify-center items-center text-center mb-3">
-              <img src={defaultImage} className="rounded-full w-40 h-40" />
+              <img
+                src={userData.image}
+                className="rounded-full w-40 h-40 sm:h-28 sm:w-28 xsm:h-24 xsm:w-24"
+              />
             </span>
-            <p className="mb-0 text-3xl font-normal text-black">
+            <p className="mb-0 text-3xl font-normal text-black md:text-clamp-profile">
               {userData.companyName}
             </p>
-            <p className="mb-5 text-normal font-thin text-black">
+            <p className="mb-5 text-normal font-thin text-black md:text-clamp-xs ">
               {userData.organizationType}
             </p>
-            <p className="mb-5 text-normal font-normal text-black">
+            <p className="mb-5 text-normal font-normal text-black md:text-clamp-base">
               {userData.cityMunicipality}
             </p>
             {console.log("insideisLoggedIn: ", !isLoading && profileType)}
             {profileType ? (
               <span
                 onClick={() => setShowModal(true)}
-                className="text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full text-sm px-10 py-1 text-center inline-flex items-center"
+                className="text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full text-sm px-10 py-1 text-center inline-flex items-center md:text-clamp-xs md:px-6"
               >
                 Edit Profile
               </span>
             ) : (
               <span
                 onClick={messageCompany}
-                className="text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full text-sm px-10 py-1 text-center inline-flex items-center"
+                className="text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full text-sm px-10 py-1 text-center inline-flex items-center md:text-clamp-xs md:px-6"
               >
                 Message
               </span>
@@ -140,9 +141,9 @@ const Profile = () => {
                       onSubmit={(e) => onSubmit(e)}
                       encType="multipart/form-data"
                     >
-                      <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-[30rem] bg-white outline-none focus:outline-none">
-                        <div className="flex items-center justify-center p-5 border-solid mx-auto border-blueGray-200 rounded-t">
-                          <h3 className="text-2xl font-semibold">
+                      <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-108 bg-white outline-none focus:outline-none xsm:h-3/4 xsm:w-80">
+                        <div className="flex items-center justify-center p-5 border-solid mx-auto border-blueGray-200 rounded-t md:p-2">
+                          <h3 className="text-2xl font-semibold md:text-clamp">
                             Edit Profile
                           </h3>
                         </div>
@@ -150,7 +151,7 @@ const Profile = () => {
 
                         <div className="relative p-6 pb-1">
                           <span className="flex justify-center items-center text-center mb-3">
-                            {data.image ? (
+                            {/* {data.image ? (
                               <img
                                 src={
                                   data.image
@@ -158,14 +159,14 @@ const Profile = () => {
                                     : null
                                 }
                                 alt={data.image ? data.image.name : null}
-                                className="relative w-[10rem] h-[10rem] bg-white rounded-full flex justify-center items-center"
+                                className="relative w-auto h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
                               />
-                            ) : (
-                              <img
-                                src={defaultImage}
-                                className="relative w-[10rem] h-[10rem] bg-white rounded-full flex justify-center items-center"
-                              />
-                            )}
+                            ) : ( */}
+                            <img
+                              src={userData.image}
+                              className="relative w-40 h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
+                            />
+                            {/* )} */}
                           </span>
                           <div className="relative w-48 h-[1.7rem] text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full inline-flex justify-center items-center">
                             <input
@@ -173,55 +174,56 @@ const Profile = () => {
                               id="image-upload"
                               className="hidden"
                               accept="image/*"
-                              onChange={handleFileInputChange}
+                              onChange={(e) => fetchImage(e)}
                             />
                             <label
                               htmlFor="image-upload"
                               className="absolute cursor-pointer"
                             >
                               {/* <IoAddSharp className="w-14 h-14 bg-[#F1F1F1] text-slate-400 rounded-lg m-2" /> */}
-                              <p className="text-slate-400">
-                                {data.image
+                              <p className="text-slate-400 text-clamp-xs">
+                                {/* {data.image
                                   ? "Replace"
-                                  : "Update Profile Picture"}
+                                  : "Update Profile Picture"} */}
+                                Test
                               </p>
                             </label>
                           </div>
 
-                          <p className="mt-5 ml-10 mb-0 text-[#5b5c61] text-normal mx-auto leading-relaxed text-left">
+                          <p className="mt-5 mx-10 mb-0 text-[#5b5c61] text-clamp-xs leading-relaxed text-left xsm:mx-2">
                             Generate Account Settings:
                           </p>
                         </div>
-                        <div className="grid grid-cols-2 text-left ml-10">
-                          <div className="p-6 pt-0">
-                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                        <div className="grid grid-cols-2 text-left mx-10 text-clamp-xs md:mx-8">
+                          <div>
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
                               Name:
                             </p>
-                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
                               Username:
                             </p>
-                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
                               Password:
                             </p>
-                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
                               Email:
                             </p>
-                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
                               Org Type:
                             </p>
-                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
                               City/Municipality:
                             </p>
-                            <p className="my-4 text-[#5b5c61] text-sm leading-relaxed">
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
                               Province:
                             </p>
                           </div>
-                          <div className="p-6 mr-10 pt-0">
+                          <div className="p-6 mr-10 pt-0 md:text-clamp-xs">
                             <input
                               type="text"
                               name="companyName"
                               id="companyName"
-                              className="mb-0 mt-4 w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-2"
                               defaultValue={userData.companyName}
                               onChange={(e) => onChange(e)}
                             />
@@ -230,7 +232,7 @@ const Profile = () => {
                               type="text"
                               name="username"
                               id="username"
-                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-2"
                               defaultValue={userData.username}
                               onChange={(e) => onChange(e)}
                             />
@@ -239,7 +241,7 @@ const Profile = () => {
                               type={inputType}
                               name="password"
                               id="password"
-                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-2 md:mb-0"
                               defaultValue={userData.password}
                               onChange={(e) => onChange(e)}
                               onMouseOut={() => setInputType("password")}
@@ -250,7 +252,7 @@ const Profile = () => {
                               type="email"
                               name="email"
                               id="email"
-                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-2 md:mb-0"
                               defaultValue={userData.email}
                               onChange={(e) => onChange(e)}
                             />
@@ -259,7 +261,7 @@ const Profile = () => {
                               type="text"
                               name="organizationType"
                               id="organizationType"
-                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-4 md:mb-0"
                               defaultValue={userData.organizationType}
                               onChange={(e) => onChange(e)}
                             />
@@ -268,7 +270,7 @@ const Profile = () => {
                               type="text"
                               name="cityMunicipality"
                               id="cityMunicipality"
-                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-3 md:mb-0"
                               defaultValue={userData.cityMunicipality}
                               onChange={(e) => onChange(e)}
                             />
@@ -277,23 +279,23 @@ const Profile = () => {
                               type="text"
                               name="province"
                               id="province"
-                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black sm:text-sm sm:leading-6"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-2 md:mb-0"
                               defaultValue={userData.province}
                               onChange={(e) => onChange(e)}
                             />
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                        <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b md:p-2">
                           <button
-                            className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
                             type="button"
                             onClick={() => setShowModal(false)}
                           >
                             Close
                           </button>
                           <button
-                            className="bg-[#31572C] text-white active:bg-[#2e4d29] font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            className="bg-[#31572C] text-white active:bg-[#2e4d29] font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
                             type="submit"
                           >
                             Update Profile
@@ -303,17 +305,19 @@ const Profile = () => {
                     </form>
                   </div>
                 </div>
-                <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                <div className="opacity-25 fixed inset-0 z-40 bg-black" />
               </>
             ) : null}
           </div>
         </div>
       </div>
-      <div className="flex justify-center pt-10">
+      <Listing myWaste={userData.wastes} />
+
+      {/* <div className="flex justify-center pt-10">
         <div className="w-4/5 mt-10 grid md:grid-cols-2">
-          <div className="flex ml-5">
-            <span className="text-3xl">
-              {userData.companyName}&apos;s uploaded wastes
+          <div className="flex">
+            <span className="text-5xl lg:text-[2.5rem] md:text-[2.2rem] sm:text-[2rem] xsm:text-[1.5rem] 2xsm:text-[1.4rem]">
+              My Wastes
             </span>
           </div>
           <div className="flex flex-row-reverse relative">
@@ -342,8 +346,8 @@ const Profile = () => {
             </div>
           )}
         </div>
-      </div>
-      <div className="flex justify-center md:px-0">
+      </div> */}
+      {/* <div className="flex justify-center md:px-0">
         <div className="mt-7 grid gap-10 px-32 grid-cols-3 lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:mt-4 md:gap-2 md:grid-cols-1 md:px-24 sm:px-16 xsm:px-4">
           {!isLoading && userData.wastes.length > 0 ? (
             userData.wastes.map((waste, index) => (
@@ -353,7 +357,7 @@ const Profile = () => {
             <p className="text-3xl font-semibold text-center">No Waste Found</p>
           )}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

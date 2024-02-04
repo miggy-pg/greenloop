@@ -11,7 +11,7 @@ import { fetchWastes } from "../../api/waste";
 const PAGE_SIZE = 6;
 const POST_PER_PAGE = 6;
 
-const Listing = ({ myWaste }) => {
+const Listing = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -21,10 +21,7 @@ const Listing = ({ myWaste }) => {
   const [filteredWaste, setFilteredWaste] = useState({});
   const [filterValue, setFilterValue] = useState("");
 
-  const wasteToDisplay = myWaste ? myWaste : waste;
-  console.log("myWaste: ", myWaste);
-  console.log("wasteToDisplay: ", wasteToDisplay);
-  const origWaste = filterValue ? filteredWaste : wasteToDisplay;
+  const origWaste = filterValue ? filteredWaste : waste;
 
   const handleOnChangeFilter = (e) => {
     setFilterValue(e.target.textContent);
@@ -113,31 +110,17 @@ const Listing = ({ myWaste }) => {
   return (
     <>
       <div
-        className={`grid w-full h-full overflow-x-hidden ${
-          myWaste ? "bg-[#F3F4F6] py-0" : "bg-white py-6"
-        }`}
+        className="grid w-full h-full py-6 overflow-x-hidden bg-white"
         id="listing"
       >
-        <div
-          className={`flex text-left justify-start items-center lg:h-[11rem] md:h-[10rem] sm:h-[9rem] xsm:h-[8rem] ${
-            myWaste
-              ? " pt-0 h-20 bg-[#F3F4F6] w-4/5"
-              : " bg-[#4F772D] h-48 pt-12 shadow-sm"
-          }`}
-        >
-          <p
-            className={`w-screen font-normal lg:pl-20 lg:text-[2.5rem] md:pl-16 md:text-[2rem] md:justify-center sm:text-left sm:pl-14 sm:text-[2rem] xsm:text-[1.3rem] xsm:pl-11 2xsm:text-[1.2rem] ${
-              myWaste
-                ? "text-3xl pl-32 text-black"
-                : "text-5xl pl-24 text-white"
-            }`}
-          >
-            {myWaste ? "My Waste" : "WASTE LISTING"}
+        <div className="bg-[#4F772D] w-full shadow-sm flex h-[12rem] pt-14 text-left justify-start items-center lg:h-[11rem] md:h-[10rem] sm:h-[9rem] xsm:h-[8rem]">
+          <p className="w-screen text-5xl font-normal text-white pl-24 lg:pl-20 lg:text-[2.5rem] md:pl-16 md:text-[2rem] md:justify-center sm:text-left sm:pl-14 sm:text-[2rem] xsm:text-[1.3rem] xsm:pl-11 2xsm:text-[1.2rem] ">
+            WASTE LISTING
           </p>
         </div>
         <div className="flex justify-center ">
           <div className="w-screen px-28 grid md:grid-cols-2 md:px-0">
-            <div className="flex ml-5 mt-5">
+            <div className="flex ml-5">
               {filterValue && (
                 <>
                   <span className="text-lg mr-5">Applied Filter:</span>
@@ -186,10 +169,7 @@ const Listing = ({ myWaste }) => {
           <div className="mt-7 grid gap-10 px-32 grid-cols-3 lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:mt-4 md:gap-2 md:grid-cols-1 md:px-24 sm:px-16 xsm:px-4">
             {currentPosts.length ? (
               currentPosts.map((waste, index) => (
-                <ListingCard
-                  key={index}
-                  props={myWaste ? waste : waste.waste}
-                />
+                <ListingCard key={index} props={waste.waste} />
               ))
             ) : (
               <p className="text-3xl font-semibold text-center">

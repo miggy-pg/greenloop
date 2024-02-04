@@ -20,7 +20,7 @@ const {
   fetchUsers,
   deleteUser,
 } = require("./controllers/user");
-const { registerUser, loginUser } = require("./controllers/auth");
+const { registerUser, loginUser, signOutUser } = require("./controllers/auth");
 const {
   conversation,
   userConversations,
@@ -160,10 +160,13 @@ app.delete("/api/users/:userId", deleteUser);
 app.get("/api/wastes/:userId", fetchUserWaste);
 
 // UPDATE USER PROFILE
-app.put("/api/users/:userId", updateProfile);
+app.post("/api/users/:userId", updateProfile);
 
 // GET WASTE
 app.get("/api/wastes", fetchWastes);
+
+// SIGN OUT USER
+app.patch("/users/sign-out/:userId", signOutUser);
 
 app.listen(port, () => {
   console.log("listening on port " + port);

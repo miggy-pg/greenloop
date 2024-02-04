@@ -14,9 +14,14 @@ export const uploadPost = async (post) => {
 };
 
 export const updateProfile = async (userId, user) => {
-  return axios.put(`http://localhost:8000/api/users/${userId}`, user);
+  console.log("updateProfileUserData: ", user);
+  return axios.post(`http://localhost:8000/api/users/${userId}`, user);
 };
 
 export const deleteUser = async (userId) => {
   return axios.delete(`http://localhost:8000/api/users/${userId}`);
+};
+
+export const signOutUser = async (userId) => {
+  return axios.patch(`http://localhost:8000/users/sign-out/${userId}`);
 };

@@ -82,183 +82,194 @@ const Form = ({ isSignInPage = true }) => {
   console.log("userSignIn: ", userSignIn);
   return (
     <div className="h-screen flex items-center">
-      <div className="flex flex-col shadow-lg justify-center w-2/4 h-4/5 items-center md:flex-row md:items-start max-w-6xl mx-auto">
-        <div className="w-full md:w-1/2 h-full max-w-md border border-palette-lighter bg-white rounded shadow-lg">
+      <div
+        className={`flex flex-row shadow-lg justify-center w-2/4 h-3/4 items-center max-w-6xl mx-auto lg:flex-col md:items-start md:w-2/4 sm:w-3/4 ${
+          isSignInPage ? "h-4/5" : "lg:h-full"
+        }`}
+      >
+        <div
+          className={`w-2/4 h-full border border-palette-lighter bg-red-500 rounded shadow-lg lg:mb-3 md:mb-0 ${
+            isSignInPage ? "lg:h-1/4 lg:w-full" : "lg:h-1/6 lg:w-full"
+          }`}
+        >
           <img
             src={isSignInPage ? forrestImage : leavesImage}
             alt="Forrest illustration"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover "
           />
         </div>
-        <div className="flex flex-col justify-center h-full w-full md:w-1/2 max-w-sm mx-auto space-y-4 min-h-128">
-          <div className="justify-center">
-            {isSignInPage && (
-              <div>
-                <div className="mx-auto w-[5rem] h-[5rem] justify-center">
-                  <img
-                    src={greenLoopLogo}
-                    alt="Forrest illustration"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-            )}
-            <div className="text-[3.3rem] font-extrabold text-[#31572C] text-center mb-9">
-              GreenLoop
-            </div>
-            <div className="text-3xl font-extrabold mb-4 ml-12">
-              {isSignInPage ? "Sign In" : "Sign Up"}
-            </div>
-
-            <form
-              className="flex flex-col items-center w-full  "
-              onSubmit={(e) => handleSubmit(e)}
-            >
-              {isSignInPage && (
-                <>
-                  <Input
-                    id="username"
-                    type="text"
-                    name="username"
-                    placeholder="username"
-                    className="mb-6 w-[75%]"
-                    value={userSignIn.username}
-                    onChange={(e) =>
-                      setUserSignIn((currSign) => ({
-                        ...currSign,
-                        [e.target.id]: e.target.value,
-                      }))
-                    }
-                  />
-                  <Input
-                    id="password"
-                    type="password"
-                    name="password"
-                    placeholder="password"
-                    className="mb-1 w-[75%]"
-                    value={userSignIn.password}
-                    onChange={(e) =>
-                      setUserSignIn((currSign) => ({
-                        ...currSign,
-                        [e.target.id]: e.target.value,
-                      }))
-                    }
-                  />
-                </>
-              )}
-              {!isSignInPage && (
-                <>
-                  <Input
-                    name="companyName"
-                    placeholder="company name"
-                    className="mb-6 w-[75%]"
-                    value={userSignUp.companyName}
-                    onChange={(e) => formOnChange(e)}
-                  />
-                  <Input
-                    name="email"
-                    type="email"
-                    placeholder="email"
-                    className="mb-6 w-[75%]"
-                    value={userSignUp.email}
-                    onChange={(e) => formOnChange(e)}
-                  />
-                  <Input
-                    id="username"
-                    type="text"
-                    name="username"
-                    placeholder="username"
-                    className="mb-6 w-[75%]"
-                    value={userSignUp.username}
-                    onChange={(e) => formOnChange(e)}
-                  />
-                  <Input
-                    id="password"
-                    type="password"
-                    name="password"
-                    placeholder="password"
-                    className="mb-1 w-[75%]"
-                    value={userSignUp.password}
-                    onChange={(e) => formOnChange(e)}
-                  />
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="confirm password"
-                    className="mt-5 w-[75%]"
-                    value={userSignUp.confirmPassword}
-                    onChange={(e) => formOnChange(e)}
-                  />
-                  <select
-                    id="organization-type"
-                    name="organizationType"
-                    onChange={(event) => handleSelectChange(event)}
-                    value={orgtype}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block w-[75%] p-1.5 mt-5"
-                  >
-                    {organizationType.map((item, index) => (
-                      <option id={index} key={index} value={item.value}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </select>
-                  <Input
-                    id="province"
-                    type="text"
-                    name="province"
-                    placeholder="province"
-                    className="mt-6 w-[75%]"
-                    value={userSignUp.province}
-                    onChange={(e) => formOnChange(e)}
-                  />
-
-                  <Input
-                    id="cityMunicipality"
-                    type="text"
-                    name="cityMunicipality"
-                    placeholder="city/municipality"
-                    className="mt-6 w-[75%]"
-                    value={userSignUp.cityMunicipality}
-                    onChange={(e) => formOnChange(e)}
-                  />
-                </>
-              )}
-              <span className=" w-9/12 text-right mb-7">
-                <span
-                  className="text-xs cursor-pointer text-end text-[#86A16E] no-underline"
-                  onClick={() =>
-                    navigate(`/users/${isSignInPage ? "sign-up" : "sign-in"}`)
-                  }
-                >
-                  {isSignInPage && "Forgot Password?"}
-                </span>
-              </span>
-              <Button
-                label={isSignInPage ? "Sign in" : "Sign up"}
-                type="submit"
-                className="w-[75%] mb-2 bg-[#31572C] rounded-3xl"
+        <div className="flex flex-col justify-center h-full w-full max-w-sm mx-auto space-y-4 min-h-128 lg:w-4/6 xsm:w-3/4">
+          {isSignInPage && (
+            <div className="flex mx-auto w-20 h-20 justify-center lg:w-14 lg:h-14">
+              <img
+                src={greenLoopLogo}
+                alt="Greenloop Logo"
+                className="w-full h-full object-cover "
               />
-            </form>
-            <div className="mx-auto text-center">
-              {isSignInPage ? (
-                <span className="text-[#6C6C6C] font-light text-xs">
-                  Don&apos;t have an account yet?
-                </span>
-              ) : (
-                <span className="text-[#6C6C6C] font-light text-xs">
-                  Already have an account?
-                </span>
-              )}{" "}
+            </div>
+          )}
+          <div
+            className={`text-4xl font-extrabold text-[#31572C] text-center lg:text-clamp-form-greenloop lg:pb-3 ${
+              isSignInPage && "pb-9 "
+            }`}
+          >
+            GreenLoop
+          </div>
+          <div className="text-2xl font-extrabold mb-4 ml-12 md:ml-0 lg:text-clamp-form-header">
+            {isSignInPage ? "Sign In" : "Sign Up"}
+          </div>
+
+          <form
+            className="flex flex-col justify-start items-left px-12 w-full md:px-0"
+            onSubmit={(e) => handleSubmit(e)}
+          >
+            {isSignInPage && (
+              <>
+                <Input
+                  id="username"
+                  type="text"
+                  name="username"
+                  placeholder="username"
+                  className="mb-6"
+                  value={userSignIn.username}
+                  onChange={(e) =>
+                    setUserSignIn((currSign) => ({
+                      ...currSign,
+                      [e.target.id]: e.target.value,
+                    }))
+                  }
+                />
+                <Input
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="password"
+                  className="mb-1"
+                  value={userSignIn.password}
+                  onChange={(e) =>
+                    setUserSignIn((currSign) => ({
+                      ...currSign,
+                      [e.target.id]: e.target.value,
+                    }))
+                  }
+                />
+              </>
+            )}
+            {!isSignInPage && (
+              <>
+                <Input
+                  name="companyName"
+                  placeholder="company name"
+                  className="mb-6"
+                  value={userSignUp.companyName}
+                  onChange={(e) => formOnChange(e)}
+                />
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="email"
+                  className="mb-6"
+                  value={userSignUp.email}
+                  onChange={(e) => formOnChange(e)}
+                />
+                <Input
+                  id="username"
+                  type="text"
+                  name="username"
+                  placeholder="username"
+                  className="mb-6"
+                  value={userSignUp.username}
+                  onChange={(e) => formOnChange(e)}
+                />
+                <Input
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="password"
+                  className="mb-1"
+                  value={userSignUp.password}
+                  onChange={(e) => formOnChange(e)}
+                />
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="confirm password"
+                  className="mt-5"
+                  value={userSignUp.confirmPassword}
+                  onChange={(e) => formOnChange(e)}
+                />
+                <select
+                  id="organization-type"
+                  name="organizationType"
+                  onChange={(event) => handleSelectChange(event)}
+                  value={orgtype}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block p-1.5 mt-5"
+                >
+                  {organizationType.map((item, index) => (
+                    <option id={index} key={index} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
+                <Input
+                  id="province"
+                  type="text"
+                  name="province"
+                  placeholder="province"
+                  className="mt-6"
+                  value={userSignUp.province}
+                  onChange={(e) => formOnChange(e)}
+                />
+
+                <Input
+                  id="cityMunicipality"
+                  type="text"
+                  name="cityMunicipality"
+                  placeholder="city/municipality"
+                  className="mt-6"
+                  value={userSignUp.cityMunicipality}
+                  onChange={(e) => formOnChange(e)}
+                />
+              </>
+            )}
+            <span className="text-right mb-7">
               <span
-                className="text-xs font-medium cursor-pointer  text-[#86A16E] no-underline"
+                className="text-xs cursor-pointer text-end text-[#86A16E] no-underline"
                 onClick={() =>
                   navigate(`/users/${isSignInPage ? "sign-up" : "sign-in"}`)
                 }
               >
-                {isSignInPage ? "Create here" : "Sign in"}
+                {isSignInPage && "Forgot Password?"}
               </span>
-            </div>
+            </span>
+            <span className="flex justify-center w-full">
+              <Button
+                label={isSignInPage ? "Sign in" : "Sign up"}
+                type="submit"
+                className="mb-2 bg-[#31572C] rounded-3xl"
+              />
+            </span>
+          </form>
+          <div className="mx-auto text-center">
+            {isSignInPage ? (
+              <span className="text-[#6C6C6C] font-light text-xs">
+                Don&apos;t have an account yet?
+              </span>
+            ) : (
+              <span className="text-[#6C6C6C] font-light text-xs">
+                Already have an account?
+              </span>
+            )}
+            {isSignInPage && <br />}{" "}
+            <span
+              className="text-xs font-medium cursor-pointer text-[#86A16E] no-underline md:text-clamp-xs"
+              onClick={() =>
+                navigate(`/users/${isSignInPage ? "sign-up" : "sign-in"}`)
+              }
+            >
+              {isSignInPage ? "Create here" : "Sign in"}
+            </span>
           </div>
         </div>
       </div>

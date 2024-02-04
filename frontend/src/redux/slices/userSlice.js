@@ -26,8 +26,9 @@ export const userSlice = createSlice({
     errorLoginUser: (state, action) => {
       toast.error(action.payload);
     },
-    logoutUser: () => {
+    signOutUser: () => {
       localStorage.removeItem("user:token");
+      localStorage.removeItem("user:detail");
     },
     successUpdateUser: () => {
       toast.success("User has been updated successfully!");
@@ -55,7 +56,7 @@ export const {
   setConversations,
   successLogin,
   errorLoginUser,
-  logoutUser,
+  signOutUser,
   successUpdateUser,
   errorUpdateUser,
   successDeleteListing,

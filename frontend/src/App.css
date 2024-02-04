@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: #f8f8f8;
+}
+
 .active {
   @apply bg-[#31572C] text-white max-h-[5rem] h-[5rem] md:h-[3.5rem] sm:h-[3rem] sm:rounded-t-lg sm:pt-0 hover:text-white;
 }

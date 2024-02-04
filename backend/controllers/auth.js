@@ -108,3 +108,22 @@ exports.loginUser = async (req, res, next) => {
     console.log(error, "Error");
   }
 };
+
+exports.signOutUser = async (req, res) => {
+  try {
+    await Users.updateOne(
+      { _id: req.user._id },
+      {
+        $set: { token: "" },
+      }
+    );
+
+    // return res
+    //   .status(200)
+    //   .clearCookie("token ", { httpOnly: true })
+    //   .json({ sucess: true, message: "User has been successfully signed out" });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({ error: err.message });
+  }
+};

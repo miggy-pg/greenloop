@@ -1,3 +1,4 @@
+const Cloudinary = require("../utils/cloudinary");
 const Users = require("../models/Users");
 const Waste = require("../models/Waste");
 
@@ -17,6 +18,7 @@ exports.fetchUser = async (req, res) => {
             organizationType: user.organizationType,
             province: user.province,
             cityMunicipality: user.cityMunicipality,
+            image: user.image.url,
             receiverId: user._id,
             wastes: wastes,
           },
@@ -81,17 +83,28 @@ exports.fetchUserWaste = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const image = req.file ? req.file.filename : "";
     const userId = req.params.userId;
     const {
       companyName,
       email,
+      image,
       username,
       password,
       organizationType,
       province,
       cityMunicipality,
     } = req.body;
+
+    let result;
+    if (image?.length > 0) {
+      result = await Cloudinary.uploader.upload(image, {
+        folder: "users/profile",
+        width: 300,
+        crop: "scale",
+      });
+    }
+    console.log("result: ", result);
+    console.log("Cloudinary: ", Cloudinary.loader);
     const user = await Users.findById(userId);
     if (user) {
       user.companyName = companyName;
@@ -101,11 +114,13 @@ exports.updateProfile = async (req, res) => {
       user.organizationType = organizationType;
       user.province = province;
       user.cityMunicipality = cityMunicipality;
-      user.image = image;
+      user.image = {
+        public_id: result.public_id,
+        url: result.secure_url,
+      };
     }
-
+    console.log("userupdateProfile: ", user);
     const updatedUser = await user.save();
-    console.log("updatedUser: ", updatedUser);
 
     res.status(200).json({
       user: {
