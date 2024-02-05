@@ -1,15 +1,19 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
 import { jwtDecode } from "jwt-decode";
+
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 import Card from "../../components/Card";
 import GreetingCard from "../../components/GreetingCard";
 import PostCard from "../../components/PostCard";
 import { fetchWastes } from "../../api/waste";
 import { fetchUser } from "../../api/user";
+import { setWastes } from "../../redux/slices/userSlice";
 
 const Home = () => {
+  const dispatch = useDispatch();
+
   const [user, setUser] = useState({});
   const [waste, setWaste] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +29,7 @@ const Home = () => {
         setIsLoading(false);
         setUser(data[0].user);
         setWaste(waste);
+        dispatch(setWastes(waste));
       } catch (err) {
         console.log(err);
       }
@@ -45,7 +50,7 @@ const Home = () => {
       <div className="max-w-screen-md px-6 mx-auto flex flex-col text-center justify-center w-[40%] 2xl:w-[45%] xl:w-[55%] lg:w-[80%] lg:px-16 sm:px-8 xsm:px-0 2xsm:px-0">
         {isLoggedIn && <GreetingCard user={user} />}
         <Link to="listing">
-          <Card />
+          <Card wasteLength={waste.length} />
         </Link>
         {sortedWaste.map((waste, i) => (
           <PostCard key={i} props={waste} />

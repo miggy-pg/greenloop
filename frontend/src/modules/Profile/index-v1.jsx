@@ -190,144 +190,100 @@ const Profile = () => {
                             </label>
                           </div>
 
-                          <p className="mt-5 mx-6 mb-0 text-[#5b5c61] text-clamp-xs leading-relaxed text-left xsm:mx-2">
+                          <p className="mt-5 mx-10 mb-0 text-[#5b5c61] text-clamp-xs leading-relaxed text-left xsm:mx-2">
                             Generate Account Settings:
                           </p>
                         </div>
+                        <div className="grid grid-cols-2 text-left mx-10 text-clamp-xs md:mx-8">
+                          <div>
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
+                              Name:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
+                              Username:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
+                              Password:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
+                              Email:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
+                              Org Type:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
+                              City/Municipality:
+                            </p>
+                            <p className="my-4 text-[#5b5c61] leading-relaxed xsm:my-2">
+                              Province:
+                            </p>
+                          </div>
+                          <div className="text-clamp-xs">
+                            <input
+                              type="text"
+                              name="companyName"
+                              id="companyName"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-2"
+                              defaultValue={userData.companyName}
+                              onChange={(e) => onChange(e)}
+                            />
 
-                        <div className="relative overflow-hidden py-5">
-                          <table className="w-full mx-6 text-clamp-xs text-left  rtl:text-right text-gray-500 sm:mx-2">
-                            <tbody>
-                              <tr className="bg-white">
-                                <th
-                                  scope="row"
-                                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                  Name:
-                                </th>
-                                <td className="px-6 py-2">
-                                  <input
-                                    type="text"
-                                    name="companyName"
-                                    id="companyName"
-                                    className=" w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    defaultValue={userData.companyName}
-                                    onChange={(e) => onChange(e)}
-                                  />
-                                </td>
-                              </tr>
-                              <tr className="bg-white">
-                                <th
-                                  scope="row"
-                                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                  Username:
-                                </th>
-                                <td className="px-6 py-2">
-                                  <input
-                                    type="text"
-                                    name="username"
-                                    id="username"
-                                    className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    defaultValue={userData.username}
-                                    onChange={(e) => onChange(e)}
-                                  />
-                                </td>
-                              </tr>
-                              <tr className="bg-white ">
-                                <th
-                                  scope="row"
-                                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                  Password:
-                                </th>
-                                <td className="px-6 py-2">
-                                  <input
-                                    type={inputType}
-                                    name="password"
-                                    id="password"
-                                    className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    defaultValue={userData.password}
-                                    onChange={(e) => onChange(e)}
-                                    onMouseOut={() => setInputType("password")}
-                                    onMouseEnter={() => setInputType("text")}
-                                  />
-                                </td>
-                              </tr>
-                              <tr className="bg-white ">
-                                <th
-                                  scope="row"
-                                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                  Email:
-                                </th>
-                                <td className="px-6 py-2">
-                                  <input
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    defaultValue={userData.email}
-                                    onChange={(e) => onChange(e)}
-                                  />
-                                </td>
-                              </tr>
-                              <tr className="bg-white ">
-                                <th
-                                  scope="row"
-                                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                  Org Type:
-                                </th>
-                                <td className="px-6 py-2">
-                                  <input
-                                    type="text"
-                                    name="organizationType"
-                                    id="organizationType"
-                                    className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    defaultValue={userData.organizationType}
-                                    onChange={(e) => onChange(e)}
-                                  />
-                                </td>
-                              </tr>
-                              <tr className="bg-white ">
-                                <th
-                                  scope="row"
-                                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                  City/Municipality:
-                                </th>
-                                <td className="px-6 py-2">
-                                  <input
-                                    type="text"
-                                    name="cityMunicipality"
-                                    id="cityMunicipality"
-                                    className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    defaultValue={userData.cityMunicipality}
-                                    onChange={(e) => onChange(e)}
-                                  />
-                                </td>
-                              </tr>
-                              <tr className="bg-white">
-                                <th
-                                  scope="row"
-                                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                  Province:
-                                </th>
-                                <td className="px-6 py-2">
-                                  <input
-                                    type="text"
-                                    name="province"
-                                    id="province"
-                                    className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    defaultValue={userData.province}
-                                    onChange={(e) => onChange(e)}
-                                  />
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
+                            <input
+                              type="text"
+                              name="username"
+                              id="username"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-2"
+                              defaultValue={userData.username}
+                              onChange={(e) => onChange(e)}
+                            />
+
+                            <input
+                              type={inputType}
+                              name="password"
+                              id="password"
+                              className="mb-0 mt-[1.2rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-2 md:mb-0"
+                              defaultValue={userData.password}
+                              onChange={(e) => onChange(e)}
+                              onMouseOut={() => setInputType("password")}
+                              onMouseEnter={() => setInputType("text")}
+                            />
+
+                            <input
+                              type="email"
+                              name="email"
+                              id="email"
+                              className="mb-0 mt-[1.2rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-2 md:mb-0"
+                              defaultValue={userData.email}
+                              onChange={(e) => onChange(e)}
+                            />
+
+                            <input
+                              type="text"
+                              name="organizationType"
+                              id="organizationType"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-4 md:mb-0"
+                              defaultValue={userData.organizationType}
+                              onChange={(e) => onChange(e)}
+                            />
+
+                            <input
+                              type="text"
+                              name="cityMunicipality"
+                              id="cityMunicipality"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-3 md:mb-0"
+                              defaultValue={userData.cityMunicipality}
+                              onChange={(e) => onChange(e)}
+                            />
+
+                            <input
+                              type="text"
+                              name="province"
+                              id="province"
+                              className="mb-0 mt-[0.9rem] w-full rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24 md:mt-2 md:mb-0"
+                              defaultValue={userData.province}
+                              onChange={(e) => onChange(e)}
+                            />
+                          </div>
                         </div>
 
                         <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b md:p-2">
