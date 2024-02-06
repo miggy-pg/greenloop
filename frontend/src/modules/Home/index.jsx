@@ -24,12 +24,11 @@ const Home = () => {
   useEffect(() => {
     async function getUser() {
       try {
-        const { data } = await fetchUser(jwtDecode(token).userId);
+        const { data: userData } = await fetchUser(jwtDecode(token).userId);
         const { data: waste } = await fetchWastes();
         setIsLoading(false);
-        setUser(data[0].user);
+        setUser(userData[0].user);
         setWaste(waste);
-        dispatch(setWastes(waste));
       } catch (err) {
         console.log(err);
       }
@@ -50,7 +49,7 @@ const Home = () => {
       <div className="max-w-screen-md px-6 mx-auto flex flex-col text-center justify-center w-[40%] 2xl:w-[45%] xl:w-[55%] lg:w-[80%] lg:px-16 sm:px-8 xsm:px-0 2xsm:px-0">
         {isLoggedIn && <GreetingCard user={user} />}
         <Link to="listing">
-          <Card wasteLength={waste.length} />
+          <Card wasteLength={waste?.length} />
         </Link>
         {sortedWaste.map((waste, i) => (
           <PostCard key={i} props={waste} />

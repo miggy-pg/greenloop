@@ -7,12 +7,13 @@ import ListingCard from "../../components/ListingCard";
 import FilterCard from "../../components/FilterCard";
 import SortByCard from "../../components/SortByCard";
 import { fetchWastes } from "../../api/waste";
-import { useSelector } from "react-redux";
+
 const PAGE_SIZE = 6;
 const POST_PER_PAGE = 6;
 
 const Listing = ({ myWaste }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+
   const [isLoading, setIsLoading] = useState(true);
   const [isFilter, setIsFilter] = useState(false);
   const [isSortBy, setIsSortBy] = useState(false);

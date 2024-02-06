@@ -43,7 +43,6 @@ const Notification = ({ isLoading }) => {
         {conversations.length > 0 &&
           !isLoading &&
           messages.map((message) => {
-            console.log("messageChat: ", message);
             return (
               user.id !== message.user.id && (
                 <Link
@@ -84,7 +83,7 @@ const Notification = ({ isLoading }) => {
               )
             );
           })}
-        {!conversations.length && (
+        {!messages.length && (
           <div className="flex px-4 py-3">
             <div className="w-full pl-3">
               <div className="text-gray-500 font-normal text-sm mb-1.5 text-center">

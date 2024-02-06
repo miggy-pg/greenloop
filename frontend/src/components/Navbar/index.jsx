@@ -1,3 +1,5 @@
+import { io } from "socket.io-client";
+
 import { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +26,6 @@ import { getConversations, getMessages } from "../../api/conversation";
 import { fetchUsers } from "../../api/user";
 
 import greenLoopLogo from "../../assets/images/greenLoop.png";
-
 // import useOutsideClick from "../../hooks/useOutsideClick";
 
 const iconSizes = "h-4.5 w-4.5 lg:h-5 lg:w-5 md:h-5 md:w-5";
@@ -70,7 +71,7 @@ const Navbar = () => {
   );
 
   const dispatch = useDispatch();
-
+  const [socket, setSocket] = useState(null);
   const [scrollActive, setScrollActive] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   // const [hideModals, setHideModals] = useState(false);
@@ -88,6 +89,16 @@ const Navbar = () => {
   const conversationId = searchParams.get("id");
 
   const { width } = useWindowSize();
+
+  useEffect(() => {
+    setSocket(io("http://localhost:8080"));
+  }, []);
+
+  useEffect(() => {
+    socket?.on("getUnreadMessages", (users) => {
+      console.log("activeUsers: ", users);
+    });
+  }, [socket]);
 
   useEffect(() => {
     const fetchConversations = async () => {

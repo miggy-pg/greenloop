@@ -6,6 +6,7 @@ const initialState = {
   receiverid: "",
   messages: [],
   conversations: [],
+  // wastes: {},
   wastes: [],
 };
 
@@ -20,6 +21,10 @@ export const userSlice = createSlice({
       state.conversations.push(action.payload);
     },
     setWastes: (state, action) => {
+      // action.payload.map((waste, index) => {
+      //   state.wastes[index] = waste;
+      // });
+      console.log("setWastes.payload", action.payload);
       state.wastes.push(action.payload);
     },
     successLogin: (state, action) => {
@@ -28,10 +33,7 @@ export const userSlice = createSlice({
     errorLoginUser: (state, action) => {
       toast.error(action.payload);
     },
-    signOutUser: () => {
-      localStorage.removeItem("user:token");
-      localStorage.removeItem("user:detail");
-    },
+
     successUpdateUser: () => {
       toast.success("User has been updated successfully!");
     },
@@ -59,7 +61,6 @@ export const {
   setWastes,
   successLogin,
   errorLoginUser,
-  signOutUser,
   successUpdateUser,
   errorUpdateUser,
   successDeleteListing,
