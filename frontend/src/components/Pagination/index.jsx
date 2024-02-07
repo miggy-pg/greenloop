@@ -1,16 +1,38 @@
 import { TbCaretRightFilled, TbCaretLeftFilled } from "react-icons/tb";
 
+const PAGE_SIZE = 6;
+const POST_PER_PAGE = 6;
+
 const Pagination = ({
-  POST_PER_PAGE,
-  totalPosts,
-  paginate,
-  nextPage,
-  prevPage,
+  origWaste,
+  searchParams,
+  setSearchParams,
   currentPage,
-  pageCount,
 }) => {
+  // Calculate actual number of pages
+  const pageCount = Math.ceil(origWaste?.length / PAGE_SIZE);
+
+  function nextPage() {
+    const next = currentPage === pageCount ? currentPage : currentPage + 1;
+
+    searchParams.set("page", next);
+    setSearchParams(searchParams);
+  }
+
+  function prevPage() {
+    const prev = currentPage === 1 ? currentPage : currentPage - 1;
+
+    searchParams.set("page", prev);
+    setSearchParams(searchParams);
+  }
+
+  const paginate = (pageNumber) => {
+    searchParams.set("page", pageNumber);
+    setSearchParams(searchParams);
+  };
+
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(totalPosts / POST_PER_PAGE); i++) {
+  for (let i = 1; i <= Math.ceil(origWaste.length / POST_PER_PAGE); i++) {
     pageNumbers.push(i);
   }
 

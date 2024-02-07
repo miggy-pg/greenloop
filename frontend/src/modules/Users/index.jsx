@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
+
 import Table from "../../components/Table";
 import UserList from "../../components/Management/UserList";
-import { useEffect, useState } from "react";
 import { deleteUser, fetchUsers } from "../../api/user";
 import { userHeader } from "../../constants/userHeader";
 

@@ -1,14 +1,15 @@
 import axios from "axios";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Button from "../../components/Button";
 import Input from "../../components/Input";
-import { useNavigate } from "react-router-dom";
 import forrestImage from "../../assets/images/login.png";
 import leavesImage from "../../assets/images/signup.png";
 import greenLoopLogo from "../../assets/images/greenLoop.png";
-import { useDispatch } from "react-redux";
-import { successLogin } from "../../redux/slices/userSlice";
+// import { useDispatch } from "react-redux";
+// import { successLogin } from "../../redux/slices/userSlice";
 
 const organizationType = [
   { value: "Waste Generator", label: "Waste Generator" },
@@ -29,7 +30,7 @@ const Form = ({ isSignInPage = true }) => {
     organizationType: orgtype,
   });
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [userSignIn, setUserSignIn] = useState({
     username: "",
     password: "",
@@ -62,7 +63,7 @@ const Form = ({ isSignInPage = true }) => {
         localStorage.setItem("user:token", res.data.token);
         localStorage.setItem("user:detail", JSON.stringify(res.data.user));
 
-        dispatch(successLogin(res.data.user));
+        // dispatch(successLogin(res.data.user));
         navigate("/");
       }
       if (res.status === 200) {

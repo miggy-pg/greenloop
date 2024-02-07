@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
-import { uploadPost } from "../../api/user";
 import { IoAddSharp } from "react-icons/io5";
 import ButtonOutline from "../../components/ButtonOutline";
+import { useUploadPost } from "../../hooks/useUploadPost";
 
 const wasteCategories = [
   "Plastic",
@@ -19,7 +19,6 @@ const wasteCategories = [
 const Post = () => {
   const token = localStorage.getItem("user:token");
 
-  const [success, setSuccess] = useState(false);
   const [data, setData] = useState({
     image: "",
   });
@@ -44,8 +43,7 @@ const Post = () => {
       formData.append("wasteCategory", selectedCategory);
       formData.append("user", jwtDecode(token).userId);
 
-      const res = await uploadPost(formData);
-      setSuccess(res.status === 200 ? true : false);
+      // await useUploadPost(formData);
 
       setData({
         image: "",

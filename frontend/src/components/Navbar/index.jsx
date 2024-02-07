@@ -1,8 +1,5 @@
-import { io } from "socket.io-client";
-
 import { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useSearchParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 import { useWindowSize } from "@uidotdev/usehooks";
 import {
@@ -16,13 +13,14 @@ import {
 } from "react-icons/io5";
 
 import Notification from "../../modules/Notification";
-import { setHideModals } from "../../redux/slices/uiSlice";
-import {
-  setMessages,
-  setConversations as setConversationsStore,
-} from "../../redux/slices/userSlice";
+// import { setHideModals } from "../../redux/slices/uiSlice";
+// import {
+//   setConversations as setConversationsStore,
+//   setUnreadMessage,
+// } from "../../redux/slices/userSlice";
 import SettingModal from "../SettingModal";
 import { getConversations, getMessages } from "../../api/conversation";
+import { useSocket } from "../../hooks/useSocket";
 import { fetchUsers } from "../../api/user";
 
 import greenLoopLogo from "../../assets/images/greenLoop.png";
@@ -64,39 +62,38 @@ const Menus = [
 ];
 
 const Navbar = () => {
-  const hideModals = useSelector((state) => state.ui.hideModals);
-  const messages = useSelector((state) => state.user.messages);
-  const conversationsStoreData = useSelector(
-    (state) => state.user.conversations
-  );
+  // const hideModals = useSelector((state) => state.ui.hideModals);
+  // const messages = useSelector((state) => state.user.messages);
+  // const conversationsStoreData = useSelector(
+  //   (state) => state.user.conversations
+  // );
+  // const unreadMessages = useSelector((state) => state.user.unreadMessages);
 
-  const dispatch = useDispatch();
-  const [socket, setSocket] = useState(null);
+  // const dispatch = useDispatch();
   const [scrollActive, setScrollActive] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
-  // const [hideModals, setHideModals] = useState(false);
+  const [hideModals, setHideModals] = useState(false);
   const [hideMenuLabels, setHideMenuLabels] = useState(false);
   const [isHoveredSettings, setHoveredSettings] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const [conversations, setConversations] = useState([]);
-  // const [messages, setMessages] = useState([]);
+  // const [unreadMessages, setUnreadMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const user = JSON.parse(localStorage.getItem("user:detail"));
 
-  const countMessages = useRef(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const conversationId = searchParams.get("id");
 
   const { width } = useWindowSize();
 
-  useEffect(() => {
-    setSocket(io("http://localhost:8080"));
-  }, []);
+  const socket = useSocket();
 
   useEffect(() => {
-    socket?.on("getUnreadMessages", (users) => {
-      console.log("activeUsers: ", users);
+    socket?.emit("userMessages", user?.id);
+    socket?.on("getUnreadMessages", (messages) => {
+      console.log("unreadMessages: ", messages);
+      // dispatch(setUnreadMessage(messages));
     });
   }, [socket]);
 
@@ -104,54 +101,10 @@ const Navbar = () => {
     const fetchConversations = async () => {
       const { data: conversations } = await getConversations(user?.id);
       setConversations(conversations);
-      dispatch(setConversationsStore(conversations));
+      // dispatch(setConversationsStore(conversations));
     };
     fetchConversations();
   }, []);
-
-  useEffect(() => {
-    try {
-      const getUsers = async () => {
-        const { data: users } = await fetchUsers();
-        // const resData = await res.json();
-        // console.log("resData: ", resData);
-        setUsers(users);
-        setIsLoading(false);
-      };
-      getUsers();
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
-      const getUserConversations = async () => {
-        conversations.map(async (conversation) => {
-          const { data: messages } = await getMessages(
-            conversation.conversationId,
-            user?.id,
-            conversation.receiverId
-          );
-
-          messages.map((message) => {
-            if (!message.hasRead && message.user.id !== user?.id) {
-              countMessages.current = countMessages.current + 1;
-            }
-            dispatch(setMessages(message));
-          });
-          // console.log("allMessages: ", allMessages);
-        });
-        // } else {
-        //   setMessages({});
-        // }
-        setIsLoading(false);
-      };
-      getUserConversations();
-    } catch (err) {
-      console.log(err);
-    }
-  }, [conversationsStoreData]);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -159,20 +112,24 @@ const Navbar = () => {
     });
 
     if (width > 640) {
-      dispatch(setHideModals(true));
-      // setHideModals(true);
+      // dispatch(setHideModals(true));
+      setHideModals(true);
     } else {
-      dispatch(setHideModals(false));
-      // setHideModals(false);
+      // dispatch(setHideModals(false));
+      setHideModals(false);
       setShowNotification(false);
       setHoveredSettings(false);
     }
     width > 900 ? setHideMenuLabels(true) : setHideMenuLabels(false);
   }, [width]);
 
-  console.log("messagesNavbar: ", messages);
+  // console.log("messagesNavbar: ", messages);
   console.log("checkingconversationId", searchParams);
   console.log("checkingconversationId", conversationId);
+
+  // useEffect(() => {
+  //   console.log("NavBarUnreadMessagesCount: ", unreadMessages.length);
+  // }, [unreadMessages.length]);
 
   return (
     <>
@@ -252,13 +209,12 @@ const Navbar = () => {
                       }
                       className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] md:px-[1.1rem] sm:h-[3rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
                     >
-                      {menu.name.includes("Notifications") &&
-                        !isLoading &&
-                        countMessages.current > 0 && (
+                      {/* {menu.name.includes("Notifications") &&
+                        unreadMessages.length > 0 && (
                           <span className="absolute top-3 right-17 bg-red-500 text-white w-4 h-4 text-center justify-between rounded-full font-medium text-xs">
-                            {countMessages.current}
+                            {unreadMessages.length}
                           </span>
-                        )}
+                        )} */}
                       <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] sm:text-3xl md:h-[3.5rem] sm:h-[3rem]">
                         {menu.icon}
                         {hideMenuLabels && (
@@ -296,8 +252,7 @@ const Navbar = () => {
               {showNotification && (
                 <Notification
                   scrollActive={scrollActive}
-                  // messages={messages}
-                  isLoading={isLoading}
+                  // unreadMessages={unreadMessages}
                   setShowNotification={setShowNotification}
                 />
               )}

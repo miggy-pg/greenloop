@@ -114,15 +114,15 @@ exports.conversationMessage = async (req, res) => {
   }
 };
 
-exports.hasReadMessage = async (req, res) => {
-  try {
-    await Messages.updateOne(
-      { _id: req.params.messageId },
-      {
-        $set: { hasRead: true },
-      }
-    );
-  } catch (error) {
-    console.log("Error", error);
-  }
-};
+// exports.hasReadMessage = async (req, res) => {
+//   try {
+//     await Messages.updateOne(
+//       { _id: req.params.messageId },
+//       {
+//         $set: { hasRead: true },
+//       }
+//     );
+//   } catch (error) {
+//     console.log("Error", error);
+//   }
+// };

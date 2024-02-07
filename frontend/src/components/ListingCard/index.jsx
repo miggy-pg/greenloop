@@ -3,7 +3,7 @@ import { transformText } from "../../utils/plasticColors";
 const ListingCard = ({ props }) => {
   const { image, post, wasteCategory } = props;
   const transformedTexts = transformText(wasteCategory);
-  console.log("transformedTexts: ", props);
+
   return (
     <div className="bg-white border border-gray-200 shadow-sm rounded-3xl my-2 md:my-4">
       <div className="h-[20rem] flex items-center justify-between lg:justify-evenly sm:h-[10rem] 2xsm:h-[7rem]">

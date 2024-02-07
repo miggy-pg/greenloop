@@ -13,6 +13,8 @@ require("./db/connection");
 
 // Import Files
 const Users = require("./models/Users");
+const Conversations = require("./models/Conversations");
+const Messages = require("./models/Messages");
 const {
   fetchUser,
   fetchUserWaste,
@@ -28,13 +30,15 @@ const {
 const {
   message,
   conversationMessage,
-  hasReadMessage,
+  // hasReadMessage,
 } = require("./controllers/message");
 const {
   fetchWastes,
   postWasteImage,
   fetchWaste,
 } = require("./controllers/waste");
+
+const { checkMessages } = require("./utils/checkMessages");
 
 // app Use
 const app = express();
@@ -92,6 +96,33 @@ io.on("connection", (socket) => {
     }
   );
 
+  socket.on("userMessages", async (userId) => {
+    const checkConversation = await Conversations.find({
+      members: { $in: [userId] },
+    });
+    const messages = await checkMessages(checkConversation[0]._id);
+    const unreadMessages = messages.filter((message) => !message.hasRead);
+    io.to(socket.id).emit("getUnreadMessages", unreadMessages);
+  });
+
+  socket.on("updateMessage", async (conversationId, messageId) => {
+    try {
+      await Messages.updateOne(
+        { _id: messageId },
+        {
+          $set: { hasRead: true },
+        }
+      );
+      const messages = await checkMessages(conversationId);
+      const unreadMessages = messages.filter((message) => !message.hasRead);
+      console.log("updatingMessagemessages: ", messages);
+      console.log("updatingMessage: ", unreadMessages);
+      io.to(socket.id).emit("getUnreadMessages", unreadMessages);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  });
+
   socket.on("disconnect", () => {
     users = users.filter((user) => user.socketId !== socket.id);
     io.emit("getUsers", users);
@@ -143,7 +174,7 @@ app.post("/api/message", message);
 
 app.get("/api/message/:conversationId", conversationMessage);
 
-app.patch("/api/message/:messageId", hasReadMessage);
+// app.patch("/api/message/:messageId", hasReadMessage);
 
 // ------------------------ END OF CHAT ROUTES --------------------------------
 

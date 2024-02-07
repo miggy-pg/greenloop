@@ -1,16 +1,20 @@
 import { useState } from "react";
-
+import { useSearchParams } from "react-router-dom";
 import { IoFilter, IoSwapVerticalSharp, IoClose } from "react-icons/io5";
 
 import Pagination from "../../components/Pagination";
 import ListingCard from "../../components/ListingCard";
 import FilterCard from "../../components/FilterCard";
 import SortByCard from "../../components/SortByCard";
-import { useWastes } from "../../hooks/useWaste";
-import { usePaginate } from "../../hooks/usePaginate";
+import { useWaste } from "../../hooks/useWaste";
+
+const PAGE_SIZE = 6;
+const POST_PER_PAGE = 6;
 
 const Listing = ({ myWaste }) => {
-  const { wastes, isLoading, error } = useWastes();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { wastes, isLoading, error } = useWaste();
 
   const [isFilter, setIsFilter] = useState(false);
   const [isSortBy, setIsSortBy] = useState(false);
@@ -21,23 +25,22 @@ const Listing = ({ myWaste }) => {
   const wasteToDisplay = myWaste ? myWaste : wasteItems;
   const origWaste = filterValue ? filteredWaste : wasteToDisplay;
 
-  const { searchParams, setSearchParams, currentPage, currentPosts } =
-    usePaginate(origWaste);
-
-  const sortedWaste =
-    wastes?.length &&
-    wastes?.sort(
-      (a, b) => new Date(a.waste.createdAt) - new Date(b.waste.createdAt)
-    );
-
   const handleOnChangeFilter = (e) => {
     setFilterValue(e.target.textContent);
     const filteredWaste = wastes.filter(
       (waste) => waste.waste.wasteCategory == e.target.textContent
     );
     setFilteredWaste(filteredWaste);
-    setIsFilter(false);
   };
+
+  const sortedWaste =
+    wastes?.length &&
+    wastes?.sort(
+      (a, b) => new Date(a.waste.createdAt) - new Date(b.waste.createdAt)
+    );
+  // console.log("isLoading: ", isLoading);
+  // console.log("waste: ", !isLoading && waste.sort((a, b) => console.log("a: ", typeof new Date(a.waste.createdAt))));
+  console.log("sorted: ", sortedWaste);
 
   const handleSortBy = (e) => {
     if (e.target.textContent == "Latest to Oldest") {
@@ -56,15 +59,43 @@ const Listing = ({ myWaste }) => {
       // setWaste(sortedWaste)
       // console.log("sortedHere: ", sortedWaste);
     }
-    setIsSortBy(false);
   };
 
   const handleClearFilter = () => {
     setFilterValue("");
   };
 
+  const currentPage = !searchParams.get("page")
+    ? 1
+    : Number(searchParams.get("page"));
+
+  // Calculate actual number of pages
+  const pageCount = Math.ceil(origWaste?.length / PAGE_SIZE);
+
+  const indexOfLastPost = currentPage * POST_PER_PAGE;
+  const indexOfFirstPost = indexOfLastPost - POST_PER_PAGE;
+  const currentPosts = origWaste?.slice(indexOfFirstPost, indexOfLastPost);
+
+  function nextPage() {
+    const next = currentPage === pageCount ? currentPage : currentPage + 1;
+
+    searchParams.set("page", next);
+    setSearchParams(searchParams);
+  }
+
+  function prevPage() {
+    const prev = currentPage === 1 ? currentPage : currentPage - 1;
+
+    searchParams.set("page", prev);
+    setSearchParams(searchParams);
+  }
+
+  const paginate = (pageNumber) => {
+    searchParams.set("page", pageNumber);
+    setSearchParams(searchParams);
+  };
+
   if (isLoading) return;
-  if (error) return <p>Error</p>;
 
   return (
     <>
@@ -125,13 +156,13 @@ const Listing = ({ myWaste }) => {
             </div>
 
             {isFilter && (
-              <div className="absolute z-10 right-[30rem] top-[18rem] border border-green-500 md:top-[15rem] md:right-[21rem] sm:right-[20rem] sm:top-[14rem] xsm:top-[13rem]">
+              <div className="absolute right-[30rem] top-[23rem] border border-green-500 md:top-[15rem] md:right-[21rem] sm:right-[20rem] sm:top-[14rem] xsm:top-[15rem]">
                 <FilterCard handleOnChangeFilter={handleOnChangeFilter} />
               </div>
             )}
 
             {isSortBy && (
-              <div className="absolute z-10 right-[26rem] top-[18rem] border border-green-500 md:top-[15rem] md:right-[21rem] sm:right-[20rem] sm:top-[14rem] xsm:top-[13rem]">
+              <div className="absolute right-[30rem] top-[23rem] border border-green-500 md:top-[15rem] md:right-[21rem] sm:right-[20rem] sm:top-[14rem] xsm:top-[15rem]">
                 <SortByCard handleSortBy={handleSortBy} />
               </div>
             )}
@@ -157,10 +188,13 @@ const Listing = ({ myWaste }) => {
         {origWaste?.length > 2 && (
           <div className="flex justify-center px-6 mb-4 mt-10 lg:mb-16 sm:px-0 sm:pb-0 ">
             <Pagination
-              origWaste={origWaste}
-              searchParams={searchParams}
-              setSearchParams={setSearchParams}
+              POST_PER_PAGE={POST_PER_PAGE}
+              totalPosts={origWaste.length}
+              paginate={paginate}
+              nextPage={nextPage}
+              prevPage={prevPage}
               currentPage={currentPage}
+              pageCount={pageCount}
             />
           </div>
         )}

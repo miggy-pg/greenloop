@@ -10,11 +10,11 @@ import { sendUserMessage } from "../../api/message";
 import { TbSend, TbCirclePlus, TbArrowLeft } from "react-icons/tb";
 
 import { useWindowSize } from "@uidotdev/usehooks";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 const Chat = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const messagesStore = useSelector((state) => state.user.messages);
+  // const messagesStore = useSelector((state) => state.user.messages);
 
   const [file, setFile] = useState([]);
   const [conversations, setConversations] = useState([]);
@@ -159,7 +159,7 @@ const Chat = () => {
   };
 
   console.log("user: ", user);
-  console.log("conversationChecking: ", messagesStore);
+  // console.log("conversationChecking: ", messagesStore);
   console.log("conversationmessages: ", messages);
   console.log("messagesLengthHere: ", messages?.messages?.length > 0);
   return (
@@ -219,7 +219,7 @@ const Chat = () => {
                                 <h4 className="font-semibold text-gray-900 ">
                                   {user?.companyName}
                                 </h4>
-                                {messagesStore[
+                                {/* {messagesStore[
                                   messagesStore.filter(
                                     (message) =>
                                       message.conversationId === conversationId
@@ -231,7 +231,7 @@ const Chat = () => {
                                         message.conversationId ===
                                         conversationId
                                     ).length - 1
-                                  ].message?.img}
+                                  ].message?.img} */}
                               </div>
                             </div>
                           </Link>

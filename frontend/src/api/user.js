@@ -2,7 +2,6 @@ import axios from "axios";
 
 export const fetchUser = async (userId) => {
   return axios.get(`http://localhost:8000/api/users/${userId}`);
-  // return await axios.get(`http://localhost:8000/api/users/${userId}`);
 };
 
 export const fetchUsers = async () => {

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { transformText } from "../../utils/plasticColors";
+import defaulImage from "../../assets/default-image.jpg";
 
 const PostCard = ({ props }) => {
   const {
@@ -19,7 +20,7 @@ const PostCard = ({ props }) => {
                 <Link to={`profile/${user?._id}`}>
                   <img
                     className="w-11 h-11 mr-5 rounded-full cursor-pointer hover:opacity-80 xsm:w-9 xsm:h-9 xsm:mr-3"
-                    src=""
+                    src={defaulImage}
                     alt="Jese avatar"
                   />
                 </Link>
