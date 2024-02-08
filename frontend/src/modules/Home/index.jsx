@@ -5,7 +5,7 @@ import GreetingCard from "../../components/GreetingCard";
 import PostCard from "../../components/PostCard";
 import { useUser } from "../../hooks/useUser";
 import { useWastes } from "../../hooks/useWaste";
-import { token } from "../../constants/userTokenDecode";
+import { token } from "../../constants/userData";
 
 const Home = () => {
   const { userData, isLoading: userLoading, error: userError } = useUser();

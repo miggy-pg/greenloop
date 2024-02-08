@@ -1,4 +1,5 @@
 import { transformText } from "../../utils/plasticColors";
+import defaulImage from "../../assets/default-image.jpg";
 
 const ListingCard = ({ props }) => {
   const { image, post, wasteCategory } = props;
@@ -9,9 +10,7 @@ const ListingCard = ({ props }) => {
       <div className="h-[20rem] flex items-center justify-between lg:justify-evenly sm:h-[10rem] 2xsm:h-[7rem]">
         <div className="w-screen border rounded-t-3xl">
           <img
-            src={`http://localhost:8000/images/waste/${
-              image ? image : "defaultimage.jpg"
-            }`}
+            src={image?.url ? image.url : defaulImage}
             className="object-cover w-full h-[20rem] rounded-t-3xl sm:h-[10rem] 2xsm:h-[8rem]"
           />
         </div>

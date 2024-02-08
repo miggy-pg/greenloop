@@ -13,9 +13,9 @@ exports.message = async (req, res) => {
       receiverId = "",
     } = req.body;
 
-    let result = null;
+    let wasteImage = null;
     if (image?.length > 0) {
-      result = await Cloudinary.uploader.upload(image, {
+      wasteImage = await Cloudinary.uploader.upload(image, {
         folder: "conversations/messages",
         width: 300,
         crop: "scale",
@@ -32,13 +32,12 @@ exports.message = async (req, res) => {
       const newMessage = new Messages({
         conversationId: newCoversation._id,
         senderId,
-
         message,
       });
       if (image?.length) {
         newMessage.image = {
-          public_id: result.public_id,
-          url: result.secure_url,
+          public_id: wasteImage.public_id,
+          url: wasteImage.secure_url,
         };
       }
 
@@ -54,8 +53,8 @@ exports.message = async (req, res) => {
     });
     if (image?.length) {
       newMessage.image = {
-        public_id: result.public_id,
-        url: result.secure_url,
+        public_id: wasteImage.public_id,
+        url: wasteImage.secure_url,
       };
     }
     await newMessage.save();

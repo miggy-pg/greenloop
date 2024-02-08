@@ -9,7 +9,7 @@ export const fetchUsers = async () => {
 };
 
 export const uploadPost = async (post) => {
-  return axios.post("http://localhost:8000/post/new", post);
+  return axios.post("http://localhost:8000/api/wastes/new", post);
 };
 
 export const updateProfile = async (userId, user) => {

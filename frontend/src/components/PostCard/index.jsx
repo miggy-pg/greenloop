@@ -21,7 +21,7 @@ const PostCard = ({ props }) => {
                   <img
                     className="w-11 h-11 mr-5 rounded-full cursor-pointer hover:opacity-80 xsm:w-9 xsm:h-9 xsm:mr-3"
                     src={defaulImage}
-                    alt="Jese avatar"
+                    alt={user?.companyName}
                   />
                 </Link>
                 <Link
@@ -45,9 +45,7 @@ const PostCard = ({ props }) => {
         <div className="h-[18rem] flex items-center justify-between lg:justify-evenly xsm:h-[10rem] 2xsm:h-[8rem]">
           <div className="w-screen border rounded-b-3xl">
             <img
-              src={`http://localhost:8000/images/waste/${
-                image ? image : "defaultimage.jpg"
-              }`}
+              src={image?.url ? image.url : defaulImage}
               className="object-cover w-full h-[18rem] rounded-b-3xl xsm:h-[10rem] 2xsm:h-[8rem]"
             />
           </div>

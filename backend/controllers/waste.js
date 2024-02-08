@@ -1,5 +1,6 @@
 const Waste = require("../models/Waste");
 const Users = require("../models/Users");
+const Cloudinary = require("../utils/cloudinary");
 
 exports.fetchWastes = async (req, res) => {
   try {
@@ -28,9 +29,26 @@ exports.fetchWastes = async (req, res) => {
 
 exports.postWasteImage = async (req, res) => {
   try {
-    const { post, wasteCategory, user } = req.body;
-    const image = req.file ? req.file.filename : "";
-    const newWaste = await Waste.create({ post, wasteCategory, image, user });
+    const { post, image, wasteCategory, user } = req.body;
+    console.log("postWasteImage: ", image);
+    let wasteImage;
+    if (image?.length > 0) {
+      wasteImage = await Cloudinary.uploader.upload(image, {
+        folder: "wastes",
+        width: 450,
+        crop: "scale",
+      });
+    }
+
+    const newWaste = await Waste.create({
+      post,
+      wasteCategory,
+      image: {
+        url: wasteImage?.secure_url,
+        public_id: wasteImage?.public_id,
+      },
+      user,
+    });
     res.json(newWaste);
   } catch (err) {
     console.error(err);

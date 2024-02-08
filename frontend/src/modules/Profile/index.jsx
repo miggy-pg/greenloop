@@ -8,10 +8,12 @@ import { updateProfile } from "../../api/user";
 import { createConversation } from "../../api/conversation";
 
 import defaulImage from "../../assets/default-image.jpg";
+import { useUploadImage } from "../../hooks/useUploadImage";
 
 const Profile = () => {
   const { id: profileId } = useParams();
   const navigate = useNavigate();
+  const { image, imagePreview, fetchImage, setImage } = useUploadImage();
 
   const [userData, setUser] = useState({
     companyName: "",
@@ -24,23 +26,11 @@ const Profile = () => {
   });
   const [inputType, setInputType] = useState("password");
   const [isLoading, setIsLoading] = useState(true);
-  const [image, setImage] = useState([]);
-  const [imagePreview, setImagePreview] = useState("");
 
   const token = localStorage.getItem("user:token");
   const [showModal, setShowModal] = useState(false);
 
   const isLoggedIn = token !== null || false;
-
-  const fetchImage = (e) => {
-    const file = e.target.files[0];
-    setImagePreview(file);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
-  };
 
   const onChange = (e) => {
     setUser({ ...userData, [e.target.name]: e.target.value });

@@ -1,28 +1,33 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const wasteSCheme = mongoose.Schema({
+const wasteSCheme = mongoose.Schema(
+  {
     post: {
-        type: String,
-        required: true,
-        maxLength: 200,
+      type: String,
+      required: true,
+      maxLength: 200,
     },
     wasteCategory: {
-        type: String,
-        required: true,
-        maxLength: 40, 
+      type: String,
+      required: true,
+      maxLength: 40,
     },
     image: {
+      public_id: {
         type: String,
-        maxLength: 250, 
+      },
+      url: {
+        type: String,
+      },
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      }
-    }, 
-    { timestamps: true
-});
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  },
+  { timestamps: true }
+);
 
-const Waste = mongoose.model('Waste', wasteSCheme);
+const Waste = mongoose.model("Waste", wasteSCheme);
 
 module.exports = Waste;

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "../api/user";
-import { token } from "../constants/userTokenDecode";
+import { token } from "../constants/userData";
 
 export const useUser = (userId = token.userId) => {
   const {

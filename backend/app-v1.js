@@ -146,7 +146,21 @@ app.post("/api/sign-in", loginUser);
 
 // ------------------------ LISTING ROUTES --------------------------------
 
-app.post("/api/wastes/new", postWasteImage);
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images/waste");
+  },
+  filename: function (req, file, cb) {
+    console.log("file: ", file);
+    cb(
+      null,
+      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+const upload = multer({ storage: storage });
+
+app.post("/post/new", upload.single("image"), postWasteImage);
 
 app.get("/getWaste", fetchWaste);
 
