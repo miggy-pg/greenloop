@@ -46,7 +46,7 @@ const Notification = ({ unreadMessages }) => {
         Notifications
       </div>
       <div>
-        {/* {unreadMessages.map((message) => {
+        {unreadMessages.map((message) => {
           console.log("Notificationmessage: ", message);
           return (
             <Link
@@ -82,8 +82,8 @@ const Notification = ({ unreadMessages }) => {
               </div>
             </Link>
           );
-        })} */}
-        {/* {!unreadMessages.length && (
+        })}
+        {!unreadMessages.length && (
           <div className="flex px-4 py-3">
             <div className="w-full pl-3">
               <div className="text-gray-500 font-normal text-sm mb-1.5 text-center">
@@ -91,7 +91,7 @@ const Notification = ({ unreadMessages }) => {
               </div>
             </div>
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );

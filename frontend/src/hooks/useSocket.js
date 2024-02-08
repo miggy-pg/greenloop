@@ -1,10 +1,10 @@
 import io from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 export const useSocket = () => {
   const [socket, setSocket] = useState(null);
 
-  useEffect(() => {
+  useMemo(() => {
     setSocket(io("http://localhost:8080"));
   }, []);
 

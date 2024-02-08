@@ -42,7 +42,7 @@ const Post = () => {
   });
 
   const onSubmit = (data) => {
-    const formData = { ...data, image, user: userTokenDecode.userId };
+    const formData = { ...data, image, user: userTokenDecode?.userId };
     mutate(formData);
   };
   console.log("imagePreview: ", imagePreview);

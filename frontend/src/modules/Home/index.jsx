@@ -5,13 +5,13 @@ import GreetingCard from "../../components/GreetingCard";
 import PostCard from "../../components/PostCard";
 import { useUser } from "../../hooks/useUser";
 import { useWastes } from "../../hooks/useWaste";
-import { token } from "../../constants/userData";
+import { userTokenDecode } from "../../constants/userData";
 
 const Home = () => {
   const { userData, isLoading: userLoading, error: userError } = useUser();
   const { wastes, isLoading: wasteLoading, error: wasteError } = useWastes();
 
-  const isLoggedIn = token !== null || false;
+  const isLoggedIn = userTokenDecode !== null || false;
 
   const sortedWaste =
     wastes?.length &&
