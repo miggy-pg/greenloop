@@ -13,7 +13,6 @@ export const uploadPost = async (post) => {
 };
 
 export const updateProfile = async (userId, user) => {
-  console.log("updateProfileUserData: ", user);
   return axios.post(`http://localhost:8000/api/users/${userId}`, user);
 };
 

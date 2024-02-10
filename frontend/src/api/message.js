@@ -5,5 +5,5 @@ export const sendUserMessage = async (newMessage) => {
 };
 
 export const updateHasReadMessage = async (messageId) => {
-  return axios.patch(`http://localhost:8000/api/message/${messageId}`);
+  return axios.get(`http://localhost:8000/api/message/${messageId}`);
 };

@@ -94,8 +94,9 @@ exports.conversationMessage = async (req, res) => {
       );
       res.status(200).json(await messageUserData);
     };
+
     const conversationId = req.params.conversationId;
-    console.log("");
+
     if (conversationId === "new") {
       const checkConversation = await Conversations.find({
         members: { $all: [req.query.senderId, req.query.receiverId] },
@@ -113,15 +114,16 @@ exports.conversationMessage = async (req, res) => {
   }
 };
 
-// exports.hasReadMessage = async (req, res) => {
-//   try {
-//     await Messages.updateOne(
-//       { _id: req.params.messageId },
-//       {
-//         $set: { hasRead: true },
-//       }
-//     );
-//   } catch (error) {
-//     console.log("Error", error);
-//   }
-// };
+exports.hasReadMessage = async (req, res) => {
+  try {
+    const messageId = req.params.messageId;
+    await Messages.updateOne(
+      { _id: messageId },
+      {
+        $set: { hasRead: true },
+      }
+    );
+  } catch (error) {
+    console.log("Error", error);
+  }
+};

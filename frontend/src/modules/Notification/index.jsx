@@ -5,26 +5,21 @@ import { Link } from "react-router-dom";
 import defaulImage from "../../assets/default-image.jpg";
 import { updateHasReadMessage } from "../../api/message";
 import { useSocket } from "../../hooks/useSocket";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const Notification = ({ unreadMessages }) => {
+const Notification = ({
+  unreadMessages,
+  unreadMessagesCount,
+  mutate,
+  convoLoading,
+}) => {
   // const messages = useSelector((state) => state.user.messages);
   // const conversations = useSelector((state) => state.user.conversations);
   const ref = useRef();
-  const socket = useSocket();
+  // const socket = useSocket();
   // console.log("userConversation: ", conversations);
   console.log("userMessages: ", unreadMessages);
   console.log("refNotif: ", ref);
-
-  const updateMessage = async (conversationId, messageId) => {
-    try {
-      console.log("cupdateMessageonversationId: ", conversationId);
-      console.log("cupdatemessageId: ", messageId);
-      socket?.emit("updateMessage", conversationId, messageId);
-      // await updateHasReadMessage(messageId);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   // useEffect(() => {
   //   function handleClick(e) {
@@ -46,44 +41,45 @@ const Notification = ({ unreadMessages }) => {
         Notifications
       </div>
       <div>
-        {/* {unreadMessages.map((message) => {
-          console.log("Notificationmessage: ", message);
-          return (
-            <Link
-              to={`chats?id=${message.conversationId}`}
-              key={message.conversationId}
-              className="flex px-4 py-3 border-b hover:bg-gray-100"
-              onClick={() =>
-                updateMessage(message.conversationId, message.message.id)
-              }
-            >
-              <div className="flex-shrink-0">
-                <img
-                  className="rounded-full w-11 h-11"
-                  src={
-                    message?.user?.image > 0
-                      ? message?.user?.image
-                      : defaulImage
-                  }
-                  alt={message.user.companyName}
-                />
-              </div>
-              <div className="w-full pl-3 text-left">
-                <div className="text-gray-500 font-normal text-clamp-xs mb-1.5 ">
-                  New message from {""}
-                  <span className="font-semibold text-gray-900">
-                    {message.user?.companyName}
-                  </span>
-                  : {message.message?.msg}
-                  <blockquote className="text-clamp-xs text-gray-500 font-light">
-                    {message.message?.msgImage.url && "Attached an image"}
-                  </blockquote>
-                </div>
-              </div>
-            </Link>
-          );
-        })} */}
-        {/* {!unreadMessages.length && (
+        {!convoLoading &&
+          unreadMessages.map((user) => {
+            return user.conversation.messages.map(
+              (message) =>
+                !message.hasRead && (
+                  <Link
+                    to={`chats?id=${message?.conversationId}`}
+                    key={message?._id}
+                    className="flex px-4 py-3 border-b hover:bg-gray-100"
+                    onClick={() => mutate(message?._id)}
+                  >
+                    <div className="flex-shrink-0">
+                      <img
+                        className="rounded-full w-11 h-11"
+                        src={
+                          user?.conversation?.sender?.image > 0
+                            ? user?.conversation?.sender?.image
+                            : defaulImage
+                        }
+                        alt={user?.conversation?.sender?.companyName}
+                      />
+                    </div>
+                    <div className="w-full pl-3 text-left">
+                      <div className="text-gray-500 font-normal text-clamp-xs mb-1.5 ">
+                        New message from {""}
+                        <span className="font-semibold text-gray-900">
+                          {user?.conversation?.sender.companyName}
+                        </span>
+                        : {message?.message}
+                        <blockquote className="text-clamp-xs text-gray-500 font-light">
+                          {message?.msgImage?.url && "Attached an image"}
+                        </blockquote>
+                      </div>
+                    </div>
+                  </Link>
+                )
+            );
+          })}
+        {!unreadMessagesCount && (
           <div className="flex px-4 py-3">
             <div className="w-full pl-3">
               <div className="text-gray-500 font-normal text-sm mb-1.5 text-center">
@@ -91,7 +87,7 @@ const Notification = ({ unreadMessages }) => {
               </div>
             </div>
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );

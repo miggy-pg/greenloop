@@ -1,4 +1,5 @@
 const Conversations = require("../models/Conversations");
+const Mesages = require("../models/Messages");
 const Users = require("../models/Users");
 
 /**
@@ -35,30 +36,32 @@ exports.conversation = async (req, res) => {
  * @param {receivedId} request query sent to url directly without form
  * @returns {any}
  */
-exports.userConversations = async (req, res) => {
+exports.userConversation = async (req, res) => {
   try {
+    console.log("am i here?");
     const userId = req.params.userId;
     const conversations = await Conversations.find({
       members: { $in: [userId] },
     });
-    console.log("userId", userId);
-    console.log("conversationsIn Converastion", conversations);
     const conversationUserData = Promise.all(
       conversations.map(async (conversation) => {
-        const receiverId = conversation.members.find(
+        const senderId = conversation.members.find(
           (member) => member !== userId
         );
-        const user = await Users.findById(receiverId);
-        console.log("receivedId: ", receiverId);
-        console.log("user", user);
-        return {
-          user: {
-            receiverId: user._id,
-            email: user.email,
-            companyName: user.companyName,
-            image: user.image,
-          },
+        const sender = await Users.findById(senderId);
+        const messages = await Mesages.find({
           conversationId: conversation._id,
+        });
+        return {
+          conversation: {
+            sender: {
+              senderId: sender._id,
+              email: sender.email,
+              companyName: sender.companyName,
+              image: sender.image,
+            },
+            messages,
+          },
         };
       })
     );

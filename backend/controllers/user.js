@@ -10,18 +10,16 @@ exports.fetchUser = async (req, res) => {
     const usersData = Promise.all(
       users.map(async (user) => {
         return {
-          user: {
-            email: user.email,
-            username: user.username,
-            password: user.password,
-            companyName: user.companyName,
-            organizationType: user.organizationType,
-            province: user.province,
-            cityMunicipality: user.cityMunicipality,
-            image: user.image.url,
-            receiverId: user._id,
-            wastes: wastes,
-          },
+          userId: user._id,
+          email: user.email,
+          username: user.username,
+          password: user.password,
+          companyName: user.companyName,
+          organizationType: user.organizationType,
+          province: user.province,
+          cityMunicipality: user.cityMunicipality,
+          image: user.image.url,
+          wastes: wastes,
         };
       })
     );
@@ -75,7 +73,7 @@ exports.fetchUserWaste = async (req, res) => {
       })
     );
 
-    res.status(200).json(await usersData);
+    res.status(200).json(wasteData);
   } catch (error) {
     console.log("Error", error);
   }
@@ -103,8 +101,6 @@ exports.updateProfile = async (req, res) => {
         crop: "scale",
       });
     }
-    console.log("result: ", result);
-    console.log("Cloudinary: ", Cloudinary.loader);
     const user = await Users.findById(userId);
     if (user) {
       user.companyName = companyName;
@@ -115,8 +111,8 @@ exports.updateProfile = async (req, res) => {
       user.province = province;
       user.cityMunicipality = cityMunicipality;
       user.image = {
-        public_id: result.public_id,
-        url: result.secure_url,
+        public_id: result?.public_id,
+        url: result?.secure_url,
       };
     }
     console.log("userupdateProfile: ", user);

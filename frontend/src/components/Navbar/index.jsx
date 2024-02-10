@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink, useSearchParams } from "react-router-dom";
 
 import { useWindowSize } from "@uidotdev/usehooks";
@@ -13,17 +13,13 @@ import {
 } from "react-icons/io5";
 
 import Notification from "../../modules/Notification";
-// import { setHideModals } from "../../redux/slices/uiSlice";
-// import {
-//   setConversations as setConversationsStore,
-//   setUnreadMessage,
-// } from "../../redux/slices/userSlice";
 import SettingModal from "../SettingModal";
-import { getConversations, getMessages } from "../../api/conversation";
-import { useSocket } from "../../hooks/useSocket";
-import { fetchUsers } from "../../api/user";
+import { user } from "../../constants/userData";
 
 import greenLoopLogo from "../../assets/images/greenLoop.png";
+import { useConversation } from "../../hooks/useConversation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateHasReadMessage } from "../../api/message";
 // import useOutsideClick from "../../hooks/useOutsideClick";
 
 const iconSizes = "h-4.5 w-4.5 lg:h-5 lg:w-5 md:h-5 md:w-5";
@@ -67,44 +63,48 @@ const Navbar = () => {
   // const conversationsStoreData = useSelector(
   //   (state) => state.user.conversations
   // );
-  // const unreadMessages = useSelector((state) => state.user.unreadMessages);
 
-  // const dispatch = useDispatch();
+  const {
+    conversations,
+    isLoading: convoLoading,
+    error,
+  } = useConversation(user?.id);
+
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: (messageId) => updateHasReadMessage(messageId),
+    onSuccess: () => {
+      alert("Message has been read");
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+  });
+
+  const unreadMessages =
+    !convoLoading &&
+    conversations?.reduce((acc, conversation) => acc.concat(conversation), []);
+
+  const unreadMessagesCount =
+    !convoLoading &&
+    unreadMessages.reduce(
+      (acc, conversation) =>
+        acc +
+        conversation.conversation.messages.filter((message) => !message.hasRead)
+          .length,
+      0
+    );
+
+  console.log("unreadMessages", unreadMessages);
+  console.log("unreadMessagesCount", unreadMessagesCount);
   const [scrollActive, setScrollActive] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [hideModals, setHideModals] = useState(false);
   const [hideMenuLabels, setHideMenuLabels] = useState(false);
   const [isHoveredSettings, setHoveredSettings] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [conversations, setConversations] = useState([]);
-  // const [unreadMessages, setUnreadMessages] = useState([]);
-  const [users, setUsers] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user:detail"));
 
   const [searchParams, setSearchParams] = useSearchParams();
   const conversationId = searchParams.get("id");
 
   const { width } = useWindowSize();
-
-  const socket = useSocket();
-
-  useEffect(() => {
-    socket?.emit("userMessages", user?.id);
-    socket?.on("getUnreadMessages", (messages) => {
-      console.log("unreadMessages: ", messages);
-      // dispatch(setUnreadMessage(messages));
-    });
-  }, [socket]);
-
-  useEffect(() => {
-    const fetchConversations = async () => {
-      const { data: conversations } = await getConversations(user?.id);
-      setConversations(conversations);
-      // dispatch(setConversationsStore(conversations));
-    };
-    fetchConversations();
-  }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -126,10 +126,6 @@ const Navbar = () => {
   // console.log("messagesNavbar: ", messages);
   console.log("checkingconversationId", searchParams);
   console.log("checkingconversationId", conversationId);
-
-  // useEffect(() => {
-  //   console.log("NavBarUnreadMessagesCount: ", unreadMessages.length);
-  // }, [unreadMessages.length]);
 
   return (
     <>
@@ -194,14 +190,14 @@ const Navbar = () => {
             )}
 
             <ul className="flex relative h-[5rem] items-center pl-5 md:pl-0 md:justify-center md:text-2xl md:h-[3.5rem] sm:h-[3rem]">
-              {Menus.map((menu, i) => {
+              {Menus.map((menu, index) => {
                 if (
                   (hideModals && menu.name.includes("Notifications")) ||
                   (hideModals && menu.name.includes("Settings"))
                 ) {
                   return (
                     <div
-                      key={i}
+                      key={index}
                       onClick={() =>
                         menu.name.includes("Notifications")
                           ? setShowNotification(!showNotification)
@@ -209,12 +205,12 @@ const Navbar = () => {
                       }
                       className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] md:px-[1.1rem] sm:h-[3rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
                     >
-                      {/* {menu.name.includes("Notifications") &&
-                        unreadMessages.length > 0 && (
+                      {menu.name.includes("Notifications") &&
+                        unreadMessagesCount && (
                           <span className="absolute top-3 right-17 bg-red-500 text-white w-4 h-4 text-center justify-between rounded-full font-medium text-xs">
-                            {unreadMessages.length}
+                            {unreadMessagesCount}
                           </span>
-                        )} */}
+                        )}
                       <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] sm:text-3xl md:h-[3.5rem] sm:h-[3rem]">
                         {menu.icon}
                         {hideMenuLabels && (
@@ -230,7 +226,7 @@ const Navbar = () => {
                 } else {
                   return (
                     <NavLink
-                      key={i}
+                      key={index}
                       to={menu.route}
                       className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] sm:h-[3rem] md:px-[1.1rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
                     >
@@ -252,8 +248,11 @@ const Navbar = () => {
               {showNotification && (
                 <Notification
                   scrollActive={scrollActive}
-                  // unreadMessages={unreadMessages}
+                  unreadMessages={unreadMessages}
+                  unreadMessagesCount={unreadMessagesCount}
                   setShowNotification={setShowNotification}
+                  mutate={mutate}
+                  convoLoading={convoLoading}
                 />
               )}
 

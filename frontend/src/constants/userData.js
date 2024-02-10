@@ -1,3 +1,3 @@
-import { jwtDecode } from "jwt-decode";
+export const user = JSON.parse(localStorage.getItem("user:detail"));
 
-export const userTokenDecode = jwtDecode(localStorage.getItem("user:token"));
+export const token = localStorage.getItem("user:token");

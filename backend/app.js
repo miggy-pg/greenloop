@@ -25,12 +25,12 @@ const {
 const { registerUser, loginUser, signOutUser } = require("./controllers/auth");
 const {
   conversation,
-  userConversations,
+  userConversation,
 } = require("./controllers/conversation");
 const {
   message,
   conversationMessage,
-  // hasReadMessage,
+  hasReadMessage,
 } = require("./controllers/message");
 const {
   fetchWastes,
@@ -96,32 +96,32 @@ io.on("connection", (socket) => {
     }
   );
 
-  socket.on("userMessages", async (userId) => {
-    const checkConversation = await Conversations.find({
-      members: { $in: [userId] },
-    });
-    const messages = await checkMessages(checkConversation[0]._id);
-    const unreadMessages = messages.filter((message) => !message.hasRead);
-    io.to(socket.id).emit("getUnreadMessages", unreadMessages);
-  });
+  // socket.on("userMessages", async (userId) => {
+  //   const checkConversation = await Conversations.find({
+  //     members: { $in: [userId] },
+  //   });
+  //   const messages = await checkMessages(checkConversation[0]._id);
+  //   const unreadMessages = messages.filter((message) => !message.hasRead);
+  //   io.to(socket.id).emit("getUnreadMessages", unreadMessages);
+  // });
 
-  socket.on("updateMessage", async (conversationId, messageId) => {
-    try {
-      await Messages.updateOne(
-        { _id: messageId },
-        {
-          $set: { hasRead: true },
-        }
-      );
-      const messages = await checkMessages(conversationId);
-      const unreadMessages = messages.filter((message) => !message.hasRead);
-      console.log("updatingMessagemessages: ", messages);
-      console.log("updatingMessage: ", unreadMessages);
-      io.to(socket.id).emit("getUnreadMessages", unreadMessages);
-    } catch (error) {
-      console.log("Error", error);
-    }
-  });
+  // socket.on("updateMessage", async (conversationId, messageId) => {
+  //   try {
+  //     await Messages.updateOne(
+  //       { _id: messageId },
+  //       {
+  //         $set: { hasRead: true },
+  //       }
+  //     );
+  //     const messages = await checkMessages(conversationId);
+  //     const unreadMessages = messages.filter((message) => !message.hasRead);
+  //     console.log("updatingMessagemessages: ", messages);
+  //     console.log("updatingMessage: ", unreadMessages);
+  //     io.to(socket.id).emit("getUnreadMessages", unreadMessages);
+  //   } catch (error) {
+  //     console.log("Error", error);
+  //   }
+  // });
 
   socket.on("disconnect", () => {
     users = users.filter((user) => user.socketId !== socket.id);
@@ -154,11 +154,13 @@ app.get("/getWaste", fetchWaste);
 
 app.post("/api/conversation", conversation);
 
-app.get("/api/conversations/:userId", userConversations);
+app.get("/api/conversations/:userId", userConversation);
+
+app.get("/api/conversations/:conversationId", conversationMessage);
 
 app.post("/api/message", message);
 
-app.get("/api/message/:conversationId", conversationMessage);
+app.get("/api/message/:messageId", hasReadMessage);
 
 // app.patch("/api/message/:messageId", hasReadMessage);
 

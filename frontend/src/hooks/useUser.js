@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "../api/user";
-import { userTokenDecode } from "../constants/userData";
+import { user } from "../constants/userData";
 
-export const useUser = (userId = userTokenDecode.userId) => {
+export const useUser = (userId = user?.id) => {
   const {
     data: user,
     isLoading,
@@ -13,7 +13,7 @@ export const useUser = (userId = userTokenDecode.userId) => {
     initialData: {},
   });
 
-  const { data: userData } = user;
+  const { data: userData } = !isLoading && user;
 
   return { userData, isLoading, error };
 };

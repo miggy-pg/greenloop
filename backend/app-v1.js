@@ -25,7 +25,7 @@ const {
 const { registerUser, loginUser, signOutUser } = require("./controllers/auth");
 const {
   conversation,
-  userConversations,
+  userConversation,
 } = require("./controllers/conversation");
 const {
   message,
@@ -168,7 +168,7 @@ app.get("/getWaste", fetchWaste);
 
 app.post("/api/conversation", conversation);
 
-app.get("/api/conversations/:userId", userConversations);
+app.get("/api/conversations/:userId", userConversation);
 
 app.post("/api/message", message);
 

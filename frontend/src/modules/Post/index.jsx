@@ -6,7 +6,7 @@ import ButtonOutline from "../../components/ButtonOutline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUploadImage } from "../../hooks/useUploadImage";
 import { uploadPost } from "../../api/user";
-import { userTokenDecode } from "../../constants/userData";
+import { user } from "../../constants/userData";
 
 const wasteCategories = [
   "Plastic",
@@ -42,10 +42,10 @@ const Post = () => {
   });
 
   const onSubmit = (data) => {
-    const formData = { ...data, image, user: userTokenDecode?.userId };
+    const formData = { ...data, image, user: user?.id };
     mutate(formData);
   };
-  console.log("imagePreview: ", imagePreview);
+
   return (
     <div
       className="bg-[#F8F8F8] w-screen h-screen pt-[9rem] pb-11 md:pt-[7rem] md:pb-7"

@@ -12,7 +12,7 @@ export const useWastes = () => {
     initialData: [],
   });
 
-  const { data: wastes } = wasteObject;
+  const { data: wastes } = !isLoading && wasteObject;
 
   return { wastes, isLoading, error };
 };
