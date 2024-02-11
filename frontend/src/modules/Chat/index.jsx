@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 import Input from "../../components/Input";
@@ -105,7 +105,10 @@ const Chat = () => {
     };
     getConversation();
   }, [conversationId, conversations]);
-  console.log("usersChat: ", users);
+
+  useMemo(() => {
+    document.title = "Green Loop | Chat";
+  }, []);
 
   const fetchImage = (e) => {
     const file = e.target.files[0];
@@ -158,10 +161,6 @@ const Chat = () => {
     setMessages({});
   };
 
-  console.log("user: ", user);
-  // console.log("conversationChecking: ", messagesStore);
-  console.log("conversationmessages: ", messages);
-  console.log("messagesLengthHere: ", messages?.messages?.length > 0);
   return (
     <div className="w-full h-full bg-white" id="profile">
       <div className="flex pt-[3.8rem] border-grey rounded">

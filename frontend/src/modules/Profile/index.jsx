@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
@@ -37,11 +37,6 @@ const Profile = (formData = {}) => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
-  // const messageCompany = async () => {
-  //   const { data } = await createConversation(user?.id, profileId);
-  //   navigate(`/chats?id=${data._id || data[0]._id}`);
-  // };
-  console.log("UseruserDetail", userDetail);
   const { mutate: messageCompany } = useMutation({
     mutationFn: () => createConversation(userDetail.id, profileId),
     onSuccess: (data) => {
@@ -59,6 +54,10 @@ const Profile = (formData = {}) => {
       setImage([]);
     },
   });
+
+  useMemo(() => {
+    document.title = "Green Loop | Profile";
+  }, []);
 
   const onSubmit = (data) => {
     try {
@@ -351,52 +350,6 @@ const Profile = (formData = {}) => {
           <Listing myWaste={user[0].wastes} />
         </>
       )}
-
-      {/* <div className="flex justify-center pt-10">
-        <div className="w-4/5 mt-10 grid md:grid-cols-2">
-          <div className="flex">
-            <span className="text-5xl lg:text-[2.5rem] md:text-[2.2rem] sm:text-[2rem] xsm:text-[1.5rem] 2xsm:text-[1.4rem]">
-              My Wastes
-            </span>
-          </div>
-          <div className="flex flex-row-reverse relative">
-            <span
-              className="p-2 m-2 rounded-lg bg-[#31572C] cursor-pointer"
-              onClick={() => setIsSortBy((sortby) => !sortby)}
-            >
-              <IoSwapVerticalSharp className="text-white" />
-            </span>
-            <span
-              className="p-2 m-2 rounded-lg bg-[#31572C] cursor-pointer"
-              onClick={() => setIsFilter((filter) => !filter)}
-            >
-              <IoFilter className="text-white" />
-            </span>
-          </div>
-          {false && (
-            //  {isFilter && (
-            <div className="absolute right-[30rem] top-[23rem] border border-green-500">
-              <FilterCard />
-            </div>
-          )}
-          {isSortBy && (
-            <div className="absolute right-[30rem] top-[23rem] border border-green-500">
-              <SortByCard />
-            </div>
-          )}
-        </div>
-      </div> */}
-      {/* <div className="flex justify-center md:px-0">
-        <div className="mt-7 grid gap-10 px-32 grid-cols-3 lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:mt-4 md:gap-2 md:grid-cols-1 md:px-24 sm:px-16 xsm:px-4">
-          {!isLoading && userData.wastes.length > 0 ? (
-            userData.wastes.map((waste, index) => (
-              <ListingCard key={index} isLoading={isLoading} props={waste} />
-            ))
-          ) : (
-            <p className="text-3xl font-semibold text-center">No Waste Found</p>
-          )}
-        </div>
-      </div> */}
     </div>
   );
 };

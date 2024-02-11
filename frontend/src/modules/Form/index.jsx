@@ -8,8 +8,6 @@ import Input from "../../components/Input";
 import forrestImage from "../../assets/images/login.png";
 import leavesImage from "../../assets/images/signup.png";
 import greenLoopLogo from "../../assets/images/greenLoop.png";
-// import { useDispatch } from "react-redux";
-// import { successLogin } from "../../redux/slices/userSlice";
 
 const organizationType = [
   { value: "Waste Generator", label: "Waste Generator" },
@@ -80,7 +78,7 @@ const Form = ({ isSignInPage = true }) => {
       }
     }
   };
-  console.log("userSignIn: ", userSignIn);
+
   return (
     <div className="h-screen flex items-center">
       <div

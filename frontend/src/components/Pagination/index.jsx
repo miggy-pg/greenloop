@@ -5,7 +5,7 @@ const POST_PER_PAGE = 6;
 
 const Pagination = ({
   origWaste,
-  searchParams,
+  paginatePage,
   setSearchParams,
   currentPage,
 }) => {
@@ -15,20 +15,20 @@ const Pagination = ({
   function nextPage() {
     const next = currentPage === pageCount ? currentPage : currentPage + 1;
 
-    searchParams.set("page", next);
-    setSearchParams(searchParams);
+    paginatePage.set("page", next);
+    setSearchParams(paginatePage);
   }
 
   function prevPage() {
     const prev = currentPage === 1 ? currentPage : currentPage - 1;
 
-    searchParams.set("page", prev);
-    setSearchParams(searchParams);
+    paginatePage.set("page", prev);
+    setSearchParams(paginatePage);
   }
 
   const paginate = (pageNumber) => {
-    searchParams.set("page", pageNumber);
-    setSearchParams(searchParams);
+    paginatePage.set("page", pageNumber);
+    setSearchParams(paginatePage);
   };
 
   const pageNumbers = [];

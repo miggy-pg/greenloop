@@ -1,8 +1,9 @@
 import { transformText } from "../../utils/plasticColors";
 import defaulImage from "../../assets/default-image.jpg";
 
-const ListingCard = ({ props }) => {
-  const { image, post, wasteCategory } = props;
+const ListingCard = ({ waste }) => {
+  console.log("ListingCard: ", waste);
+  const { image, post, wasteCategory } = waste;
   const transformedTexts = transformText(wasteCategory);
 
   return (

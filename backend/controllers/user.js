@@ -35,17 +35,16 @@ exports.fetchUsers = async (req, res) => {
     const usersData = Promise.all(
       users.map(async (user) => {
         return {
-          user: {
-            id: user._id,
-            email: user.email,
-            username: user.username,
-            password: user.password,
-            companyName: user.companyName,
-            receiverId: user._id,
-            organizationType: user.organizationType,
-            province: user.province,
-            cityMunicipality: user.cityMunicipality,
-          },
+          receiverId: user._id,
+          id: user._id,
+          email: user.email,
+          username: user.username,
+          password: user.password,
+          companyName: user.companyName,
+          organizationType: user.organizationType,
+          province: user.province,
+          cityMunicipality: user.cityMunicipality,
+          image: user.image.url,
         };
       })
     );

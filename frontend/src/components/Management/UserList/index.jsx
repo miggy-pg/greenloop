@@ -21,7 +21,9 @@ export default function UserList({
 
   return (
     <tr className="hover:bg-gray-100">
-      <Table.Row type="default">{image}</Table.Row>
+      <Table.Row type="default">
+        <img src={image} />
+      </Table.Row>
       <Table.Row type="name">
         <div className="text-sm font-semibold text-gray-900 sm:text-md md:text-sm lg:text-sm">
           {companyName}

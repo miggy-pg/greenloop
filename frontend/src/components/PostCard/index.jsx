@@ -4,9 +4,7 @@ import { transformText } from "../../utils/plasticColors";
 import defaulImage from "../../assets/default-image.jpg";
 
 const PostCard = ({ props }) => {
-  const {
-    waste: { post, image, wasteCategory, user },
-  } = props;
+  const { post, image, wasteCategory, user } = props;
 
   const transformedTexts = transformText(wasteCategory);
 

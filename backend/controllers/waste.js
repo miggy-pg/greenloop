@@ -10,13 +10,11 @@ exports.fetchWastes = async (req, res) => {
         const user = await Users.findById(waste.user);
         // console.log("user: ");
         return {
-          waste: {
-            post: waste.post,
-            wasteCategory: waste.wasteCategory,
-            image: waste.image,
-            user: user,
-            createdAt: waste.createdAt,
-          },
+          user: user,
+          post: waste.post,
+          wasteCategory: waste.wasteCategory,
+          image: waste.image,
+          createdAt: waste.createdAt,
         };
       })
     );

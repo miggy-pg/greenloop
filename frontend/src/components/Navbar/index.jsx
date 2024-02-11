@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink, useSearchParams } from "react-router-dom";
+import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
 
 import { useWindowSize } from "@uidotdev/usehooks";
 import {
@@ -58,11 +58,20 @@ const Menus = [
 ];
 
 const Navbar = () => {
-  // const hideModals = useSelector((state) => state.ui.hideModals);
-  // const messages = useSelector((state) => state.user.messages);
-  // const conversationsStoreData = useSelector(
-  //   (state) => state.user.conversations
-  // );
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [scrollActive, setScrollActive] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [hideModals, setHideModals] = useState(false);
+  const [hideMenuLabels, setHideMenuLabels] = useState(false);
+  const [isHoveredSettings, setHoveredSettings] = useState(false);
+
+  const conversationId = searchParams.get("id");
+
+  const { width } = useWindowSize();
 
   const {
     conversations,
@@ -70,11 +79,9 @@ const Navbar = () => {
     error,
   } = useConversation(user?.id);
 
-  const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: (messageId) => updateHasReadMessage(messageId),
     onSuccess: () => {
-      alert("Message has been read");
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
   });
@@ -93,18 +100,12 @@ const Navbar = () => {
       0
     );
 
-  console.log("unreadMessages", unreadMessages);
-  console.log("unreadMessagesCount", unreadMessagesCount);
-  const [scrollActive, setScrollActive] = useState(false);
-  const [showNotification, setShowNotification] = useState(false);
-  const [hideModals, setHideModals] = useState(false);
-  const [hideMenuLabels, setHideMenuLabels] = useState(false);
-  const [isHoveredSettings, setHoveredSettings] = useState(false);
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const conversationId = searchParams.get("id");
-
-  const { width } = useWindowSize();
+    setSearchQuery("");
+    navigate(`/listing?search=${searchQuery}`);
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -122,10 +123,6 @@ const Navbar = () => {
     }
     width > 900 ? setHideMenuLabels(true) : setHideMenuLabels(false);
   }, [width]);
-
-  // console.log("messagesNavbar: ", messages);
-  console.log("checkingconversationId", searchParams);
-  console.log("checkingconversationId", conversationId);
 
   return (
     <>
@@ -154,14 +151,16 @@ const Navbar = () => {
                 />
               </Link>
               <div className="relative ml-5">
-                <input
-                  type="text"
-                  id="header-searchbox"
-                  name="searchbox"
-                  placeholder="Search here ..."
-                  className="w-[20rem] bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-xs sm:h-4 sm:w-[14rem] sm:p-3.5 sm:pl-8 sm:max-w-xs xsm:w-[13rem] 2xsm:w-[11rem] 2xsm:p-3 2xsm:pl-8 2xsm:h-4"
-                />
-                <IoSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none sm:top-2.5" />
+                <form onSubmit={(e) => handleSubmit(e)}>
+                  <input
+                    type="text"
+                    id="search"
+                    name="search"
+                    placeholder="Search here ..."
+                    className="w-[20rem] bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-xs sm:h-4 sm:w-[14rem] sm:p-3.5 sm:pl-8 sm:max-w-xs xsm:w-[13rem] 2xsm:w-[11rem] 2xsm:p-3 2xsm:pl-8 2xsm:h-4"
+                  />
+                  <IoSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none sm:top-2.5" />
+                </form>
               </div>
             </div>
           )}
@@ -177,14 +176,17 @@ const Navbar = () => {
                   />
                 </Link>
                 <div className="relative flex items-center ml-5 lg:h-12 md:h-9">
-                  <input
-                    type="text"
-                    id="header-searchbox"
-                    name="searchbox"
-                    placeholder="Search here ..."
-                    className="w-[20rem] h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-sm bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none lg:h-6 lg:w-[15rem] md:h-2 md:w-[12rem] md:text-xs md:max-w-xs "
-                  />
-                  <IoSearch className="absolute align-center left-3 top-3 h-3 w-3 text-gray-300 pointer-events-none lg:top-5 md:top-3" />
+                  <form onSubmit={(e) => handleSubmit(e)}>
+                    <input
+                      type="text"
+                      id="search"
+                      name="search"
+                      placeholder="Search here ..."
+                      className="w-[20rem] h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-sm bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none lg:h-6 lg:w-[15rem] md:h-2 md:w-[12rem] md:text-xs md:max-w-xs "
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <IoSearch className="absolute align-center left-3 top-3 h-3 w-3 text-gray-300 pointer-events-none lg:top-5 md:top-3" />
+                  </form>
                 </div>
               </div>
             )}

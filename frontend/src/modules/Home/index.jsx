@@ -6,6 +6,7 @@ import PostCard from "../../components/PostCard";
 import { useUser } from "../../hooks/useUser";
 import { useWastes } from "../../hooks/useWaste";
 import { token } from "../../constants/userData";
+import { useMemo } from "react";
 
 const Home = () => {
   const { userData, isLoading: userLoading, error: userError } = useUser();
@@ -17,10 +18,14 @@ const Home = () => {
     wastes?.length &&
     wastes.sort((a, b) => {
       return (
-        new Date(b.waste.createdAt).getTime() -
-        new Date(a.waste.createdAt).getTime()
+        new Date(b.waste?.createdAt).getTime() -
+        new Date(a.waste?.createdAt).getTime()
       );
     });
+
+  useMemo(() => {
+    document.title = "Green Loop | Home";
+  }, []);
 
   if (userLoading || wasteLoading) return;
   return (
@@ -31,8 +36,8 @@ const Home = () => {
           <Link to="listing">
             <Card wasteLength={wastes?.length} />
           </Link>
-          {sortedWaste?.map((waste, i) => (
-            <PostCard key={i} props={waste} />
+          {sortedWaste?.map((waste, index) => (
+            <PostCard key={index} props={waste} />
           ))}
         </div>
       )}

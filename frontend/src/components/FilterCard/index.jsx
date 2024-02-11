@@ -4,7 +4,7 @@ const categories = [
   "Glass",
   "Scrap Metal",
   "E-waste",
-  "Textitle",
+  "Textile",
   "Food waste",
   "Biodegradable waste",
 ];
