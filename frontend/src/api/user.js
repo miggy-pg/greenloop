@@ -16,6 +16,10 @@ export const updateProfile = async (userId, user) => {
   return axios.post(`http://localhost:8000/api/users/${userId}`, user);
 };
 
+export const createUser = async (user) => {
+  return axios.post("http://localhost:8000/api/sign-up", user);
+};
+
 export const deleteUser = async (userId) => {
   return axios.delete(`http://localhost:8000/api/users/${userId}`);
 };

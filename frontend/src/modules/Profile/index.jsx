@@ -1,9 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 
 import Listing from "../Listing";
-import { fetchUser } from "../../api/user";
 import { updateProfile } from "../../api/user";
 import { createConversation } from "../../api/conversation";
 

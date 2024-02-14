@@ -41,7 +41,7 @@ export default function UserList({
           $variations="primaryBlue"
           $size="small"
           onClick={() => {
-            setShowModal(userId);
+            setShowModal(true);
             getUserData(userId);
           }}
         >
