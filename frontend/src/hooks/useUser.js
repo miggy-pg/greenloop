@@ -28,7 +28,6 @@ export const useUsers = () => {
     queryFn: () => fetchUsers(),
     initialData: [],
   });
-
   const { data: allUsers } = !isLoading && users;
 
   return { allUsers, isLoading, error };

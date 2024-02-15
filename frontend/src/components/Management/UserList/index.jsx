@@ -12,10 +12,9 @@ export default function UserList({
   province,
   username,
   cityMunicipality,
-  setShowModal,
   userId,
   getUserData,
-  onDelete,
+  deleteUserAction,
 }) {
   const navigate = useNavigate();
 
@@ -41,7 +40,6 @@ export default function UserList({
           $variations="primaryBlue"
           $size="small"
           onClick={() => {
-            setShowModal(true);
             getUserData(userId);
           }}
         >
@@ -50,7 +48,7 @@ export default function UserList({
         <StyledButton
           $variations="danger"
           $size="small"
-          onClick={() => onDelete(userId)}
+          onClick={() => deleteUserAction(userId)}
         >
           Delete
         </StyledButton>

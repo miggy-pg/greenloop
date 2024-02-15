@@ -65,6 +65,7 @@ const Form = ({ isSignInPage = true }) => {
         navigate("/");
       }
       if (res.status === 200) {
+        !isSignInPage && alert("User created successfully");
         setUserSignUp({
           companyName: "",
           username: "",

@@ -1,28 +1,28 @@
 import { useMemo, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { set, useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 
 import Table from "../../components/Table";
 import UserList from "../../components/Management/UserList";
+import { useUploadImage } from "../../hooks/useUploadImage";
+import { useUsers } from "../../hooks/useUser";
 import { createUser, deleteUser } from "../../api/user";
 import { userHeader } from "../../constants/userHeader";
 
 import defaultImage from "../../assets/default-image.jpg";
-import { useUsers } from "../../hooks/useUser";
 
 export default function Dasbhboard() {
-  const [users, setUsers] = useState({});
+  const queryClient = useQueryClient();
   const [userData, setUserData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
   const { allUsers, isLoading: allUsersLoading, error } = useUsers();
-
-  const { register, getValues, reset } = useForm({
-    defaultValues: userData,
-  });
+  const { image, fetchImage, imagePreview, setImage, setImagePreview } =
+    useUploadImage();
+  const { register, handleSubmit, getValues, reset } = useForm();
 
   const getUserData = (userId) => {
+    setShowModal(true);
     const userRecord = allUsers.filter((user) => user.id == userId);
     setUserData(userRecord[0]);
   };
@@ -31,30 +31,41 @@ export default function Dasbhboard() {
     setUserData({ ...userData, image: e.target.files[0] });
   };
 
-  const { mutate } = useMutation({
+  const { mutate: createUserData } = useMutation({
     mutationFn: (data) => createUser(data),
     onSuccess: () => {
       alert("User created successfully");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      reset();
       setShowModal(false);
     },
   });
 
-  const onDelete = async (id) => {
-    try {
-      await deleteUser(id);
-    } catch (error) {
-      console.log(error);
-    }
+  const { mutate: deleteUserAction } = useMutation({
+    mutationFn: (userId) => deleteUser(userId),
+    onSuccess: () => {
+      alert("User has been deleted");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      reset();
+    },
+  });
+
+  const onSubmit = (data) => {
+    createUserData({ ...data, onAdmin: true, image });
   };
 
-  // const onClose = () => {
-  //   setShowModal(false);
-  //   setUserData({});
-  // };
+  const onClose = () => {
+    setShowModal(false);
+    setUserData({});
+  };
 
   useMemo(() => {
     document.title = "Green Loop | Users";
   }, []);
+
+  useMemo(() => {
+    reset(userData);
+  }, [userData, reset]);
 
   return (
     <div className="bg-[#F8F8F8] w-full h-screen mt-16 py-14" id="homepage">
@@ -91,9 +102,8 @@ export default function Dasbhboard() {
                     cityMunicipality={user.cityMunicipality}
                     username={user.username}
                     userId={user.id}
-                    setShowModal={setShowModal}
                     getUserData={getUserData}
-                    onDelete={onDelete}
+                    deleteUserAction={deleteUserAction}
                   />
                 ))}
               </Table.Body>
@@ -103,7 +113,7 @@ export default function Dasbhboard() {
                 <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                   <div className="relative w-auto my-6 mx-auto max-w-2xl">
                     <form
-                      // onSubmit={handleSubmit(onSubmit)}
+                      onSubmit={handleSubmit(onSubmit)}
                       encType="multipart/form-data"
                     >
                       <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-108 bg-white outline-none focus:outline-none xsm:h-3/4 xsm:w-80">
@@ -116,8 +126,6 @@ export default function Dasbhboard() {
 
                         <div className="relative p-6 pb-1">
                           <span className="flex justify-center items-center text-center mb-3">
-                            {console.log("checkingThisOne: ", userData)}
-
                             <img
                               src={userData?.image || defaultImage}
                               className="relative w-40 h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
@@ -129,16 +137,16 @@ export default function Dasbhboard() {
                               id="image-upload"
                               className="hidden"
                               accept="image/*"
-                              // onChange={(e) => fetchImage(e)}
+                              onChange={(e) => fetchImage(e)}
                             />
                             <label
                               htmlFor="image-upload"
                               className="absolute cursor-pointer"
                             >
                               <p className="text-slate-400 text-clamp-xs">
-                                {/* {image.length
+                                {image.length
                                   ? "Replace"
-                                  : "Update Profile Picture"} */}
+                                  : "Update Profile Picture"}
                               </p>
                             </label>
                           </div>
@@ -182,7 +190,6 @@ export default function Dasbhboard() {
                                     name="username"
                                     id="username"
                                     className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    // defaultValue={userData.username}
                                     {...register("username")}
                                   />
                                 </td>
@@ -200,7 +207,6 @@ export default function Dasbhboard() {
                                     name="password"
                                     id="password"
                                     className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    // defaultValue={userData.password}
                                     {...register("password")}
                                     // onMouseOut={() => setInputType("password")}
                                     // onMouseEnter={() => setInputType("text")}
@@ -220,7 +226,6 @@ export default function Dasbhboard() {
                                     name="email"
                                     id="email"
                                     className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    // defaultValue={userData.email}
                                     {...register("email")}
                                   />
                                 </td>
@@ -238,7 +243,6 @@ export default function Dasbhboard() {
                                     name="organizationType"
                                     id="organizationType"
                                     className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    // defaultValue={userData.organizationType}
                                     {...register("organizationType")}
                                   />
                                 </td>
@@ -256,7 +260,6 @@ export default function Dasbhboard() {
                                     name="cityMunicipality"
                                     id="cityMunicipality"
                                     className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    // defaultValue={userData.cityMunicipality}
                                     {...register("cityMunicipality")}
                                   />
                                 </td>
@@ -274,7 +277,6 @@ export default function Dasbhboard() {
                                     name="province"
                                     id="province"
                                     className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    // defaultValue={userData.province}
                                     {...register("province")}
                                   />
                                 </td>
@@ -287,7 +289,7 @@ export default function Dasbhboard() {
                           <button
                             className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
                             type="button"
-                            onClick={() => setShowModal(false)}
+                            onClick={onClose}
                           >
                             Close
                           </button>
@@ -295,7 +297,7 @@ export default function Dasbhboard() {
                             className="bg-[#31572C] text-white active:bg-[#2e4d29] font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
                             type="submit"
                           >
-                            Update Profile
+                            {!userData ? "Update Profile" : "Create User"}
                           </button>
                         </div>
                       </div>

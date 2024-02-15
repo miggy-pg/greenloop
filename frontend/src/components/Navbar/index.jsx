@@ -208,7 +208,7 @@ const Navbar = () => {
                       className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] md:px-[1.1rem] sm:h-[3rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
                     >
                       {menu.name.includes("Notifications") &&
-                        unreadMessagesCount && (
+                        unreadMessagesCount > 0 && (
                           <span className="absolute top-3 right-17 bg-red-500 text-white w-4 h-4 text-center justify-between rounded-full font-medium text-xs">
                             {unreadMessagesCount}
                           </span>
