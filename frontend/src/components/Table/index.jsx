@@ -39,11 +39,11 @@ function Header({ data, render }) {
 function Row({ children, type }) {
   const rowType = {
     checkbox: "w-4 p-8",
-    actionButton: "space-x-2 whitespace-nowrap p-8",
+    actionButton: "space-x-2 whitespace-nowrap rounded-full",
     status:
-      "mr-2 rounded-md border border-green-100 bg-green-100 px-2.5 py-0.5 text-2xl font-medium text-green-800 dark:border-green-500 dark:bg-gray-700 dark:text-green-400",
+      "mr-2 rounded-md border border-green-100 bg-green-100 px-2.5 py-0.5 text-2xl font-medium text-green-800 ",
     default:
-      "whitespace-nowrap pt-4 pr-4 text-sm font-medium text-gray-900 sm:text-md md:text-sm lg:text-sm",
+      "whitespace-nowrap pt-4 text-sm text-left flex font-medium text-gray-900 sm:text-md md:text-sm lg:text-sm",
   };
 
   if (type === "name")

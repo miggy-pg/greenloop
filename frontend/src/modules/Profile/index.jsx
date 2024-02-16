@@ -147,11 +147,11 @@ const Profile = (formData = {}) => {
                                     alt={
                                       imagePreview ? imagePreview.name : null
                                     }
-                                    className="relative w-auto h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
+                                    className="relative w-40 h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
                                   />
                                 ) : (
                                   <img
-                                    src={user[0].image}
+                                    src={defaulImage}
                                     className="relative w-40 h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
                                   />
                                 )}

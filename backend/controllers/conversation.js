@@ -20,10 +20,8 @@ exports.conversation = async (req, res) => {
         members: [senderId, receiverId],
       });
       await conversations.save();
-      console.log("conversationsCreating", conversations);
       res.status(200).json(conversations);
     }
-    console.log("conversationsGetting", conversations);
     res.status(200).json(conversations);
   } catch (error) {
     console.log(error, "Error");
@@ -38,7 +36,6 @@ exports.conversation = async (req, res) => {
  */
 exports.userConversation = async (req, res) => {
   try {
-    console.log("am i here?");
     const userId = req.params.userId;
     const conversations = await Conversations.find({
       members: { $in: [userId] },
@@ -50,15 +47,15 @@ exports.userConversation = async (req, res) => {
         );
         const sender = await Users.findById(senderId);
         const messages = await Mesages.find({
-          conversationId: conversation._id,
+          conversationId: conversation?._id,
         });
         return {
           conversation: {
             sender: {
-              senderId: sender._id,
-              email: sender.email,
-              companyName: sender.companyName,
-              image: sender.image,
+              senderId: sender?._id,
+              email: sender?.email,
+              companyName: sender?.companyName,
+              image: sender?.image,
             },
             messages,
           },

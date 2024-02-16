@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import Table from "../../Table";
 import StyledButton from "../../Button/StyledButton";
+import defaultImage from "../../../assets/default-image.jpg";
 
 export default function UserList({
   image,
@@ -21,7 +22,10 @@ export default function UserList({
   return (
     <tr className="hover:bg-gray-100">
       <Table.Row type="default">
-        <img src={image} />
+        <img
+          src={image ? image : defaultImage}
+          className="rounded-full w-10 h-10"
+        />
       </Table.Row>
       <Table.Row type="name">
         <div className="text-sm font-semibold text-gray-900 sm:text-md md:text-sm lg:text-sm">
@@ -45,6 +49,8 @@ export default function UserList({
         >
           Update
         </StyledButton>
+      </Table.Row>
+      <Table.Row type="actionButton">
         <StyledButton
           $variations="danger"
           $size="small"
@@ -55,7 +61,7 @@ export default function UserList({
       </Table.Row>
       <Table.Row>
         <StyledButton
-          $variations="primaryBlue"
+          $variations="secondary"
           $size="small"
           onClick={() => navigate(`/profile/${userId}`)}
         >

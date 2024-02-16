@@ -13,7 +13,7 @@ import {
 } from "react-icons/io5";
 
 import Notification from "../../modules/Notification";
-import SettingModal from "../SettingModal";
+import SettingModal from "../SettingsModal";
 import { user } from "../../constants/userData";
 
 import greenLoopLogo from "../../assets/images/greenLoop.png";

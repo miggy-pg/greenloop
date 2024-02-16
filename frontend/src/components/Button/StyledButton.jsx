@@ -2,8 +2,8 @@ import styled, { css } from "styled-components";
 
 const sizes = {
   small: css`
-    font-size: 0.8;
-    padding: 0.2rem 0.6rem;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.8rem;
     font-weight: 500;
   `,
   medium: css`
@@ -29,31 +29,39 @@ const variations = {
   `,
 
   primaryBlue: css`
-    color: var(--color-brand-50);
-    background-color: var(--color-blue-600);
+    color: white;
+    background-color: #35682e;
+    border-radius: 1rem;
 
     &:hover {
-      background-color: var(--color-blue-700);
+      background-color: #24481f;
+      transition: 0.3s;
     }
   `,
 
   secondary: css`
-    color: var(--color-grey-600);
-    background: var(--color-grey-0);
-    border: var(--color-grey-200);
+    color: #00ffc3;
+    background-color: #1b2f31;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
 
     &:hover {
-      background-color: var(--color-grey-100);
+      background-color: #2b5054;
+      transition: 0.3s;
     }
   `,
 
   danger: css`
-    color: var(--color-red-100);
-    background-color: var(--color-red-700);
+    color: white;
+    background-color: #9b4949;
+    border-radius: 1rem;
 
     &:hover {
-      background-color: var(--color-red-600);
-      color: var(--color-grey-0);
+      background-color: #c26161;
+      transition: 0.3s;
     }
   `,
 

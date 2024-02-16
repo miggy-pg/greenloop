@@ -1,4 +1,5 @@
 const bcryptjs = require("bcryptjs");
+const Cloudinary = require("../utils/cloudinary");
 const jwt = require("jsonwebtoken");
 const Users = require("../models/Users");
 
@@ -14,13 +15,21 @@ exports.registerUser = async (req, res, next) => {
       province,
       cityMunicipality,
       token,
+      image,
     } = req.body;
 
-    if (password !== confirmPassword) {
-      res.status(400).send("Password does not match");
+    let result;
+    if (image?.length > 0) {
+      result = await Cloudinary.uploader.upload(image, {
+        folder: "users/profile",
+        width: 300,
+        crop: "scale",
+      });
     }
 
-    if (!username || !email || !password) {
+    if (!req.body?.onAdmin && password !== confirmPassword) {
+      res.status(400).send("Password does not match");
+    } else if (!username || !email || !password) {
       res.status(400).send("Please fill all required fields");
     } else {
       const userNameExist = await Users.findOne({ username });
@@ -39,7 +48,13 @@ exports.registerUser = async (req, res, next) => {
           province,
           cityMunicipality,
           token,
+          image: {
+            url: result?.secure_url,
+            public_id: result?.public_id,
+          },
         });
+
+        newUser.save();
 
         bcryptjs.hash(password, 10, (err, hashedPassword) => {
           newUser.set("password", hashedPassword);
@@ -112,16 +127,16 @@ exports.loginUser = async (req, res, next) => {
 exports.signOutUser = async (req, res) => {
   try {
     await Users.updateOne(
-      { _id: req.user._id },
+      { _id: req.params?.userId },
       {
-        $set: { token: "" },
+        $set: { token: null },
       }
     );
 
-    // return res
-    //   .status(200)
-    //   .clearCookie("token ", { httpOnly: true })
-    //   .json({ sucess: true, message: "User has been successfully signed out" });
+    return res
+      .status(200)
+      .clearCookie("token ", { httpOnly: true })
+      .json({ sucess: true, message: "User has been successfully signed out" });
   } catch (err) {
     console.log(err.message);
     return res.status(500).json({ error: err.message });

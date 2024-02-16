@@ -7,6 +7,7 @@ import { useUser } from "../../hooks/useUser";
 import { useWastes } from "../../hooks/useWaste";
 import { token } from "../../constants/userData";
 import { useMemo } from "react";
+import Spinner from "../../components/Spinner";
 
 const Home = () => {
   const { userData, isLoading: userLoading, error: userError } = useUser();
@@ -27,7 +28,9 @@ const Home = () => {
     document.title = "Green Loop | Home";
   }, []);
 
-  if (userLoading || wasteLoading) return;
+  console.log("userData: ", userData);
+
+  if (userLoading) return <Spinner />;
   return (
     <div className="bg-[#F8F8F8] w-full h-full mt-12 py-14" id="homepage">
       {isLoggedIn && userData && (

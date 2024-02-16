@@ -7,7 +7,7 @@ const SettingModal = () => {
   const navigate = useNavigate();
 
   const signOut = async () => {
-    // await signOutUser(user.id);
+    await signOutUser(user.id);
     navigate("/users/sign-in");
     localStorage.removeItem("user:token");
     localStorage.removeItem("user:detail");

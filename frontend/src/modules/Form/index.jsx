@@ -62,7 +62,6 @@ const Form = ({ isSignInPage = true }) => {
         localStorage.setItem("user:detail", JSON.stringify(res.data.user));
 
         // dispatch(successLogin(res.data.user));
-        navigate("/");
       }
       if (res.status === 200) {
         !isSignInPage && alert("User created successfully");
@@ -76,6 +75,7 @@ const Form = ({ isSignInPage = true }) => {
           cityMunicipality: "",
           organizationType: orgtype,
         });
+        navigate("/");
       }
     }
   };

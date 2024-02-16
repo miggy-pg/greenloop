@@ -10,6 +10,7 @@ import { createUser, deleteUser } from "../../api/user";
 import { userHeader } from "../../constants/userHeader";
 
 import defaultImage from "../../assets/default-image.jpg";
+import { organizationType } from "../../constants/organizationType";
 
 export default function Dasbhboard() {
   const queryClient = useQueryClient();
@@ -38,6 +39,9 @@ export default function Dasbhboard() {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       reset();
       setShowModal(false);
+      setUserData({});
+      setImagePreview("");
+      setImage("");
     },
   });
 
@@ -46,17 +50,19 @@ export default function Dasbhboard() {
     onSuccess: () => {
       alert("User has been deleted");
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      reset();
     },
   });
 
   const onSubmit = (data) => {
+    console.log("data: ", data);
     createUserData({ ...data, onAdmin: true, image });
   };
 
   const onClose = () => {
     setShowModal(false);
     setUserData({});
+    setImagePreview("");
+    setImage("");
   };
 
   useMemo(() => {
@@ -126,10 +132,22 @@ export default function Dasbhboard() {
 
                         <div className="relative p-6 pb-1">
                           <span className="flex justify-center items-center text-center mb-3">
-                            <img
-                              src={userData?.image || defaultImage}
-                              className="relative w-40 h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
-                            />
+                            {imagePreview ? (
+                              <img
+                                src={
+                                  imagePreview
+                                    ? URL.createObjectURL(imagePreview)
+                                    : null
+                                }
+                                alt={imagePreview ? imagePreview.name : null}
+                                className="relative w-40 h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
+                              />
+                            ) : (
+                              <img
+                                src={defaultImage}
+                                className="relative w-40 h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
+                              />
+                            )}
                           </span>
                           <div className="relative w-48 h-[1.7rem] text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full inline-flex justify-center items-center">
                             <input
@@ -238,13 +256,25 @@ export default function Dasbhboard() {
                                   Org Type:
                                 </th>
                                 <td className="px-6 py-2">
-                                  <input
-                                    type="text"
+                                  <select
+                                    id="organization-type"
                                     name="organizationType"
-                                    id="organizationType"
-                                    className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    {...register("organizationType")}
-                                  />
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
+                                    {...register("organizationType", {
+                                      required:
+                                        "Please select organization type",
+                                    })}
+                                  >
+                                    {organizationType.map((item, index) => (
+                                      <option
+                                        id={index}
+                                        key={index}
+                                        value={item.value}
+                                      >
+                                        {item.label}
+                                      </option>
+                                    ))}
+                                  </select>
                                 </td>
                               </tr>
                               <tr className="bg-white ">
