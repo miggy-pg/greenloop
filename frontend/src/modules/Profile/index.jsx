@@ -14,7 +14,7 @@ import { useUser } from "../../hooks/useUser";
 const Profile = (formData = {}) => {
   const userDetail = JSON.parse(localStorage.getItem("user:detail"));
   const token = localStorage.getItem("user:token");
-
+  console.log("userDetail: ", userDetail);
   const { id: profileId } = useParams();
   const { id: userId, ...editValues } = formData;
   const isLoggedIn = token !== null || false;
@@ -27,7 +27,7 @@ const Profile = (formData = {}) => {
     isLoading: userLoading,
     error: userError,
   } = useUser(userDetail.id);
-
+  console.log("userProfile: ", user);
   const { register, handleSubmit, getValues, reset } = useForm({
     defaultValues: isLoggedIn ? editValues : {},
   });

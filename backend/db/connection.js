@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // PORT + DB Name
-const url = `mongodb://localhost:27017/greenloop`;
+const url = `mongodb+srv://waste-system-user:6iftdonD4dLIQuZp@cluster0.069wmwt.mongodb.net/`;
 
 mongoose
   .connect(url, {

@@ -13,18 +13,15 @@ export const useUser = (userId) => {
     queryFn: () => fetchUser(userId),
     initialData: {},
   });
+
   console.log(
-    "userLoggiog: ",
+    "useUser: ",
     useQuery({
       queryKey: ["user"],
       queryFn: () => fetchUser(userId),
       initialData: {},
-      staleTime: Infinity,
     })
   );
-
-  console.log("token: ", token);
-  console.log("userjwtDecode: ", user);
 
   const { data: userData } = !isLoading && user;
 

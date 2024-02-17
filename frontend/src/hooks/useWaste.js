@@ -12,6 +12,15 @@ export const useWastes = () => {
     initialData: [],
   });
 
+  console.log(
+    "userWaste: ",
+    useQuery({
+      queryKey: ["userWastes"],
+      queryFn: fetchWastes,
+      initialData: [],
+    })
+  );
+
   const { data: wastes } = !isLoading && wasteObject;
 
   return { wastes, isLoading, error };

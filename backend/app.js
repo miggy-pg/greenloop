@@ -100,11 +100,14 @@ io.on("connection", (socket) => {
     const checkConversation = await Conversations.find({
       members: { $in: [userId] },
     });
-    const messages = await checkMessages(checkConversation[0]._id);
-    const newMessages = messages.filter(
-      (message) => !message.hasRead && message.user.id.toString() !== userId
-    );
-    io.to(socket.id).emit("getNewMessages", newMessages);
+
+    if (checkConversation.length > 0) {
+      const messages = await checkMessages(checkConversation[0]._id);
+      const newMessages = messages.filter(
+        (message) => !message.hasRead && message.user.id.toString() !== userId
+      );
+      io.to(socket.id).emit("getNewMessages", newMessages);
+    }
   });
 
   // socket.on("updateMessage", async (conversationId, messageId) => {

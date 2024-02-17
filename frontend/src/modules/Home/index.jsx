@@ -10,13 +10,14 @@ import { useWastes } from "../../hooks/useWaste";
 const Home = () => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
 
-  const { wastes, isLoading: wasteLoading, error: wasteError } = useWastes();
-
+  const { wastes, isLoading, error: wasteError } = useWastes();
+  console.log("wastes: ", wastes);
   const isLoggedIn = user !== null || false;
 
   const sortedWaste =
-    wastes?.length &&
-    wastes.sort((a, b) => {
+    wastes &&
+    wastes?.length > 0 &&
+    wastes?.sort((a, b) => {
       return (
         new Date(b.waste?.createdAt).getTime() -
         new Date(a.waste?.createdAt).getTime()
@@ -27,6 +28,8 @@ const Home = () => {
     document.title = "Green Loop | Home";
   }, []);
 
+  if (isLoading) return;
+
   return (
     <div className="bg-[#F8F8F8] w-full h-full mt-12 py-14" id="homepage">
       {isLoggedIn && (
@@ -35,9 +38,11 @@ const Home = () => {
           <Link to="listing">
             <Card wasteLength={wastes?.length} />
           </Link>
-          {sortedWaste?.map((waste, index) => (
-            <PostCard key={index} props={waste} />
-          ))}
+          {wastes &&
+            wastes?.length > 0 &&
+            sortedWaste?.map((waste, index) => (
+              <PostCard key={index} props={waste} />
+            ))}
         </div>
       )}
     </div>
