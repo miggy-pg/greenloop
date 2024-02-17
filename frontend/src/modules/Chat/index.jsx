@@ -496,7 +496,7 @@ const Chat = () => {
                                 } `}
                               >
                                 <div className="flex text-left justify-end">
-                                  <span className="bg-red-200 rounded-3xl px-5">
+                                  <span className="bg-gray-200 rounded-3xl px-5">
                                     <p className="text-sm text-blue py-3">
                                       {message.msg}
                                     </p>
@@ -534,7 +534,7 @@ const Chat = () => {
                                       className="rounded-full w-12 h-12"
                                     />
                                   </span>
-                                  <p className="text-sm text-blue p-3 bg-red-200 rounded-xl">
+                                  <p className="text-sm text-blue p-3 bg-gray-200 rounded-xl">
                                     {message.msg}
                                   </p>
                                 </div>
