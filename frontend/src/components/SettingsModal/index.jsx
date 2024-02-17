@@ -1,16 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { user } from "../../constants/userData";
 import { signOutUser } from "../../api/user";
 
 const SettingModal = () => {
+  const user = JSON.parse(localStorage.getItem("user:detail"));
   const navigate = useNavigate();
 
   const signOut = async () => {
-    await signOutUser(user.id);
     navigate("/users/sign-in");
-    localStorage.removeItem("user:token");
-    localStorage.removeItem("user:detail");
+    localStorage.clear();
+    await signOutUser(user.id);
   };
 
   return (

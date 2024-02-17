@@ -52,8 +52,6 @@ const Form = ({ isSignInPage = true }) => {
       isSignInPage ? userSignIn : userSignUp
     );
 
-    console.log("res: ", res.data);
-
     if (res.status === 400) {
       alert("Invalid credentials");
     } else {

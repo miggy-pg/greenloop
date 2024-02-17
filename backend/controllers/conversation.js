@@ -51,6 +51,7 @@ exports.userConversation = async (req, res) => {
         });
         return {
           conversation: {
+            conversationId: conversation?._id,
             sender: {
               senderId: sender?._id,
               email: sender?.email,

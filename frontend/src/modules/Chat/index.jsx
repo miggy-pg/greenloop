@@ -10,10 +10,12 @@ import { sendUserMessage } from "../../api/message";
 import { TbSend, TbCirclePlus, TbArrowLeft } from "react-icons/tb";
 
 import { useWindowSize } from "@uidotdev/usehooks";
-// import { useSelector } from "react-redux";
+import defaultImage from "../../assets/default-image.jpg";
 
 const Chat = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
+  const [receiverData, setReceiverData] = useState({});
   // const messagesStore = useSelector((state) => state.user.messages);
 
   const [file, setFile] = useState([]);
@@ -59,11 +61,9 @@ const Chat = () => {
   }, [messages?.messages, width]);
 
   useEffect(() => {
-    const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
     const fetchConversations = async () => {
       const { data } = await getConversations(loggedInUser?.id);
       setConversations(data);
-      console.log("conversationData: ", data);
     };
     fetchConversations();
   }, []);
@@ -77,7 +77,6 @@ const Chat = () => {
         },
       });
       const resData = await res.json();
-      console.log("resData: ", resData);
       setUsers(resData);
     };
     fetchUsers();
@@ -86,17 +85,19 @@ const Chat = () => {
   useEffect(() => {
     const getConversation = async () => {
       if (conversationId) {
+        console.log("thsesAreconversatoin?: ", conversations);
         const receiver = conversations.find(
-          (convo) => convo.conversationId === conversationId
+          (convo) => convo.conversation.conversationId === conversationId
         );
         const { data } = await getMessages(
           conversationId,
           user?.id,
-          receiver?.receiverId
+          receiver.conversation.sender.senderId
         );
+
         setMessages({
           messages: data,
-          receiver: receiver.user,
+          receiver: receiver.conversation.sender.senderId,
           conversationId,
         });
       } else {
@@ -104,7 +105,7 @@ const Chat = () => {
       }
     };
     getConversation();
-  }, [conversationId, conversations]);
+  }, [conversationId, conversations, messages.messages?.length]);
 
   useMemo(() => {
     document.title = "Green Loop | Chat";
@@ -123,13 +124,8 @@ const Chat = () => {
     searchParams.set("id", conversationId);
     setSearchParams(searchParams);
 
-    const { data } = await getMessages(
-      conversationId,
-      user?.id,
-      receiver?.receiverId
-    );
-    console.log("dataFetch: ", data);
-    console.log("dataFetchReceiver: ", receiver);
+    const { data } = await getMessages(conversationId, user?.id, receiver);
+
     setOpenConvo(true);
     setMessages({ messages: data, receiver, conversationId });
   };
@@ -151,12 +147,11 @@ const Chat = () => {
     };
     file.length > 0 && (messageForm.image = file);
 
-    const { data } = await sendUserMessage(messageForm);
+    await sendUserMessage(messageForm);
     setFile([]);
   };
 
   const handleMoveBack = () => {
-    console.log("HereAtConversationAgain: ", conversationId);
     setOpenConvo(false);
     setMessages({});
   };
@@ -181,42 +176,55 @@ const Chat = () => {
                       />
                       <img
                         className="rounded-full items-start flex-shrink-0 ml-4 mr-3 border border-primary"
-                        src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
+                        src={
+                          receiverData?.image
+                            ? receiverData?.image
+                            : defaultImage
+                        }
                         width="40"
                         height="40"
                         alt="Marie Zulfikar"
                       />
                       <h4 className="text-sm font-semibold text-gray-900">
-                        Marie Zulfikar
+                        {receiverData.receiver}
                       </h4>
                     </div>
                   </>
                 )}
                 <div className="divide-y divide-gray-200">
-                  {conversations.length > 0 && !openConvo
-                    ? conversations.map(({ conversationId, user }) => {
-                        console.log("conversationIduser: ", user);
-                        console.log(
-                          "conversatioconversationId: ",
-                          conversationId
-                        );
+                  {conversations && !openConvo
+                    ? conversations.map((convo) => {
                         return (
                           <Link
                             key={conversationId}
                             className="w-full flex justify-center text-left py-8 sm:px-5 sm:py-1 sm:my-2 xsm:justify-start overflow-x-hidden"
-                            onClick={() => fetchMessages(conversationId, user)}
+                            onClick={() => {
+                              fetchMessages(
+                                convo.conversation.conversationId,
+                                convo.conversation.sender.senderId
+                              );
+                              setReceiverData({
+                                receiver: convo.conversation.sender.companyName,
+                                image: convo.conversation?.sender?.image?.url,
+                              });
+                            }}
                           >
                             <div className="flex items-center">
                               <img
                                 className="rounded-full flex-shrink-0 mr-5 border border-primary"
-                                src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
+                                src={
+                                  convo.conversation?.sender?.image?.url
+                                    ? convo.conversation.sender.image.url
+                                    : defaultImage
+                                }
                                 width="48"
                                 height="48"
-                                alt={user?.companyName}
+                                alt={convo.conversation.sender.companyName}
                               />
                               <div className="text-clamp-base">
                                 <h4 className="font-semibold text-gray-900 ">
-                                  {user?.companyName}
+                                  {/* {convo.conversation.sender.companyName} */}
+                                  Test
                                 </h4>
                                 {/* {messagesStore[
                                   messagesStore.filter(
@@ -288,8 +296,6 @@ const Chat = () => {
                                         </div>
                                       </div>
                                     )}
-
-                                    <div ref={messageRef}></div>
                                   </>
                                 ) : (
                                   <>
@@ -344,6 +350,7 @@ const Chat = () => {
                         )}
                   </div>
                 </div>
+
                 {messages?.conversationId && (
                   <div className="fixed bottom-12 px-10 py-3 w-full bg-white flex justify-center items-center">
                     <input
@@ -394,25 +401,30 @@ const Chat = () => {
               <div className="row-start-2 row-span-3 col-start-1 h-full border border-b-0">
                 <div className="bg-grey-lighter overflow-y-auto">
                   {conversations.length > 0 ? (
-                    conversations.map(({ conversationId, user }) => {
-                      console.log("conversationIduser: ", user);
-                      console.log(
-                        "conversatioconversationId: ",
-                        conversationId
-                      );
+                    conversations.map((convo) => {
                       return (
                         <>
                           <div
                             className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                            onClick={() => fetchMessages(conversationId, user)}
+                            onClick={() =>
+                              fetchMessages(
+                                convo.conversation.conversationId,
+                                convo.conversation.sender.senderId
+                              )
+                            }
                           >
                             <img
-                              src="https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg"
+                              src={
+                                convo.conversation?.sender?.image?.url
+                                  ? convo.conversation.sender.image.url
+                                  : defaultImage
+                              }
                               className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
                             />
                             <div className="ml-6">
                               <h3 className="text-clamp-to-desktop font-semibold">
-                                {!isTablet && user?.companyName}
+                                {!isTablet &&
+                                  convo.conversation.sender.companyName}
                               </h3>
                             </div>
                           </div>
@@ -472,6 +484,7 @@ const Chat = () => {
                 <div className="p-14 sm:p-2">
                   {messages?.messages?.length > 0 ? (
                     messages.messages.map(({ message, user: { id } = {} }) => {
+                      console.log("messageCVhats: ", message);
                       return (
                         <>
                           {id === user?.id ? (
@@ -484,7 +497,7 @@ const Chat = () => {
                                 } `}
                               >
                                 <div className="flex text-left justify-end">
-                                  <span className="bg-gray-200 rounded-3xl px-5">
+                                  <span className="bg-red-200 rounded-3xl px-5">
                                     <p className="text-sm text-blue py-3">
                                       {message.msg}
                                     </p>
@@ -505,8 +518,6 @@ const Chat = () => {
                                   />
                                 </div>
                               </div>
-
-                              <div ref={messageRef}></div>
                             </>
                           ) : (
                             <>
@@ -524,7 +535,7 @@ const Chat = () => {
                                       className="rounded-full w-12 h-12"
                                     />
                                   </span>
-                                  <p className="text-sm text-blue p-3 bg-gray-200 rounded-xl">
+                                  <p className="text-sm text-blue p-3 bg-red-200 rounded-xl">
                                     {message.msg}
                                   </p>
                                 </div>
@@ -553,10 +564,9 @@ const Chat = () => {
                                   </div>
                                 </div>
                               )}
-
-                              <div ref={messageRef}></div>
                             </>
                           )}
+                          <div ref={messageRef}></div>
                         </>
                       );
                     })
@@ -568,7 +578,6 @@ const Chat = () => {
                 </div>
               </div>
               <div></div>
-
               {messages?.conversationId && (
                 <div className="row-start-3 col-start-2 col-span-3 px-10 w-full flex justify-center items-center md:pb-8 sm:pb-4">
                   <input

@@ -76,7 +76,7 @@ const Listing = ({ myWaste }) => {
 
   return (
     <div
-      className={`grid w-full h-[full] overflow-x-hidden ${
+      className={`grid w-full h-full overflow-x-hidden ${
         myWaste
           ? "bg-[#F3F4F6] py-0"
           : !currentPosts?.length

@@ -1,8 +1,9 @@
+import { jwtDecode } from "jwt-decode";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser, fetchUsers } from "../api/user";
-import { user } from "../constants/userData";
+import { token } from "../constants/userData";
 
-export const useUser = (userId = user?.id) => {
+export const useUser = (userId) => {
   const {
     data: user,
     isLoading,
@@ -21,6 +22,10 @@ export const useUser = (userId = user?.id) => {
       staleTime: Infinity,
     })
   );
+
+  console.log("token: ", token);
+  console.log("userjwtDecode: ", user);
+
   const { data: userData } = !isLoading && user;
 
   return { userData, isLoading, error };

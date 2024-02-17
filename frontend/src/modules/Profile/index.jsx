@@ -10,9 +10,11 @@ import { createConversation } from "../../api/conversation";
 import defaulImage from "../../assets/default-image.jpg";
 import { useUploadImage } from "../../hooks/useUploadImage";
 import { useUser } from "../../hooks/useUser";
-import { user as userDetail, token } from "../../constants/userData";
 
 const Profile = (formData = {}) => {
+  const userDetail = JSON.parse(localStorage.getItem("user:detail"));
+  const token = localStorage.getItem("user:token");
+
   const { id: profileId } = useParams();
   const { id: userId, ...editValues } = formData;
   const isLoggedIn = token !== null || false;
@@ -24,7 +26,7 @@ const Profile = (formData = {}) => {
     userData: user,
     isLoading: userLoading,
     error: userError,
-  } = useUser(profileId);
+  } = useUser(userDetail.id);
 
   const { register, handleSubmit, getValues, reset } = useForm({
     defaultValues: isLoggedIn ? editValues : {},

@@ -66,14 +66,16 @@ exports.message = async (req, res) => {
 
 exports.conversationMessage = async (req, res) => {
   try {
+    console.log("req.params: ", req.body);
+    console.log("req.params: ", req.params);
+    console.log("conversationMessage: ", req);
     const checkMessages = async (conversationId) => {
       const messages = await Messages.find({ conversationId });
-      // console.log("messagesConversationMessage: ", messages);
       // console.log("messagesconversationId: ", conversationId);
       const messageUserData = Promise.all(
         messages.map(async (message) => {
           const user = await Users.findById(message.senderId);
-          // console.log("userConversationMessage: ", user);
+          // console.log("userConversationMessage: ", message);
           // console.log("messageConversationMessage: ", message);
           return {
             user: {
@@ -92,6 +94,7 @@ exports.conversationMessage = async (req, res) => {
           };
         })
       );
+      // console.log("messageUserData: ", await messageUserData);
       res.status(200).json(await messageUserData);
     };
 

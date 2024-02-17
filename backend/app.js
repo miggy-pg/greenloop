@@ -96,14 +96,15 @@ io.on("connection", (socket) => {
     }
   );
 
-  // socket.on("userMessages", async (userId) => {
-  //   const checkConversation = await Conversations.find({
-  //     members: { $in: [userId] },
-  //   });
-  //   const messages = await checkMessages(checkConversation[0]._id);
-  //   const unreadMessages = messages.filter((message) => !message.hasRead);
-  //   io.to(socket.id).emit("getUnreadMessages", unreadMessages);
-  // });
+  socket.emit("getNewMessages", async (userId) => {
+    console.log("getNewMessages: ", userId);
+    // const checkConversation = await Conversations.find({
+    //   members: { $in: [userId] },
+    // });
+    // const messages = await checkMessages(checkConversation[0]._id);
+    // const newMessages = messages.filter((message) => !message.hasRead);
+    // io.to(socket.id).emit("getNewMessages", newMessages);
+  });
 
   // socket.on("updateMessage", async (conversationId, messageId) => {
   //   try {
@@ -156,7 +157,7 @@ app.post("/api/conversation", conversation);
 
 app.get("/api/conversations/:userId", userConversation);
 
-app.get("/api/conversations/:conversationId", conversationMessage);
+app.get("/api/messages/:conversationId", conversationMessage);
 
 app.post("/api/message", message);
 

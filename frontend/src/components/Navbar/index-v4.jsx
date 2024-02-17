@@ -1,5 +1,3 @@
-import { io } from "socket.io-client";
-
 import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
 
@@ -65,7 +63,6 @@ const Navbar = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [socket, setSocket] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [scrollActive, setScrollActive] = useState(false);
@@ -112,23 +109,6 @@ const Navbar = () => {
     setSearchQuery("");
     navigate(`/listing?search=${searchQuery}`);
   };
-
-  useEffect(() => {
-    setSocket(io("http://localhost:8080"));
-  }, []);
-
-  useEffect(() => {
-    socket?.on("getNewMessage", (data) => {
-      console.log("getNewMessage: ", data);
-      // setMessages((prev) => ({
-      //   ...prev,
-      //   messages: [
-      //     ...prev.messages,
-      //     { user: data.user, message: data.message },
-      //   ],
-      // }));
-    });
-  }, [socket]);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {

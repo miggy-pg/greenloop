@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import defaulImage from "../../assets/default-image.jpg";
 import { updateHasReadMessage } from "../../api/message";
 import { useSocket } from "../../hooks/useSocket";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const Notification = ({
   unreadMessages,
@@ -13,13 +12,8 @@ const Notification = ({
   mutate,
   convoLoading,
 }) => {
-  // const messages = useSelector((state) => state.user.messages);
-  // const conversations = useSelector((state) => state.user.conversations);
+  const userDetails = JSON.parse(localStorage.getItem("user:detail"));
   const ref = useRef();
-  // const socket = useSocket();
-  // console.log("userConversation: ", conversations);
-  console.log("userMessages: ", unreadMessages);
-  console.log("refNotif: ", ref);
 
   // useEffect(() => {
   //   function handleClick(e) {
@@ -45,6 +39,7 @@ const Notification = ({
           unreadMessages.map((user) => {
             return user.conversation.messages.map(
               (message) =>
+                message.senderId !== userDetails?.id &&
                 !message.hasRead && (
                   <Link
                     to={`chats?id=${message?.conversationId}`}
@@ -52,6 +47,7 @@ const Notification = ({
                     className="flex px-4 py-3 border-b hover:bg-gray-100"
                     onClick={() => mutate(message?._id)}
                   >
+                    {console.log("messageNotif: ", message)}
                     <div className="flex-shrink-0">
                       <img
                         className="rounded-full w-11 h-11"
