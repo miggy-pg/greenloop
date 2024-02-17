@@ -96,14 +96,15 @@ io.on("connection", (socket) => {
     }
   );
 
-  socket.emit("getNewMessages", async (userId) => {
-    console.log("getNewMessages: ", userId);
-    // const checkConversation = await Conversations.find({
-    //   members: { $in: [userId] },
-    // });
-    // const messages = await checkMessages(checkConversation[0]._id);
-    // const newMessages = messages.filter((message) => !message.hasRead);
-    // io.to(socket.id).emit("getNewMessages", newMessages);
+  socket.on("getNewMessages", async (userId) => {
+    const checkConversation = await Conversations.find({
+      members: { $in: [userId] },
+    });
+    const messages = await checkMessages(checkConversation[0]._id);
+    const newMessages = messages.filter(
+      (message) => !message.hasRead && message.user.id.toString() !== userId
+    );
+    io.to(socket.id).emit("getNewMessages", newMessages);
   });
 
   // socket.on("updateMessage", async (conversationId, messageId) => {

@@ -87,7 +87,7 @@ const Form = ({ isSignInPage = true }) => {
       >
         <div
           className={`w-2/4 h-full border border-palette-lighter bg-red-500 rounded shadow-lg lg:mb-3 md:mb-0 ${
-            isSignInPage ? "lg:h-1/4 lg:w-full" : "lg:h-1/6 lg:w-full"
+            isSignInPage ? "lg:h-1/6 lg:w-full" : "lg:h-[8%] lg:w-full"
           }`}
         >
           <img
@@ -245,7 +245,9 @@ const Form = ({ isSignInPage = true }) => {
               <Button
                 label={isSignInPage ? "Sign in" : "Sign up"}
                 type="submit"
-                className="mb-2 bg-[#31572C] rounded-3xl"
+                className={`bg-[#31572C] rounded-3xl ${
+                  isSignInPage ? "mb-2" : "-mb-1"
+                }`}
               />
             </span>
           </form>

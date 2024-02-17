@@ -2,13 +2,11 @@ import { io } from "socket.io-client";
 
 import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useWindowSize } from "@uidotdev/usehooks";
 import {
   IoAddCircleOutline,
   IoChatboxEllipsesOutline,
-  IoExitOutline,
   IoHomeOutline,
   IoListOutline,
   IoNotificationsOutline,
@@ -18,11 +16,11 @@ import {
 
 import Notification from "../../modules/Notification";
 import SettingModal from "../SettingsModal";
-import Modal from "../Modal";
 // import { user } from "../../constants/userData";
 
 import greenLoopLogo from "../../assets/images/greenLoop.png";
 import { useConversation } from "../../hooks/useConversation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateHasReadMessage } from "../../api/message";
 // import useOutsideClick from "../../hooks/useOutsideClick";
 
@@ -69,8 +67,6 @@ const Navbar = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [socket, setSocket] = useState(null);
   const [onClickedRead, setOnClickedRead] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [newMessages, setNewMessages] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [scrollActive, setScrollActive] = useState(false);
@@ -96,20 +92,20 @@ const Navbar = () => {
     },
   });
 
-  // const unreadMessages =
-  //   !convoLoading &&
-  //   conversations?.reduce((acc, conversation) => acc.concat(conversation), []);
+  const unreadMessages =
+    !convoLoading &&
+    conversations?.reduce((acc, conversation) => acc.concat(conversation), []);
 
-  // const unreadMessagesCount =
-  //   !convoLoading &&
-  //   unreadMessages.reduce(
-  //     (acc, conversation) =>
-  //       acc +
-  //       conversation.conversation.messages.filter(
-  //         (message) => message.senderId !== user?.id && !message.hasRead
-  //       ).length,
-  //     0
-  //   );
+  const unreadMessagesCount =
+    !convoLoading &&
+    unreadMessages.reduce(
+      (acc, conversation) =>
+        acc +
+        conversation.conversation.messages.filter(
+          (message) => message.senderId !== user?.id && !message.hasRead
+        ).length,
+      0
+    );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -119,7 +115,6 @@ const Navbar = () => {
   };
 
   const hasReadMessage = (messageId) => {
-    console.log("messageId: ", messageId);
     mutate(messageId);
     setOnClickedRead(true);
   };
@@ -131,7 +126,7 @@ const Navbar = () => {
   useEffect(() => {
     socket?.emit("getNewMessages", user?.id);
     socket?.on("getNewMessages", (data) => {
-      setNewMessages(data);
+      console.log("getNewMessages: ", data);
     });
     setOnClickedRead(false);
   }, [socket, onClickedRead]);
@@ -153,8 +148,6 @@ const Navbar = () => {
     width > 900 ? setHideMenuLabels(true) : setHideMenuLabels(false);
   }, [width]);
 
-  console.log("newMessages: ", newMessages);
-
   return (
     <>
       <header
@@ -170,35 +163,29 @@ const Navbar = () => {
         >
           {!hideModals && (
             <div
-              className={`w-screen col-start-1 col-end-4 flex items-center justify-between ${
+              className={`col-start-1 col-end-4 flex items-center ${
                 hideModals && " fixed z-100"
               }`}
             >
-              <div className="flex items-center ml-10">
-                <Link to="/" className="cursor-pointer">
-                  <img
-                    src={greenLoopLogo}
-                    className="h-[3.5rem] w-auto sm:w-[2.6rem] sm:h-[2.6rem] 2xsm:w-[2.5rem] 2xsm:h-[2.5rem]"
-                    alt="green-loop logo"
+              <Link to="/" className="cursor-pointer">
+                <img
+                  src={greenLoopLogo}
+                  className="h-[3.5rem] w-auto sm:w-[2.6rem] sm:h-[2.6rem] 2xsm:w-[2.5rem] 2xsm:h-[2.5rem]"
+                  alt="green-loop logo"
+                />
+              </Link>
+              <div className="relative ml-5">
+                <form onSubmit={(e) => handleSubmit(e)}>
+                  <input
+                    type="text"
+                    id="search"
+                    name="search"
+                    placeholder="Search here ..."
+                    className="w-[20rem] bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-xs sm:h-4 sm:w-[14rem] sm:p-3.5 sm:pl-8 sm:max-w-xs xsm:w-[13rem] 2xsm:w-[11rem] 2xsm:p-3 2xsm:pl-8 2xsm:h-4"
                   />
-                </Link>
-                <div className="relative ml-5">
-                  <form onSubmit={(e) => handleSubmit(e)}>
-                    <input
-                      type="text"
-                      id="search"
-                      name="search"
-                      placeholder="Search here ..."
-                      className="w-[20rem] bg-[#FEFEFE] border border-[#CACACA] focus:bg-white focus:border-gray-300 focus:outline-none h-10 p-4 pl-8 placeholder-gray-500 rounded-full text-xs sm:h-4 sm:w-[14rem] sm:p-3.5 sm:pl-8 sm:max-w-xs xsm:w-[13rem] 2xsm:w-[11rem] 2xsm:p-3 2xsm:pl-8 2xsm:h-4"
-                    />
-                    <IoSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none sm:top-2.5" />
-                  </form>
-                </div>
+                  <IoSearch className="absolute align-center left-3 top-3.5 h-3 w-3 text-gray-300 pointer-events-none sm:top-2.5" />
+                </form>
               </div>
-
-              <button onClick={() => setIsLoggingOut(true)}>
-                <IoExitOutline className="w-7 h-7 mr-5" />
-              </button>
             </div>
           )}
 
@@ -245,9 +232,9 @@ const Navbar = () => {
                       className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] md:px-[1.1rem] sm:h-[3rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
                     >
                       {menu.name.includes("Notifications") &&
-                        newMessages.length > 0 && (
+                        unreadMessagesCount > 0 && (
                           <span className="absolute top-3 right-17 bg-red-500 text-white w-4 h-4 text-center justify-between rounded-full font-medium text-xs">
-                            {newMessages.length}
+                            {unreadMessagesCount}
                           </span>
                         )}
                       <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] sm:text-3xl md:h-[3.5rem] sm:h-[3rem]">
@@ -287,7 +274,8 @@ const Navbar = () => {
               {showNotification && (
                 <Notification
                   scrollActive={scrollActive}
-                  newMessages={newMessages}
+                  unreadMessages={unreadMessages}
+                  unreadMessagesCount={unreadMessagesCount}
                   setShowNotification={setShowNotification}
                   hasReadMessage={hasReadMessage}
                   convoLoading={convoLoading}
@@ -295,7 +283,6 @@ const Navbar = () => {
               )}
 
               {isHoveredSettings && <SettingModal />}
-              {isLoggingOut && <Modal setIsLoggingOut={setIsLoggingOut} />}
             </ul>
           </div>
         </nav>

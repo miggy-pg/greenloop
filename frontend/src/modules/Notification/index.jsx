@@ -1,17 +1,8 @@
 import { useRef } from "react";
-// import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-// import useOutsideClick from "../../hooks/useOutsideClick";
 import defaulImage from "../../assets/default-image.jpg";
-import { updateHasReadMessage } from "../../api/message";
-import { useSocket } from "../../hooks/useSocket";
 
-const Notification = ({
-  unreadMessages,
-  unreadMessagesCount,
-  mutate,
-  convoLoading,
-}) => {
+const Notification = ({ newMessages, hasReadMessage, convoLoading }) => {
   const userDetails = JSON.parse(localStorage.getItem("user:detail"));
   const ref = useRef();
 
@@ -36,46 +27,42 @@ const Notification = ({
       </div>
       <div>
         {!convoLoading &&
-          unreadMessages.map((user) => {
-            return user.conversation.messages.map(
-              (message) =>
-                message.senderId !== userDetails?.id &&
-                !message.hasRead && (
-                  <Link
-                    to={`chats?id=${message?.conversationId}`}
-                    key={message?._id}
-                    className="flex px-4 py-3 border-b hover:bg-gray-100"
-                    onClick={() => mutate(message?._id)}
-                  >
-                    {console.log("messageNotif: ", message)}
-                    <div className="flex-shrink-0">
-                      <img
-                        className="rounded-full w-11 h-11"
-                        src={
-                          user?.conversation?.sender?.image > 0
-                            ? user?.conversation?.sender?.image
-                            : defaulImage
-                        }
-                        alt={user?.conversation?.sender?.companyName}
-                      />
-                    </div>
-                    <div className="w-full pl-3 text-left">
-                      <div className="text-gray-500 font-normal text-clamp-xs mb-1.5 ">
-                        New message from {""}
-                        <span className="font-semibold text-gray-900">
-                          {user?.conversation?.sender.companyName}
-                        </span>
-                        : {message?.message}
-                        <blockquote className="text-clamp-xs text-gray-500 font-light">
-                          {message?.msgImage?.url && "Attached an image"}
-                        </blockquote>
-                      </div>
-                    </div>
-                  </Link>
-                )
+          newMessages.map((message) => {
+            console.log("newMessagesmessage: ", message);
+            return (
+              <Link
+                to={`chats?id=${message?.conversationId}`}
+                key={message?._id}
+                className="flex px-4 py-3 border-b hover:bg-gray-100"
+                onClick={() => hasReadMessage(message?.message?.id)}
+              >
+                <div className="flex-shrink-0">
+                  <img
+                    className="rounded-full w-11 h-11"
+                    src={
+                      message?.message?.user?.image?.url.length > 0
+                        ? message?.message?.user?.image?.url
+                        : defaulImage
+                    }
+                    alt={message?.user?.companyName}
+                  />
+                </div>
+                <div className="w-full pl-3 text-left">
+                  <div className="text-gray-500 font-normal text-clamp-xs mb-1.5 ">
+                    New message from {""}
+                    <span className="font-semibold text-gray-900">
+                      {message.user.companyName}
+                    </span>
+                    : {message?.message?.msg}
+                    <blockquote className="text-clamp-xs text-gray-500 font-light">
+                      {message?.message?.msgImage?.url && "Attached an image"}
+                    </blockquote>
+                  </div>
+                </div>
+              </Link>
             );
           })}
-        {!unreadMessagesCount && (
+        {!newMessages.length && (
           <div className="flex px-4 py-3">
             <div className="w-full pl-3">
               <div className="text-gray-500 font-normal text-sm mb-1.5 text-center">

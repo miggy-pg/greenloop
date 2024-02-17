@@ -484,7 +484,6 @@ const Chat = () => {
                 <div className="p-14 sm:p-2">
                   {messages?.messages?.length > 0 ? (
                     messages.messages.map(({ message, user: { id } = {} }) => {
-                      console.log("messageCVhats: ", message);
                       return (
                         <>
                           {id === user?.id ? (
