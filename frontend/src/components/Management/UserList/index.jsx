@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
-import Table from "../../Table";
-import StyledButton from "../../Button/StyledButton";
+import Table from "../../Common/Table";
+import StyledButton from "../../Common/Button/StyledButton";
 import defaultImage from "../../../assets/default-image.jpg";
 
 export default function UserList({

@@ -1,7 +1,25 @@
-const require = require("express");
-const router = express.Router();
-const { fetchUser } = require("../controllers/user");
+const { Router } = require("express");
+const {
+  fetchUser,
+  fetchUsers,
+  deleteUser,
+  updateProfile,
+} = require("../controllers/user");
 
-router.get("/user/:userId", fetchUser);
+const router = Router();
 
-exports.userRouter = router;
+/*
+| CRUD Operation     | HTTP Method | Route              |
+|--------------------|-------------|--------------------|
+| Retrieve All Users | GET         | /api/users/        |
+| Retrieve One User  | GET         | /api/:userId       |
+| Update User        | POST        | /api/users/:id     |
+| Delete User        | DELETE      | /api/users/:id     |
+*/
+
+router.get("/users", fetchUsers);
+router.get("/users/:userId", fetchUser);
+router.post("/users/:userId", updateProfile);
+router.delete("/users/:userId", deleteUser);
+
+module.exports = router;

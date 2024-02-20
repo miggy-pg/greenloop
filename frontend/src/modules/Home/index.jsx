@@ -1,10 +1,9 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
-import Card from "../../components/Card";
-import GreetingCard from "../../components/GreetingCard";
-import PostCard from "../../components/PostCard";
-import Spinner from "../../components/Spinner";
+import Card from "../../components/Common/Card";
+import GreetingCard from "../../components/Common/GreetingCard";
+import PostCard from "../../components/Common/PostCard";
 import { useWastes } from "../../hooks/useWaste";
 
 const Home = () => {

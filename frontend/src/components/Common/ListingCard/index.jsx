@@ -1,8 +1,7 @@
-import { transformText } from "../../utils/plasticColors";
-import defaulImage from "../../assets/default-image.jpg";
+import { transformText } from "../../../utils/plasticColors";
+import defaulImage from "../../../assets/default-image.jpg";
 
 const ListingCard = ({ waste }) => {
-  console.log("ListingCard: ", waste);
   const { image, post, wasteCategory } = waste;
   const transformedTexts = transformText(wasteCategory);
 

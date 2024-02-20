@@ -1,5 +1,3 @@
-import { token } from "../../constants/userData";
-
 const GreetingCard = ({ user }) => {
   return (
     <div className="p-4 bg-gradient-to-r from-[#50792D] to-[#66A62E] border border-gray-200 shadow-sm rounded-3xl my-2">

@@ -1,20 +1,9 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import defaulImage from "../../assets/default-image.jpg";
+import defaultImage from "../../assets/default-image.jpg";
 
-const Notification = ({ newMessages, hasReadMessage, convoLoading }) => {
-  const userDetails = JSON.parse(localStorage.getItem("user:detail"));
+const Notification = ({ newMessages, hasReadMessage }) => {
   const ref = useRef();
-
-  // useEffect(() => {
-  //   function handleClick(e) {
-  //     if (ref.current && !ref.current.contains(e.target)) {
-  //       setShowNotification(false);
-  //     }
-  //   }
-  //   document.addEventListener("click", handleClick, true);
-  //   return () => document.removeEventListener("click", handleClick, true);
-  // }, []);
 
   return (
     <div
@@ -26,42 +15,41 @@ const Notification = ({ newMessages, hasReadMessage, convoLoading }) => {
         Notifications
       </div>
       <div>
-        {!convoLoading &&
-          newMessages.map((message) => {
-            console.log("newMessagesmessage: ", message);
-            return (
-              <Link
-                to={`chats?id=${message?.conversationId}`}
-                key={message?._id}
-                className="flex px-4 py-3 border-b hover:bg-gray-100"
-                onClick={() => hasReadMessage(message?.message?.id)}
-              >
-                <div className="flex-shrink-0">
-                  <img
-                    className="rounded-full w-11 h-11"
-                    src={
-                      message?.message?.user?.image?.url.length > 0
-                        ? message?.message?.user?.image?.url
-                        : defaulImage
-                    }
-                    alt={message?.user?.companyName}
-                  />
+        {newMessages.map((message) => {
+          console.log("newMessagesmessage: ", message);
+          return (
+            <Link
+              to={`chats?id=${message?.conversationId}`}
+              key={message?._id}
+              className="flex px-4 py-3 border-b hover:bg-gray-100"
+              onClick={() => hasReadMessage(message?.message?.id)}
+            >
+              <div className="flex-shrink-0">
+                <img
+                  className="rounded-full w-11 h-11"
+                  src={
+                    message?.message?.user?.image?.url.length > 0
+                      ? message?.message?.user?.image?.url
+                      : defaultImage
+                  }
+                  alt={message?.user?.companyName}
+                />
+              </div>
+              <div className="w-full pl-3 text-left">
+                <div className="text-gray-500 font-normal text-clamp-xs mb-1.5 ">
+                  New message from {""}
+                  <span className="font-semibold text-gray-900">
+                    {message.user.companyName}
+                  </span>
+                  : {message?.message?.msg}
+                  <blockquote className="text-clamp-xs text-gray-500 font-light">
+                    {message?.message?.msgImage?.url && "Attached an image"}
+                  </blockquote>
                 </div>
-                <div className="w-full pl-3 text-left">
-                  <div className="text-gray-500 font-normal text-clamp-xs mb-1.5 ">
-                    New message from {""}
-                    <span className="font-semibold text-gray-900">
-                      {message.user.companyName}
-                    </span>
-                    : {message?.message?.msg}
-                    <blockquote className="text-clamp-xs text-gray-500 font-light">
-                      {message?.message?.msgImage?.url && "Attached an image"}
-                    </blockquote>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+              </div>
+            </Link>
+          );
+        })}
         {!newMessages.length && (
           <div className="flex px-4 py-3">
             <div className="w-full pl-3">

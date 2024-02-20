@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
-import { transformText } from "../../utils/plasticColors";
-import defaulImage from "../../assets/default-image.jpg";
+import { transformText } from "../../../utils/plasticColors";
+import defaulImage from "../../../assets/default-image.jpg";
 
 const PostCard = ({ props }) => {
   const { post, image, wasteCategory, user } = props;

@@ -8,10 +8,10 @@ import {
   IoTrashBinSharp,
 } from "react-icons/io5";
 
-import Pagination from "../../components/Pagination";
-import ListingCard from "../../components/ListingCard";
-import FilterCard from "../../components/FilterCard";
-import SortByCard from "../../components/SortByCard";
+import Pagination from "../../components/Common/Pagination";
+import ListingCard from "../../components/Common/ListingCard";
+import FilterCard from "../../components/Common/FilterCard";
+import SortByCard from "../../components/Common/SortByCard";
 import { useWastes } from "../../hooks/useWaste";
 import { usePaginate } from "../../hooks/usePaginate";
 
@@ -33,7 +33,6 @@ const Listing = ({ myWaste }) => {
   const [filteredWaste, setFilteredWaste] = useState({});
   const [filterValue, setFilterValue] = useState("");
 
-  // const wasteItems = wastes?.length && wastes;
   const wasteToDisplay = myWaste ? myWaste : wasteItems;
   const origWaste = filterValue ? filteredWaste : wasteToDisplay;
 
@@ -100,13 +99,13 @@ const Listing = ({ myWaste }) => {
           {myWaste ? "My Waste" : "WASTE LISTING"}
         </p>
       </div>
-      <div className="w-screen px-32 grid md:grid-cols-2 md:px-0">
+      <div className="w-screen px-32 grid md:px-0">
         <div className="flex items-center justify-between">
-          <div>
+          <div className="md:ml-3">
             {filterValue && (
               <>
-                <span className="text-lg mr-5">Applied Filter:</span>
-                <span className="text-medium font-semibold bg-gray-300 px-2 rounded-full">
+                <span className="text-clamp-base mr-5">Applied Filter:</span>
+                <span className="text-clamp-base font-semibold bg-gray-300 px-2 rounded-full">
                   {filterValue}
                   <button
                     className="absolute pl-2 pt-1 focus:outline-none"
@@ -159,7 +158,7 @@ const Listing = ({ myWaste }) => {
             ))
           ) : (
             <span className="flex grid-cols-2 w-full text-3xl font-semibold justify-center items-center">
-              <p className="flex items-center">
+              <p className="flex items-center mt-24">
                 <IoTrashBinSharp className="mr-2" /> No Waste Found
               </p>
             </span>

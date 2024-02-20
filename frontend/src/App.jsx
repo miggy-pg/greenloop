@@ -1,5 +1,6 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -8,14 +9,19 @@ import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 
 const Home = lazy(() => import("./modules/Home"));
-const Layout = lazy(() => import("./components/Layout"));
+const Layout = lazy(() => import("./components/Common/Layout"));
 const Chat = lazy(() => import("./modules/Chat"));
 const Form = lazy(() => import("./modules/Form"));
 const Listing = lazy(() => import("./modules/Listing"));
 const Post = lazy(() => import("./modules/Post"));
 const Profile = lazy(() => import("./modules/Profile"));
 const Users = lazy(() => import("./modules/Users"));
-const FullPageSpinner = lazy(() => import("./components/FullPageSpinner"));
+const MobileNotification = lazy(() =>
+  import("./modules/Notification/MobileNotification")
+);
+const FullPageSpinner = lazy(() =>
+  import("./components/Common/FullPageSpinner")
+);
 
 const ProtectedRoute = ({ children, auth = false }) => {
   const isLoggedIn = localStorage.getItem("user:token") !== null || false;
@@ -39,7 +45,17 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  // const hideModals = useSelector((state) => state.ui.hideModals);
+  const [hideModals, setHideModals] = useState(false);
+
+  const { width } = useWindowSize();
+
+  useEffect(() => {
+    if (width > 640) {
+      setHideModals(true);
+    } else {
+      setHideModals(false);
+    }
+  });
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -78,9 +94,9 @@ const App = () => {
               <Route path="profile" element={<Profile />} />
               <Route path="chats" element={<Chat />} />
               <Route path="chats/:id" element={<Chat />} />
-              {/* {!hideModals && (
-          <Route path="notifications" element={<MobileNotification />} />
-        )} */}
+              {!hideModals && (
+                <Route path="notifications" element={<MobileNotification />} />
+              )}
               <Route path="dashboard/users" element={<Users />} />
             </Route>
           </Routes>

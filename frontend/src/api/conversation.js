@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const getMessages = async (conversationId, userId, receiverId) => {
-  console.log("conversationIdreceiverId: ", receiverId);
   return axios.get(
     `http://localhost:8000/api/messages/${conversationId}?senderId=${userId}&&receiverId=${receiverId}`
   );
@@ -12,7 +11,7 @@ export const getConversations = async (userId) => {
 };
 
 export const createConversation = async (senderId, receiverId) => {
-  return axios.post(`http://localhost:8000/api/conversation`, {
+  return axios.post(`http://localhost:8000/api/conversations`, {
     senderId,
     receiverId,
   });

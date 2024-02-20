@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
-import Input from "../../components/Input";
+import Input from "../../components/Common/Input";
 import { getConversations, getMessages } from "../../api/conversation";
 import { sendUserMessage } from "../../api/message";
 
@@ -226,19 +226,6 @@ const Chat = () => {
                                   {/* {convo.conversation.sender.companyName} */}
                                   Test
                                 </h4>
-                                {/* {messagesStore[
-                                  messagesStore.filter(
-                                    (message) =>
-                                      message.conversationId === conversationId
-                                  ).length - 1
-                                ].message?.msg ||
-                                  messagesStore[
-                                    messagesStore.filter(
-                                      (message) =>
-                                        message.conversationId ===
-                                        conversationId
-                                    ).length - 1
-                                  ].message?.img} */}
                               </div>
                             </div>
                           </Link>
@@ -344,7 +331,7 @@ const Chat = () => {
                       : messages?.messages?.length > 0 &&
                         !openConvo &&
                         !conversationId && (
-                          <div className="bg-red-500 text-center text-lg font-semibold mt-24">
+                          <div className="text-center text-lg font-semibold mt-24">
                             No Messages or No Conversation Selected
                           </div>
                         )}
@@ -483,92 +470,109 @@ const Chat = () => {
                 </div>
                 <div className="p-14 sm:p-2">
                   {messages?.messages?.length > 0 ? (
-                    messages.messages.map(({ message, user: { id } = {} }) => {
-                      return (
-                        <>
-                          {id === user?.id ? (
-                            <>
-                              <div
-                                className={`max-w-[35%]  rounded-b-xl p-2 mb-2 ${
-                                  id === user?.id
-                                    ? "bg-primary text-blue rounded-tl-xl ml-auto"
-                                    : "bg-secondary rounded-tr-xl"
-                                } `}
-                              >
-                                <div className="flex text-left justify-end">
-                                  <span className="bg-gray-200 rounded-3xl px-5">
-                                    <p className="text-sm text-blue py-3">
-                                      {message.msg}
-                                    </p>
-                                  </span>
-                                </div>
-                              </div>
-                              <div
-                                className={`max-w-[35%]  rounded-b-xl p-2 mb-2 ${
-                                  id === user?.id
-                                    ? "bg-primary text-blue rounded-tl-xl ml-auto"
-                                    : "bg-secondary rounded-tr-xl"
-                                } `}
-                              >
-                                <div className="flex text-right justify-end">
-                                  <img
-                                    src={message?.msgImage?.url}
-                                    className="rounded-lg"
-                                  />
-                                </div>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <div
-                                className={`max-w-[35%] rounded-b-xl p-4 mb-6 ${
-                                  id === user?.id
-                                    ? "bg-primary text-blue rounded-tl-xl ml-auto"
-                                    : "bg-secondary rounded-tr-xl"
-                                } `}
-                              >
-                                <div className="flex flex-col-2 gap-4 text-right justify-start">
-                                  <span className="text-sm">
-                                    <img
-                                      src="https://www.shutterstock.com/image-vector/young-man-anime-style-character-600nw-2313503433.jpg"
-                                      className="rounded-full w-12 h-12"
-                                    />
-                                  </span>
-                                  <p className="text-sm text-blue p-3 bg-gray-200 rounded-xl">
-                                    {message.msg}
-                                  </p>
-                                </div>
-                              </div>
-                              {message?.msgImage?.url && (
+                    messages.messages.map(
+                      ({ message, user: messageSender }) => {
+                        return (
+                          <>
+                            {messageSender.id == user?.id ? (
+                              <>
+                                {/* Current User Message Message Chat Box */}
                                 <div
-                                  className={`max-w-[35%] rounded-b-xl p-4 mb-6 ${
-                                    id === user?.id
+                                  className={`max-w-[70%]  rounded-b-xl p-2 mb-2 ${
+                                    messageSender !== user?.id
                                       ? "bg-primary text-blue rounded-tl-xl ml-auto"
                                       : "bg-secondary rounded-tr-xl"
                                   } `}
                                 >
-                                  <div className="flex flex-col-2 gap-4 text-right justify-start">
-                                    <span className="text-sm">
-                                      <img
-                                        src="https://www.shutterstock.com/image-vector/young-man-anime-style-character-600nw-2313503433.jpg"
-                                        className="rounded-full w-12 h-12"
-                                      />
-                                    </span>
-                                    <span className="bg-yellow-500">
-                                      <img
-                                        src={message?.msgImage?.url}
-                                        className="rounded-lg"
-                                      />
+                                  <div className="flex text-left justify-end">
+                                    <span className="bg-gray-200 rounded-3xl px-5">
+                                      <p className="text-sm text-blue py-3">
+                                        {message.msg}
+                                      </p>
                                     </span>
                                   </div>
                                 </div>
-                              )}
-                            </>
-                          )}
-                          <div ref={messageRef}></div>
-                        </>
-                      );
-                    })
+
+                                {/* Current User Image Message Message Chat Box */}
+                                <div
+                                  className={`max-w-[70%]  rounded-b-xl p-2 mb-2 ${
+                                    messageSender === user?.id
+                                      ? "bg-primary text-blue rounded-tl-xl ml-auto"
+                                      : "bg-secondary rounded-tr-xl"
+                                  } `}
+                                >
+                                  <div className="flex text-right justify-end">
+                                    <img
+                                      src={message?.msgImage?.url}
+                                      className="rounded-lg"
+                                    />
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                {/* Desktop Text Message Chat Box */}
+                                <div
+                                  className={`max-w-[70%] rounded-b-xl p-4 mb-6 sm:p-2 ${
+                                    messageSender === user?.id
+                                      ? "bg-primary text-blue rounded-tl-xl ml-auto"
+                                      : "bg-secondary rounded-tr-xl"
+                                  } `}
+                                >
+                                  <div className="flex flex-col-2 gap-4 text-left justify-start">
+                                    <span className="text-clamp-xs w-12 sm:w-9">
+                                      <img
+                                        src={
+                                          messageSender.image?.url?.length > 0
+                                            ? messageSender.url
+                                            : defaultImage
+                                        }
+                                        alt={messageSender?.companyName}
+                                        className="rounded-full w-12 h-12 sm:w-9 sm:h-9"
+                                      />
+                                    </span>
+                                    <p className="text-clamp-xs text-blue p-3 bg-gray-200 rounded-xl">
+                                      {message.msg}
+                                    </p>
+                                  </div>
+                                </div>
+                                {/* Desktop Image Message Chat Box */}
+                                {message?.msgImage?.url && (
+                                  <div
+                                    className={`max-w-[70%] rounded-b-xl p-4 mb-6 ${
+                                      messageSender === user?.id
+                                        ? "bg-primary text-blue rounded-tl-xl ml-auto"
+                                        : "bg-secondary rounded-tr-xl"
+                                    } `}
+                                  >
+                                    <div className="flex flex-col-2 gap-4 text-right justify-start">
+                                      <span className="text-clamp-xs">
+                                        <img
+                                          src={
+                                            messageSender.image?.url?.length > 0
+                                              ? messageSender.url
+                                              : defaultImage
+                                          }
+                                          alt={messageSender?.companyName}
+                                          className="rounded-full w-12 h-12"
+                                        />
+                                      </span>
+                                      <div className="flex text-right justify-end">
+                                        <img
+                                          src={message?.msgImage?.url}
+                                          className="rounded-lg"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </>
+                            )}
+                            <div ref={messageRef}></div>
+                          </>
+                        );
+                      }
+                    )
                   ) : (
                     <div className="text-center text-lg  font-semibold mt-24">
                       No Messages or No Conversation Selected
@@ -601,7 +605,7 @@ const Chat = () => {
                     className={`ml-2 p-2 cursor-pointer bg-light rounded-full ${
                       !message && "pointer-events-none"
                     }`}
-                    onClick={() => sendMessage()}
+                    onClick={(e) => sendMessage(e)}
                   >
                     <TbSend className="h-6 w-6" />
                   </div>

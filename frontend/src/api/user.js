@@ -25,5 +25,5 @@ export const deleteUser = async (userId) => {
 };
 
 export const signOutUser = async (userId) => {
-  return axios.patch(`http://localhost:8000/users/sign-out/${userId}`);
+  return axios.patch(`http://localhost:8000/api/sign-out/${userId}`);
 };

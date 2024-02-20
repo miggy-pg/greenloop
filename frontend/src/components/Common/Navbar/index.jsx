@@ -16,15 +16,13 @@ import {
   IoSearch,
 } from "react-icons/io5";
 
-import Notification from "../../modules/Notification";
-import SettingModal from "../SettingsModal";
+import Notification from "../../../modules/Notification";
+import SettingsModal from "../../Common/SettingsModal";
 import Modal from "../Modal";
-// import { user } from "../../constants/userData";
 
-import greenLoopLogo from "../../assets/images/greenLoop.png";
-import { useConversation } from "../../hooks/useConversation";
-import { updateHasReadMessage } from "../../api/message";
-// import useOutsideClick from "../../hooks/useOutsideClick";
+import greenLoopLogo from "../../../assets/images/greenloop-logo.png";
+import { useConversation } from "../../../hooks/useConversation";
+import { updateHasReadMessage } from "../../../api/message";
 
 const iconSizes = "h-4.5 w-4.5 lg:h-5 lg:w-5 md:h-5 md:w-5";
 
@@ -83,33 +81,12 @@ const Navbar = () => {
 
   const { width } = useWindowSize();
 
-  const {
-    conversations,
-    isLoading: convoLoading,
-    error,
-  } = useConversation(user?.id);
-
-  const { mutate } = useMutation({
+  const { mutate: readMessage } = useMutation({
     mutationFn: (messageId) => updateHasReadMessage(messageId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
   });
-
-  // const unreadMessages =
-  //   !convoLoading &&
-  //   conversations?.reduce((acc, conversation) => acc.concat(conversation), []);
-
-  // const unreadMessagesCount =
-  //   !convoLoading &&
-  //   unreadMessages.reduce(
-  //     (acc, conversation) =>
-  //       acc +
-  //       conversation.conversation.messages.filter(
-  //         (message) => message.senderId !== user?.id && !message.hasRead
-  //       ).length,
-  //     0
-  //   );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -119,8 +96,7 @@ const Navbar = () => {
   };
 
   const hasReadMessage = (messageId) => {
-    console.log("messageId: ", messageId);
-    mutate(messageId);
+    readMessage(messageId);
     setOnClickedRead(true);
   };
 
@@ -142,18 +118,14 @@ const Navbar = () => {
     });
 
     if (width > 640) {
-      // dispatch(setHideModals(true));
       setHideModals(true);
     } else {
-      // dispatch(setHideModals(false));
       setHideModals(false);
       setShowNotification(false);
       setHoveredSettings(false);
     }
     width > 900 ? setHideMenuLabels(true) : setHideMenuLabels(false);
   }, [width]);
-
-  console.log("newMessages: ", newMessages);
 
   return (
     <>
@@ -290,11 +262,10 @@ const Navbar = () => {
                   newMessages={newMessages}
                   setShowNotification={setShowNotification}
                   hasReadMessage={hasReadMessage}
-                  convoLoading={convoLoading}
                 />
               )}
 
-              {isHoveredSettings && <SettingModal />}
+              {isHoveredSettings && <SettingsModal />}
               {isLoggingOut && <Modal setIsLoggingOut={setIsLoggingOut} />}
             </ul>
           </div>

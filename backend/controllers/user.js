@@ -55,29 +55,6 @@ exports.fetchUsers = async (req, res) => {
   }
 };
 
-exports.fetchUserWaste = async (req, res) => {
-  try {
-    const { userId } = req.body;
-    const listing = await Waste.find({ user: userId });
-    const wasteData = Promise.all(
-      listing.map(async (waste) => {
-        return {
-          waste: {
-            post: waste.post,
-            wasteCategory: waste.wasteCategory,
-            image: waste.image,
-            user: waste.user,
-          },
-        };
-      })
-    );
-
-    res.status(200).json(wasteData);
-  } catch (error) {
-    console.log("Error", error);
-  }
-};
-
 exports.updateProfile = async (req, res) => {
   try {
     const userId = req.params.userId;

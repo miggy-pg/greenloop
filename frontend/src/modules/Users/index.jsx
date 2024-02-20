@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
-import Table from "../../components/Table";
+import Table from "../../components/Common/Table";
 import UserList from "../../components/Management/UserList";
 import { useUploadImage } from "../../hooks/useUploadImage";
 import { useUsers } from "../../hooks/useUser";

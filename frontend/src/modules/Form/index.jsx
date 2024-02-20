@@ -3,11 +3,11 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Button from "../../components/Button";
-import Input from "../../components/Input";
+import Button from "../../components/Common/Button";
+import Input from "../../components/Common/Input";
 import forrestImage from "../../assets/images/login-side-panel.webp";
 import leavesImage from "../../assets/images/signup-side-panel.webp";
-import greenLoopLogo from "../../assets/images/greenLoop.png";
+import greenLoopLogo from "../../assets/images/greenloop-logo.png";
 
 const organizationType = [
   { value: "Waste Generator", label: "Waste Generator" },

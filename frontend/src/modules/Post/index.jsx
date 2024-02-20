@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 
 import { IoAddSharp } from "react-icons/io5";
-import ButtonOutline from "../../components/ButtonOutline";
+import ButtonOutline from "../../components/Common/ButtonOutline";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUploadImage } from "../../hooks/useUploadImage";
@@ -38,7 +38,8 @@ const Post = () => {
       setImage([]);
     },
     onError: (error) => {
-      alert("Error: ", error);
+      console.log("error: ", error);
+      alert("Error: ", error?.message);
     },
   });
 

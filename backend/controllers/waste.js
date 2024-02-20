@@ -8,7 +8,6 @@ exports.fetchWastes = async (req, res) => {
     const wasteData = Promise.all(
       listing.map(async (waste) => {
         const user = await Users.findById(waste.user);
-        // console.log("user: ");
         return {
           user: user,
           post: waste.post,
@@ -25,10 +24,32 @@ exports.fetchWastes = async (req, res) => {
   }
 };
 
+exports.fetchUserWaste = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const listing = await Waste.find({ user: userId });
+    const wasteData = Promise.all(
+      listing.map(async (waste) => {
+        return {
+          waste: {
+            post: waste.post,
+            wasteCategory: waste.wasteCategory,
+            image: waste.image,
+            user: waste.user,
+          },
+        };
+      })
+    );
+
+    res.status(200).json(wasteData);
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
 exports.postWasteImage = async (req, res) => {
   try {
     const { post, image, wasteCategory, user } = req.body;
-    console.log("postWasteImage: ", image);
     let wasteImage;
     if (image?.length > 0) {
       wasteImage = await Cloudinary.uploader.upload(image, {
@@ -51,14 +72,5 @@ exports.postWasteImage = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
-  }
-};
-
-exports.fetchWaste = async (req, res) => {
-  try {
-    const waste = await Waste.find();
-    res.json(waste);
-  } catch (error) {
-    console.log(error, "Error");
   }
 };
