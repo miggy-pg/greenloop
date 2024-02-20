@@ -1,7 +1,5 @@
-import { jwtDecode } from "jwt-decode";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser, fetchUsers } from "../api/user";
-import { token } from "../constants/userData";
 
 export const useUser = (userId) => {
   const {

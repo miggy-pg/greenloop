@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 import Button from "../../components/Button";
 import Input from "../../components/Input";
-import forrestImage from "../../assets/images/login.png";
-import leavesImage from "../../assets/images/signup.png";
+import forrestImage from "../../assets/images/login-side-panel.webp";
+import leavesImage from "../../assets/images/signup-side-panel.webp";
 import greenLoopLogo from "../../assets/images/greenLoop.png";
 
 const organizationType = [

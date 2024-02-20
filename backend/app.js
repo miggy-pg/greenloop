@@ -5,8 +5,9 @@ const io = require("socket.io")(8080, {
     origin: "*",
   },
 });
-const multer = require("multer");
 const path = require("path");
+const dotenv = require("dotenv");
+dotenv.config();
 
 // Connect DB
 require("./db/connection");
@@ -14,7 +15,6 @@ require("./db/connection");
 // Import Files
 const Users = require("./models/Users");
 const Conversations = require("./models/Conversations");
-const Messages = require("./models/Messages");
 const {
   fetchUser,
   fetchUserWaste,
@@ -110,29 +110,10 @@ io.on("connection", (socket) => {
     }
   });
 
-  // socket.on("updateMessage", async (conversationId, messageId) => {
-  //   try {
-  //     await Messages.updateOne(
-  //       { _id: messageId },
-  //       {
-  //         $set: { hasRead: true },
-  //       }
-  //     );
-  //     const messages = await checkMessages(conversationId);
-  //     const unreadMessages = messages.filter((message) => !message.hasRead);
-  //     console.log("updatingMessagemessages: ", messages);
-  //     console.log("updatingMessage: ", unreadMessages);
-  //     io.to(socket.id).emit("getUnreadMessages", unreadMessages);
-  //   } catch (error) {
-  //     console.log("Error", error);
-  //   }
-  // });
-
   socket.on("disconnect", () => {
     users = users.filter((user) => user.socketId !== socket.id);
     io.emit("getUsers", users);
   });
-  // io.emit('getUsers', socket.userId);
 });
 
 // Routes

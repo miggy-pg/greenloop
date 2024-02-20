@@ -17,19 +17,15 @@ export default function Dasbhboard() {
   const [userData, setUserData] = useState({});
   const [showModal, setShowModal] = useState(false);
 
-  const { allUsers, isLoading: allUsersLoading, error } = useUsers();
+  const { allUsers, error } = useUsers();
   const { image, fetchImage, imagePreview, setImage, setImagePreview } =
     useUploadImage();
-  const { register, handleSubmit, getValues, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const getUserData = (userId) => {
     setShowModal(true);
     const userRecord = allUsers.filter((user) => user.id == userId);
     setUserData(userRecord[0]);
-  };
-
-  const handleFileInputChange = (e) => {
-    setUserData({ ...userData, image: e.target.files[0] });
   };
 
   const { mutate: createUserData } = useMutation({
