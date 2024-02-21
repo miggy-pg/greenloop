@@ -12,15 +12,6 @@ export const useUser = (userId) => {
     initialData: {},
   });
 
-  console.log(
-    "useUser: ",
-    useQuery({
-      queryKey: ["user"],
-      queryFn: () => fetchUser(userId),
-      initialData: {},
-    })
-  );
-
   const { data: userData } = !isLoading && user;
 
   return { userData, isLoading, error };

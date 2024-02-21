@@ -1,28 +1,24 @@
-import { io } from "socket.io-client";
-
 import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useWindowSize } from "@uidotdev/usehooks";
 import {
-  IoAddCircleOutline,
-  IoChatboxEllipsesOutline,
   IoExitOutline,
+  IoSearch,
   IoHomeOutline,
   IoListOutline,
+  IoAddCircleOutline,
+  IoChatboxEllipsesOutline,
   IoNotificationsOutline,
   IoSettings,
-  IoSearch,
 } from "react-icons/io5";
 
 import Notification from "../../../modules/Notification";
-import SettingsModal from "../../Common/SettingsModal";
+import SettingsModal from "../SettingsModal";
 import Modal from "../Modal";
+import { useSocketMessages } from "../../../hooks/useSocket";
 
-import greenLoopLogo from "../../../assets/images/greenloop-logo.png";
-import { useConversation } from "../../../hooks/useConversation";
-import { updateHasReadMessage } from "../../../api/message";
+import greenloopLogo from "../../../assets/images/greenloop-logo.png";
 
 const iconSizes = "h-4.5 w-4.5 lg:h-5 lg:w-5 md:h-5 md:w-5";
 
@@ -62,13 +58,9 @@ const Menus = [
 const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
 
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [socket, setSocket] = useState(null);
-  const [onClickedRead, setOnClickedRead] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [newMessages, setNewMessages] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [scrollActive, setScrollActive] = useState(false);
@@ -81,13 +73,6 @@ const Navbar = () => {
 
   const { width } = useWindowSize();
 
-  const { mutate: readMessage } = useMutation({
-    mutationFn: (messageId) => updateHasReadMessage(messageId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["conversations"] });
-    },
-  });
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -95,22 +80,7 @@ const Navbar = () => {
     navigate(`/listing?search=${searchQuery}`);
   };
 
-  const hasReadMessage = (messageId) => {
-    readMessage(messageId);
-    setOnClickedRead(true);
-  };
-
-  useEffect(() => {
-    setSocket(io("http://localhost:8080"));
-  }, []);
-
-  useEffect(() => {
-    socket?.emit("getNewMessages", user?.id);
-    socket?.on("getNewMessages", (data) => {
-      setNewMessages(data);
-    });
-    setOnClickedRead(false);
-  }, [socket, onClickedRead]);
+  const { newMessages, hasReadMessage } = useSocketMessages(user);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -149,7 +119,7 @@ const Navbar = () => {
               <div className="flex items-center ml-10">
                 <Link to="/" className="cursor-pointer">
                   <img
-                    src={greenLoopLogo}
+                    src={greenloopLogo}
                     className="h-[3.5rem] w-auto sm:w-[2.6rem] sm:h-[2.6rem] 2xsm:w-[2.5rem] 2xsm:h-[2.5rem]"
                     alt="green-loop logo"
                   />
@@ -179,7 +149,7 @@ const Navbar = () => {
               <div className="flex items-center text-center px-5">
                 <Link to="/">
                   <img
-                    src={greenLoopLogo}
+                    src={greenloopLogo}
                     className="h-14 w-auto items-center cursor-pointer lg:h-12 md:h-9"
                     alt="green-loop logo"
                   />
@@ -242,6 +212,12 @@ const Navbar = () => {
                       className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] sm:h-[3rem] md:px-[1.1rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
                     >
                       <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] md:h-[3.5rem] sm:h-[3rem] sm:text-xl">
+                        {menu.name.includes("Notifications") &&
+                          newMessages.length > 0 && (
+                            <span className="absolute top-2 bg-red-500 text-white w-4 h-4 text-center justify-between rounded-full font-medium text-xs">
+                              {newMessages.length}
+                            </span>
+                          )}
                         {menu.icon}
 
                         {hideMenuLabels && (
@@ -258,9 +234,7 @@ const Navbar = () => {
               })}
               {showNotification && (
                 <Notification
-                  scrollActive={scrollActive}
                   newMessages={newMessages}
-                  setShowNotification={setShowNotification}
                   hasReadMessage={hasReadMessage}
                 />
               )}

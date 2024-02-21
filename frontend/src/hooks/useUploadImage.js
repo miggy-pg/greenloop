@@ -7,6 +7,7 @@ export const useUploadImage = () => {
   const fetchImage = (e) => {
     const file = e.target.files[0];
     setImagePreview(file);
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {

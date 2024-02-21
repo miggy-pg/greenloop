@@ -16,7 +16,6 @@ const Notification = ({ newMessages, hasReadMessage }) => {
       </div>
       <div>
         {newMessages.map((message) => {
-          console.log("newMessagesmessage: ", message);
           return (
             <Link
               to={`chats?id=${message?.conversationId}`}

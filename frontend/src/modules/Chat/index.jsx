@@ -16,7 +16,6 @@ const Chat = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
   const [receiverData, setReceiverData] = useState({});
-  // const messagesStore = useSelector((state) => state.user.messages);
 
   const [file, setFile] = useState([]);
   const [conversations, setConversations] = useState([]);
@@ -130,7 +129,7 @@ const Chat = () => {
     setMessages({ messages: data, receiver, conversationId });
   };
 
-  const sendMessage = async (e) => {
+  const sendMessage = async () => {
     setMessage("");
     socket?.emit("sendMessage", {
       senderId: user?.id,
@@ -164,7 +163,7 @@ const Chat = () => {
             <div className="h-full w-full">
               <div className="relative mx-auto rounded-lg">
                 {!openConvo ? (
-                  <h3 className="text-md font-semibold uppercase text-gray-400 mb-4 pl-2">
+                  <h3 className="text-md font-semibold uppercase text-gray-400 mb-4 pl-2 py-2">
                     Chats
                   </h3>
                 ) : (
@@ -241,12 +240,12 @@ const Chat = () => {
                   <div className="p-14 sm:p-0 ">
                     {messages?.messages?.length > 0 && openConvo
                       ? messages.messages.map(
-                          ({ message, user: { id } = {} }) => {
+                          ({ message, user: { id } = {} }, index) => {
                             return (
                               <>
                                 {/* Receiver Side */}
                                 {id === user?.id ? (
-                                  <>
+                                  <div key={index}>
                                     <div className="w-full flex justify-end text-left py-8 sm:px-2 sm:py-1 sm:my-2 overflow-x-hidden">
                                       <div className="flex items-center">
                                         <h4 className="text-xs text-blue p-3 bg-gray-200 rounded-xl">
@@ -283,9 +282,9 @@ const Chat = () => {
                                         </div>
                                       </div>
                                     )}
-                                  </>
+                                  </div>
                                 ) : (
-                                  <>
+                                  <div key={index}>
                                     {/* Sender Side */}
                                     <div className="w-full flex justify-start text-left py-8 xsm:pr-16 sm:px-2 sm:py-1 sm:my-2 overflow-x-hidden">
                                       <span className="flex items-center">
@@ -322,7 +321,7 @@ const Chat = () => {
                                     )}
 
                                     <div ref={messageRef}></div>
-                                  </>
+                                  </div>
                                 )}
                               </>
                             );
@@ -388,34 +387,33 @@ const Chat = () => {
               <div className="row-start-2 row-span-3 col-start-1 h-full border border-b-0">
                 <div className="bg-grey-lighter overflow-y-auto">
                   {conversations.length > 0 ? (
-                    conversations.map((convo) => {
+                    conversations.map((convo, index) => {
                       return (
-                        <>
-                          <div
-                            className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
-                            onClick={() =>
-                              fetchMessages(
-                                convo.conversation.conversationId,
-                                convo.conversation.sender.senderId
-                              )
+                        <div
+                          key={index}
+                          className="flex items-center py-3 px-7 hover:bg-gray-100 cursor-pointer"
+                          onClick={() =>
+                            fetchMessages(
+                              convo.conversation.conversationId,
+                              convo.conversation.sender.senderId
+                            )
+                          }
+                        >
+                          <img
+                            src={
+                              convo.conversation?.sender?.image?.url
+                                ? convo.conversation.sender.image.url
+                                : defaultImage
                             }
-                          >
-                            <img
-                              src={
-                                convo.conversation?.sender?.image?.url
-                                  ? convo.conversation.sender.image.url
-                                  : defaultImage
-                              }
-                              className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
-                            />
-                            <div className="ml-6">
-                              <h3 className="text-clamp-to-desktop font-semibold">
-                                {!isTablet &&
-                                  convo.conversation.sender.companyName}
-                              </h3>
-                            </div>
+                            className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
+                          />
+                          <div className="ml-6">
+                            <h3 className="text-clamp-to-desktop font-semibold">
+                              {!isTablet &&
+                                convo.conversation.sender.companyName}
+                            </h3>
                           </div>
-                        </>
+                        </div>
                       );
                     })
                   ) : (
@@ -471,9 +469,9 @@ const Chat = () => {
                 <div className="p-14 sm:p-2">
                   {messages?.messages?.length > 0 ? (
                     messages.messages.map(
-                      ({ message, user: messageSender }) => {
+                      ({ message, user: messageSender }, index) => {
                         return (
-                          <>
+                          <div key={index}>
                             {messageSender.id == user?.id ? (
                               <>
                                 {/* Current User Message Message Chat Box */}
@@ -569,7 +567,7 @@ const Chat = () => {
                               </>
                             )}
                             <div ref={messageRef}></div>
-                          </>
+                          </div>
                         );
                       }
                     )

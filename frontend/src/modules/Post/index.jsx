@@ -28,7 +28,7 @@ const Post = () => {
 
   const queryClient = useQueryClient();
 
-  const { mutate, isLoading: isCreating } = useMutation({
+  const { mutate: createWaste, isLoading: isCreating } = useMutation({
     mutationFn: (formData) => uploadPost(formData),
     onSuccess: () => {
       alert("Post uploaded successfully");
@@ -45,7 +45,7 @@ const Post = () => {
 
   const onSubmit = (data) => {
     const formData = { ...data, image, user: user?.id };
-    mutate(formData);
+    createWaste(formData);
   };
 
   useMemo(() => {
@@ -133,14 +133,14 @@ const Post = () => {
                   className="absolute cursor-pointer"
                 >
                   <IoAddSharp className="w-14 h-14 bg-[#F1F1F1] text-slate-400 rounded-lg m-2" />
-                  <p className="text-slate-400">Add Image</p>
+                  <p className="text-slate-400 text-clamp-base">Add Image</p>
                 </label>
               </div>
             )}
 
             <ButtonOutline
               disabled={isCreating}
-              className="w-full my-10"
+              className="w-full my-10 sm:text-clamp-xs sm:py-2"
               type="submit"
             >
               Upload
