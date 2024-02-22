@@ -80,7 +80,7 @@ const Chat = () => {
     };
     fetchUsers();
   }, []);
-
+  console.log("searchParams: ", searchParams);
   useEffect(() => {
     const getConversation = async () => {
       if (conversationId) {
@@ -151,8 +151,8 @@ const Chat = () => {
   };
 
   const handleMoveBack = () => {
+    searchParams.delete("id");
     setOpenConvo(false);
-    setMessages({});
   };
 
   return (
@@ -336,7 +336,7 @@ const Chat = () => {
                         )}
                   </div>
                 </div>
-
+                {console.log("messagesChatMobile: ", messages)}
                 {messages?.conversationId && (
                   <div className="fixed bottom-12 px-10 py-3 w-full bg-white flex justify-center items-center">
                     <input

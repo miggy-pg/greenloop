@@ -76,7 +76,7 @@ exports.loginUser = async (req, res, next) => {
     if (!username || !password) {
       res
         .status(400)
-        .send(`Please fill ${!username ? "username" : "password"}}`);
+        .send(`Please fill ${!username ? "username" : "password"}`);
     } else {
       const user = await Users.findOne({ username });
       if (!user) {
@@ -84,7 +84,7 @@ exports.loginUser = async (req, res, next) => {
       } else {
         const validateUser = await bcryptjs.compare(password, user.password);
         if (!validateUser) {
-          res.status(400).send("Username or password is incorrect");
+          res.status(400).send("Password is incorrect");
         } else {
           const payload = {
             userId: user._id,
@@ -104,6 +104,7 @@ exports.loginUser = async (req, res, next) => {
                 }
               );
               user.save();
+
               return res.status(200).json({
                 user: {
                   id: user._id,

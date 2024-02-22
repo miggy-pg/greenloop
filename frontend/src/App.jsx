@@ -11,7 +11,8 @@ import "./App.css";
 const Home = lazy(() => import("./modules/Home"));
 const Layout = lazy(() => import("./components/Common/Layout"));
 const Chat = lazy(() => import("./modules/Chat"));
-const Form = lazy(() => import("./modules/Form"));
+const SignIn = lazy(() => import("./modules/SignIn"));
+const SignUp = lazy(() => import("./modules/SignUp"));
 const Listing = lazy(() => import("./modules/Listing"));
 const Post = lazy(() => import("./modules/Post"));
 const Profile = lazy(() => import("./modules/Profile"));
@@ -55,7 +56,7 @@ const App = () => {
     } else {
       setHideModals(false);
     }
-  });
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -67,7 +68,7 @@ const App = () => {
               path="/users/sign-in"
               element={
                 <ProtectedRoute>
-                  <Form isSignInPage={true} />
+                  <SignIn />
                 </ProtectedRoute>
               }
             />
@@ -75,7 +76,7 @@ const App = () => {
               path="/users/sign-up"
               element={
                 <ProtectedRoute>
-                  <Form isSignInPage={false} />
+                  <SignUp />
                 </ProtectedRoute>
               }
             />
