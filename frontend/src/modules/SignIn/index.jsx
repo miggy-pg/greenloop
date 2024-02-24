@@ -86,13 +86,11 @@ const SignIn = () => {
                 Forgot Password?
               </span>
             </span>
-            <span className="flex justify-center w-full">
-              <Button
-                label="Sign in"
-                type="submit"
-                className="bg-[#31572C] rounded-3xl mb-2"
-              />
-            </span>
+            <Button
+              label="Sign in"
+              type="submit"
+              className="bg-[#31572C] rounded-3xl mb-2"
+            />
           </form>
           <div className="mx-auto text-center">
             <span className="text-[#6C6C6C] font-light text-xs">

@@ -32,7 +32,7 @@ const SignUp = () => {
   // }
 
   const onSubmit = (data, e) => {
-    e.preventDefault();
+    // e.preventDefault();
     console.log("onRegister: ", data);
     // if (res.status === 400) {
     //   alert("Invalid credentials");
@@ -81,6 +81,7 @@ const SignUp = () => {
           <form
             className="flex flex-col justify-start items-left px-12 w-full md:px-0"
             onSubmit={handleSubmit(onSubmit)}
+            // onClick={() => console.log("Clicked")}
           >
             <Input
               name="companyName"
@@ -88,6 +89,7 @@ const SignUp = () => {
               className="mb-6"
               register={{ ...register("companyName") }}
               // value={userSignUp.companyName}
+              // onChange={(e) => formOnChange(e)}
             />
             <Input
               name="email"
@@ -96,6 +98,7 @@ const SignUp = () => {
               className="mb-6"
               register={{ ...register("email") }}
               // value={userSignUp.email}
+              // onChange={(e) => formOnChange(e)}
             />
             <Input
               id="username"
@@ -105,6 +108,7 @@ const SignUp = () => {
               className="mb-6"
               register={{ ...register("username") }}
               // value={userSignUp.username}
+              // onChange={(e) => formOnChange(e)}
             />
             <Input
               id="password"
@@ -114,6 +118,7 @@ const SignUp = () => {
               className="mb-1"
               register={{ ...register("password") }}
               // value={userSignUp.password}
+              // onChange={(e) => formOnChange(e)}
             />
             <Input
               id="confirmPassword"
@@ -123,14 +128,17 @@ const SignUp = () => {
               className="mt-5"
               register={{ ...register("confirmPassword") }}
               // value={userSignUp.confirmPassword}
+              // onChange={(e) => formOnChange(e)}
             />
             <select
               id="organization-type"
               name="organizationType"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block p-1.5 mt-5"
-              {...register("organizationType", {
-                required: "Please select organization type",
-              })}
+              register={{
+                ...register("organizationType", {
+                  required: "Please select organization type",
+                }),
+              }}
             >
               {organizationType.map((item, index) => (
                 <option id={index} key={index} value={item.value}>
@@ -146,6 +154,7 @@ const SignUp = () => {
               className="mt-6"
               register={{ ...register("province") }}
               // value={userSignUp.province}
+              // onChange={(e) => formOnChange(e)}
             />
 
             <Input
@@ -156,11 +165,13 @@ const SignUp = () => {
               className="mt-6"
               register={{ ...register("cityMunicipality") }}
               // value={userSignUp.cityMunicipality}
+              // onChange={(e) => formOnChange(e)}
             />
+
             <Button
-              label="Sign in"
+              label="Sign up"
               type="submit"
-              className="bg-[#31572C] rounded-3xl mb-2 mt-5"
+              className="bg-[#31572C] rounded-3xl -mb-1 mt-5"
             />
           </form>
           <div className="mx-auto text-center">
