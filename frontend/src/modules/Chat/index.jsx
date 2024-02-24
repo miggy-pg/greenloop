@@ -80,23 +80,22 @@ const Chat = () => {
     };
     fetchUsers();
   }, []);
-  console.log("searchParams: ", searchParams);
+
   useEffect(() => {
     const getConversation = async () => {
       if (conversationId) {
-        console.log("thsesAreconversatoin?: ", conversations);
-        const receiver = conversations.find(
-          (convo) => convo.conversation.conversationId === conversationId
+        const receiver = conversations?.find(
+          (convo) => convo?.conversation.conversationId === conversationId
         );
         const { data } = await getMessages(
           conversationId,
           user?.id,
-          receiver.conversation.sender.senderId
+          receiver?.conversation.sender.senderId
         );
 
         setMessages({
           messages: data,
-          receiver: receiver.conversation.sender.senderId,
+          receiver: receiver?.conversation.sender.senderId,
           conversationId,
         });
       } else {
@@ -240,43 +239,27 @@ const Chat = () => {
                   <div className="p-14 sm:p-0 ">
                     {messages?.messages?.length > 0 && openConvo
                       ? messages.messages.map(
-                          ({ message, user: { id } = {} }, index) => {
+                          ({ message, user: messageSender = {} }, index) => {
                             return (
                               <>
                                 {/* Receiver Side */}
-                                {id === user?.id ? (
+                                {messageSender.id === user?.id ? (
                                   <div key={index}>
-                                    <div className="w-full flex justify-end text-left py-8 sm:px-2 sm:py-1 sm:my-2 overflow-x-hidden">
+                                    <div className="w-full flex justify-end text-left py-8 sm:px-2 sm:py-1 sm:pr-3 sm:my-2 overflow-x-hidden">
                                       <div className="flex items-center">
                                         <h4 className="text-xs text-blue p-3 bg-gray-200 rounded-xl">
                                           {message.msg}
                                         </h4>
-                                        <img
-                                          className="rounded-full flex-shrink-0 sm:ml-2 border border-primary"
-                                          src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
-                                          width="48"
-                                          height="48"
-                                          alt={user?.companyName}
-                                        />
                                       </div>
                                     </div>
 
                                     {message?.msgImage?.url && (
                                       <div>
-                                        <div className="w-full flex justify-end text-left py-8 sm:px-2 xsm:pl-16 sm:py-1 sm:my-2 overflow-x-hidden">
+                                        <div className="w-full flex justify-end text-left py-8 overflow-x-hidden sm:px-2 sm:pr-3 sm:py-1 sm:my-2 xsm:pl-16">
                                           <div className="flex flex-col-2 gap-4 text-right justify-end">
                                             <img
                                               src={message?.msgImage?.url}
                                               className="rounded-lg w-auto h-24 ml-2"
-                                            />
-                                          </div>
-                                          <div>
-                                            <img
-                                              className="rounded-full flex-shrink-0 sm:ml-2 border border-primary"
-                                              src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
-                                              width="48"
-                                              height="48"
-                                              alt={user?.companyName}
                                             />
                                           </div>
                                         </div>
@@ -289,7 +272,12 @@ const Chat = () => {
                                     <div className="w-full flex justify-start text-left py-8 xsm:pr-16 sm:px-2 sm:py-1 sm:my-2 overflow-x-hidden">
                                       <span className="flex items-center">
                                         <img
-                                          src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
+                                          src={
+                                            messageSender.image?.url?.length > 0
+                                              ? messageSender.url
+                                              : defaultImage
+                                          }
+                                          alt={messageSender?.companyName}
                                           className="rounded-full w-12 h-12 sm:mr-2"
                                         />
                                         <p className="text-xs text-blue p-3 bg-gray-200 rounded-xl">
@@ -303,11 +291,14 @@ const Chat = () => {
                                         <div className="w-full flex justify-start text-left py-8 xsm:pr-16 sm:py-1 sm:my-2 overflow-x-hidden">
                                           <div className="">
                                             <img
-                                              className="rounded-full flex-shrink-0 sm:ml-2"
-                                              src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-32-01_pfck4u.jpg"
-                                              width="48"
-                                              height="48"
-                                              alt={user?.companyName}
+                                              className="rounded-full w-12 h-12 flex-shrink-0 sm:ml-2"
+                                              src={
+                                                messageSender.image?.url
+                                                  ?.length > 0
+                                                  ? messageSender.url
+                                                  : defaultImage
+                                              }
+                                              alt={messageSender?.companyName}
                                             />
                                           </div>
                                           <div className="flex flex-col-2 gap-4 text-right justify-start">
@@ -336,7 +327,7 @@ const Chat = () => {
                         )}
                   </div>
                 </div>
-                {console.log("messagesChatMobile: ", messages)}
+
                 {messages?.conversationId && (
                   <div className="fixed bottom-12 px-10 py-3 w-full bg-white flex justify-center items-center">
                     <input
@@ -578,7 +569,6 @@ const Chat = () => {
                   )}
                 </div>
               </div>
-              <div></div>
               {messages?.conversationId && (
                 <div className="row-start-3 col-start-2 col-span-3 px-10 w-full flex justify-center items-center md:pb-8 sm:pb-4">
                   <input

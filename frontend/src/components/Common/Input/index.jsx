@@ -7,6 +7,8 @@ const Input = ({
   isRequired = true,
   placeholder = "",
   register,
+  value = "",
+  onChange = () => {},
 }) => {
   return (
     <div className={`${className}`}>
@@ -16,14 +18,27 @@ const Input = ({
       >
         {label}
       </label>
-      <input
-        type={type}
-        id={name}
-        className={`bg-gray-50 border px-3 py-1 border-gray-300 text-gray-900 text-sm rounded-full block w-full focus:ring-blue-500 focus:border-blue-500 lg:w-clamp-form-input lg:text-clamp-xs md:px-3 ${inputClassName}`}
-        placeholder={placeholder}
-        required={isRequired}
-        {...register}
-      />
+
+      {register ? (
+        <input
+          type={type}
+          id={name}
+          className={`bg-gray-50 border px-3 py-1 border-gray-300 text-gray-900 text-sm rounded-full block w-full focus:ring-blue-500 focus:border-blue-500 lg:w-clamp-form-input lg:text-clamp-xs md:px-3 ${inputClassName}`}
+          placeholder={placeholder}
+          required={isRequired}
+          {...register}
+        />
+      ) : (
+        <input
+          type={type}
+          id={name}
+          value={value}
+          className={`bg-gray-50 border px-3 py-1 border-gray-300 text-gray-900 text-sm rounded-full block w-full focus:ring-blue-500 focus:border-blue-500 lg:w-clamp-form-input lg:text-clamp-xs md:px-3 ${inputClassName}`}
+          placeholder={placeholder}
+          required={isRequired}
+          onChange={onChange}
+        />
+      )}
     </div>
   );
 };

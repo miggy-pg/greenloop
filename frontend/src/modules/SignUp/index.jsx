@@ -1,14 +1,11 @@
-import axios from "axios";
-
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 import Button from "../../components/Common/Button";
 import Input from "../../components/Common/Input";
-import forrestImage from "../../assets/images/login-side-panel.webp";
 import leavesImage from "../../assets/images/signup-side-panel.webp";
-import greenLoopLogo from "../../assets/images/greenloop-logo.png";
-import { useForm } from "react-hook-form";
+import { signUpUser } from "../../api/auth";
 
 const organizationType = [
   { value: "Waste Generator", label: "Waste Generator" },
@@ -19,45 +16,23 @@ const organizationType = [
 const SignUp = () => {
   const { register, handleSubmit, reset } = useForm();
 
-  // const dispatch = useDispatch();
+  const { mutate: createUser } = useMutation({
+    mutationFn: (data) => signUpUser(data),
+    onSuccess: () => {
+      alert("User created successfully");
+      navigate("/users/sign-in");
+    },
+    onError: (error) => {
+      alert(error.response?.data);
+      console.log("error: ", error);
+    },
+  });
 
   const navigate = useNavigate();
 
-  // function handleSelectChange(e) {
-  //   setOrgType(e.target.value);
-  // }
-
-  // function formOnChange(e) {
-  //   setUserSignUp({ ...userSignUp, [e.target.id]: e.target.value });
-  // }
-
   const onSubmit = (data, e) => {
     e.preventDefault();
-    console.log("onRegister: ", data);
-    // if (res.status === 400) {
-    //   alert("Invalid credentials");
-    // } else {
-    //   if (res.data.token) {
-    //     localStorage.setItem("user:token", res.data.token);
-    //     localStorage.setItem("user:detail", JSON.stringify(res.data.user));
-
-    //     // dispatch(successLogin(res.data.user));
-    //   }
-    //   if (res.status === 200) {
-    //     !isSignInPage && alert("User created successfully");
-    //     setUserSignUp({
-    //       companyName: "",
-    //       username: "",
-    //       email: "",
-    //       password: "",
-    //       confirmPassword: "",
-    //       province: "",
-    //       cityMunicipality: "",
-    //       organizationType: orgtype,
-    //     });
-    //     navigate("/");
-    //   }
-    // }
+    createUser(data);
   };
 
   return (
@@ -87,15 +62,14 @@ const SignUp = () => {
               placeholder="company name"
               className="mb-6"
               register={{ ...register("companyName") }}
-              // value={userSignUp.companyName}
             />
+
             <Input
               name="email"
               type="email"
               placeholder="email"
               className="mb-6"
               register={{ ...register("email") }}
-              // value={userSignUp.email}
             />
             <Input
               id="username"
@@ -104,7 +78,6 @@ const SignUp = () => {
               placeholder="username"
               className="mb-6"
               register={{ ...register("username") }}
-              // value={userSignUp.username}
             />
             <Input
               id="password"
@@ -113,7 +86,6 @@ const SignUp = () => {
               placeholder="password"
               className="mb-1"
               register={{ ...register("password") }}
-              // value={userSignUp.password}
             />
             <Input
               id="confirmPassword"
@@ -122,7 +94,6 @@ const SignUp = () => {
               placeholder="confirm password"
               className="mt-5"
               register={{ ...register("confirmPassword") }}
-              // value={userSignUp.confirmPassword}
             />
             <select
               id="organization-type"
@@ -145,7 +116,6 @@ const SignUp = () => {
               placeholder="province"
               className="mt-6"
               register={{ ...register("province") }}
-              // value={userSignUp.province}
             />
 
             <Input
@@ -155,10 +125,9 @@ const SignUp = () => {
               placeholder="city/municipality"
               className="mt-6"
               register={{ ...register("cityMunicipality") }}
-              // value={userSignUp.cityMunicipality}
             />
             <Button
-              label="Sign in"
+              label="Sign up"
               type="submit"
               className="bg-[#31572C] rounded-3xl mb-2 mt-5"
             />

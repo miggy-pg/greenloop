@@ -53,6 +53,10 @@ const Profile = (formData = {}) => {
       setImagePreview("");
       setImage([]);
     },
+    onError: (error) => {
+      alert(error.response?.data);
+      console.log("error: ", error);
+    },
   });
 
   useMemo(() => {
