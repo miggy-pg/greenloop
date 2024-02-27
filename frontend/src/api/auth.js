@@ -1,9 +1,10 @@
 import axios from "axios";
+import { getEndpoint } from "../utils/Helper";
 
 export const signInUser = async (userData) => {
-  return await axios.post("http://localhost:8000/api/sign-in", userData);
+  return await axios.post(`${getEndpoint}/api/sign-in`, userData);
 };
 
 export const signUpUser = async (userData) => {
-  return await axios.post("http://localhost:8000/api/sign-up", userData);
+  return await axios.post(`${getEndpoint}/api/sign-up`, userData);
 };

@@ -483,20 +483,22 @@ const Chat = () => {
                                 </div>
 
                                 {/* Current User Image Message Message Chat Box */}
-                                <div
-                                  className={`max-w-[70%]  rounded-b-xl p-2 mb-2 ${
-                                    messageSender === user?.id
-                                      ? "bg-primary text-blue rounded-tl-xl ml-auto"
-                                      : "bg-secondary rounded-tr-xl"
-                                  } `}
-                                >
-                                  <div className="flex text-right justify-end">
-                                    <img
-                                      src={message?.msgImage?.url}
-                                      className="rounded-lg"
-                                    />
+                                {message?.msgImage?.url && (
+                                  <div
+                                    className={`w-full rounded-b-xl p-2 mb-2 ${
+                                      messageSender === user?.id
+                                        ? "bg-primary text-blue rounded-tl-xl ml-auto"
+                                        : "bg-secondary rounded-tr-xl"
+                                    } `}
+                                  >
+                                    <div className="flex text-right justify-end">
+                                      <img
+                                        src={message?.msgImage?.url}
+                                        className="rounded-lg w-62 h-62"
+                                      />
+                                    </div>
                                   </div>
-                                </div>
+                                )}
                               </>
                             ) : (
                               <>

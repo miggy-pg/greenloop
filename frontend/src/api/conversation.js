@@ -1,17 +1,18 @@
 import axios from "axios";
+import { getEndpoint } from "../utils/Helper";
 
 export const getMessages = async (conversationId, userId, receiverId) => {
   return axios.get(
-    `http://localhost:8000/api/messages/${conversationId}?senderId=${userId}&&receiverId=${receiverId}`
+    `${getEndpoint}/api/messages/${conversationId}?senderId=${userId}&&receiverId=${receiverId}`
   );
 };
 
 export const getConversations = async (userId) => {
-  return axios.get(`http://localhost:8000/api/conversations/${userId}`);
+  return axios.get(`${getEndpoint}/api/conversations/${userId}`);
 };
 
 export const createConversation = async (senderId, receiverId) => {
-  return axios.post(`http://localhost:8000/api/conversations`, {
+  return axios.post(`${getEndpoint}/api/conversations`, {
     senderId,
     receiverId,
   });

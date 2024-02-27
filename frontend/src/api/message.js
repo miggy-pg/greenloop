@@ -1,10 +1,10 @@
 import axios from "axios";
+import { getEndpoint } from "../utils/Helper";
 
 export const sendUserMessage = async (newMessage) => {
-  console.log("newMessage: ", newMessage);
-  return axios.post("http://localhost:8000/api/message", newMessage);
+  return axios.post(`${getEndpoint}/api/message`, newMessage);
 };
 
 export const updateHasReadMessage = async (messageId) => {
-  return axios.get(`http://localhost:8000/api/message/${messageId}`);
+  return axios.get(`${getEndpoint}/api/message/${messageId}`);
 };
