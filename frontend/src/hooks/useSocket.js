@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { updateHasReadMessage } from "../api/message";
+import { socketPort } from "../utils/Helper";
 
 export const useSocketMessages = (user) => {
   const queryClient = useQueryClient();
@@ -24,7 +25,8 @@ export const useSocketMessages = (user) => {
   };
 
   useEffect(() => {
-    setSocket(io("http://localhost:8080"));
+    setSocket(io(socketPort));
+    // setSocket(io("http://localhost:8080"));
   }, []);
 
   useEffect(() => {

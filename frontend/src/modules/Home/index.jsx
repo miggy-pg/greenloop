@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import Card from "../../components/Common/Card";
@@ -23,9 +22,9 @@ const Home = () => {
       );
     });
 
-  useMemo(() => {
-    document.title = "Green Loop | Home";
-  }, []);
+  // useMemo(() => {
+  //   document.title = "Green Loop | Home";
+  // }, []);
 
   if (isLoading) return;
 

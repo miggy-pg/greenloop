@@ -11,10 +11,13 @@ import { TbSend, TbCirclePlus, TbArrowLeft } from "react-icons/tb";
 
 import { useWindowSize } from "@uidotdev/usehooks";
 import defaultImage from "../../assets/default-image.jpg";
+import { getEndpoint, socketPort } from "../../utils/Helper";
 
 const Chat = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  document.title = "Green Loop | Chat";
+
   const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
+  const [searchParams, setSearchParams] = useSearchParams();
   const [receiverData, setReceiverData] = useState({});
 
   const [file, setFile] = useState([]);
@@ -34,7 +37,7 @@ const Chat = () => {
   const conversationId = searchParams.get("id");
 
   useEffect(() => {
-    setSocket(io("http://localhost:8080"));
+    setSocket(io(socketPort));
   }, []);
 
   useEffect(() => {
@@ -69,7 +72,7 @@ const Chat = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await fetch("http://localhost:8000/api/users", {
+      const res = await fetch(`${getEndpoint}:8000/api/users`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -104,10 +107,6 @@ const Chat = () => {
     };
     getConversation();
   }, [conversationId, conversations, messages.messages?.length]);
-
-  useMemo(() => {
-    document.title = "Green Loop | Chat";
-  }, []);
 
   const fetchImage = (e) => {
     const file = e.target.files[0];

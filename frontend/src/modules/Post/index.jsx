@@ -7,7 +7,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUploadImage } from "../../hooks/useUploadImage";
 import { uploadPost } from "../../api/user";
 import { user } from "../../constants/userData";
-import { useMemo } from "react";
 
 const wasteCategories = [
   "Plastic",
@@ -21,6 +20,8 @@ const wasteCategories = [
 ];
 
 const Post = () => {
+  document.title = "Green Loop | Post";
+
   const { image, imagePreview, fetchImage, setImagePreview, setImage } =
     useUploadImage();
 
@@ -47,10 +48,6 @@ const Post = () => {
     const formData = { ...data, image, user: user?.id };
     createWaste(formData);
   };
-
-  useMemo(() => {
-    document.title = "Green Loop | Post";
-  }, []);
 
   return (
     <div

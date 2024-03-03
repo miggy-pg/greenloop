@@ -16,6 +16,8 @@ import { useWastes } from "../../hooks/useWaste";
 import { usePaginate } from "../../hooks/usePaginate";
 
 const Listing = ({ myWaste }) => {
+  document.title = "Green Loop | Listing";
+
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
 
@@ -64,10 +66,6 @@ const Listing = ({ myWaste }) => {
   const handleClearFilter = () => {
     setFilterValue("");
   };
-
-  useMemo(() => {
-    document.title = "Green Loop | Listing";
-  }, []);
 
   if (isLoading) return;
 

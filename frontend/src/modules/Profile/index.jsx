@@ -12,6 +12,8 @@ import { useUploadImage } from "../../hooks/useUploadImage";
 import { useUser } from "../../hooks/useUser";
 
 const Profile = (formData = {}) => {
+  document.title = "Green Loop | Profile";
+
   const userDetail = JSON.parse(localStorage.getItem("user:detail"));
   const token = localStorage.getItem("user:token");
   console.log("userDetail: ", userDetail);
@@ -58,10 +60,6 @@ const Profile = (formData = {}) => {
       console.log("error: ", error);
     },
   });
-
-  useMemo(() => {
-    document.title = "Green Loop | Profile";
-  }, []);
 
   const onSubmit = (data) => {
     try {

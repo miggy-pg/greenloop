@@ -15,9 +15,12 @@ export default {
     extend: {
       height: {
         108: "30rem",
+        dvh: "100dvh",
+        "9/10": "90%",
       },
       width: {
         "clamp-form-input": "clamp(100%, 20vw, 20rem)",
+        dvw: "100dvw",
       },
       fontSize: {
         clamp: "clamp(1rem, 4vw, 1.8rem)",

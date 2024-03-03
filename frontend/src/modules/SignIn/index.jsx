@@ -9,6 +9,8 @@ import forrestImage from "../../assets/images/login-side-panel.webp";
 import greenLoopLogo from "../../assets/images/greenloop-logo.png";
 
 const SignIn = () => {
+  document.title = "Green Loop | Sign In";
+
   const { register, handleSubmit, reset } = useForm();
 
   const navigate = useNavigate();
@@ -34,24 +36,24 @@ const SignIn = () => {
   };
 
   return (
-    <div className="h-screen flex items-center">
-      <div className="flex flex-row shadow-lg justify-center w-2/4 items-center max-w-6xl mx-auto lg:flex-col md:items-start md:w-2/4 sm:w-3/4 h-4/5">
-        <div className="w-2/4 h-full border border-palette-lighter bg-red-500 rounded shadow-lg lg:mb-3 md:mb-0 lg:h-1/6 lg:w-full">
+    <div className="flex h-dvh w-dvw">
+      <div className="flex shadow-lg justify-center my-auto w-2/4 h-9/10 items-center max-w-6xl mx-auto lg:flex-col md:items-start md:w-3/5 sm:w-3/4 sm:h-full xsm:w-full xsm:h-screen">
+        <div className="w-3/4 h-full border border-palette-lighter rounded shadow-lg lg:mb-3 md:mb-0 lg:h-1/6 lg:w-full">
           <img
             src={forrestImage}
             alt="Forrest illustration"
-            className="w-full h-full object-cover "
+            className="w-full h-full object-cover xsm:h-36"
           />
         </div>
-        <div className="flex flex-col justify-center h-full w-full max-w-sm mx-auto space-y-4 min-h-128 lg:w-4/6 xsm:w-3/4">
-          <div className="flex mx-auto w-20 h-20 justify-center lg:w-14 lg:h-14">
+        <div className="flex flex-col justify-center h-full w-full max-w-lg mx-auto space-y-4 lg:w-4/6 xsm:w-3/4">
+          <div className="mx-auto w-20 h-20 justify-center lg:w-14 lg:h-14">
             <img
               src={greenLoopLogo}
               alt="Greenloop Logo"
               className="w-full h-full object-cover "
             />
           </div>
-          <div className="text-4xl font-extrabold text-[#31572C] text-center lg:text-clamp-form-greenloop lg:pb-3 pb-9 ">
+          <div className="text-4xl font-extrabold text-[#31572C] text-center pb-9 lg:text-clamp-form-greenloop lg:pb-3">
             GreenLoop
           </div>
           <div className="text-2xl font-extrabold mb-4 ml-12 md:ml-0 lg:text-clamp-form-header">
