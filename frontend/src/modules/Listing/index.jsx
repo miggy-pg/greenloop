@@ -92,7 +92,8 @@ const Listing = ({ myWaste }) => {
         <p
           className={`w-screen font-normal lg:pl-20 lg:text-[2.5rem] md:pl-16 md:text-[2rem] md:justify-center sm:text-left sm:pl-14 sm:text-[2rem] xsm:text-[1.3rem] xsm:pl-11 2xsm:text-[1.2rem] ${
             myWaste ? "text-3xl pl-32 text-black" : "text-5xl pl-24 text-white"
-          }`}
+          }`}s
+          
         >
           {myWaste ? "My Waste" : "WASTE LISTING"}
         </p>
@@ -122,12 +123,14 @@ const Listing = ({ myWaste }) => {
             >
               <IoFilter className="text-white" />
             </button>
-            <button
-              className="p-2 m-4 rounded-lg bg-[#31572C] cursor-pointer"
-              onClick={() => setIsSortBy((sortby) => !sortby)}
-            >
-              <IoSwapVerticalSharp className="text-white " />
-            </button>
+            {!myWaste && (
+              <button
+                className="p-2 m-4 rounded-lg bg-[#31572C] cursor-pointer"
+                onClick={() => setIsSortBy((sortby) => !sortby)}
+              >
+                <IoSwapVerticalSharp className="text-white " />
+              </button>
+            )}
           </div>
         </div>
 

@@ -29,7 +29,7 @@ const SettingModal = () => {
               className="block px-4 py-4 cursor-pointer hover:bg-gray-100"
               role="menuitem"
             >
-              Users
+              Dashboard
             </span>
           </Link>
         </li>

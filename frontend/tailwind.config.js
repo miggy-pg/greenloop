@@ -2,6 +2,9 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
+    fontFamily: {
+      sans: ["Poppins", "sans-serif"],
+    },
     screens: {
       "2xl": { max: "1535px" },
       xl: { max: "1279px" },

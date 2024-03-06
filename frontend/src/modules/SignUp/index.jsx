@@ -39,12 +39,12 @@ const SignUp = () => {
 
   return (
     <div className="h-dvh flex w-dvw items-center">
-      <div className="flex flex-row shadow-lg justify-center w-2/4 h-9/10 max-w-6xl mx-auto lg:h-full lg:flex-col md:items-start md:w-2/4 sm:w-3/4 sm:h-[100dvh] xsm:w-full">
+      <div className="flex flex-row shadow-lg justify-center w-2/4 h-9/10 max-w-6xl mx-auto lg:h-full lg:flex-col md:items-start md:w-2/4 sm:w-3/4 sm:h-screen xsm:w-full">
         <div className="w-2/4 h-full border border-palette-lighter bg-red-500 rounded shadow-lg lg:mb-3 md:mb-0 lg:h-[8%] lg:w-full">
           <img
             src={leavesImage}
             alt="Forrest illustration"
-            className="w-full h-full object-cover "
+            className="w-full h-full object-cover xsm:h-36"
           />
         </div>
         <div className="flex flex-col justify-center h-full w-full max-w-sm mx-auto space-y-4 min-h-128 lg:w-4/6 xsm:w-3/4">
@@ -127,11 +127,13 @@ const SignUp = () => {
               className="mt-6"
               register={{ ...register("cityMunicipality") }}
             />
-            <Button
-              label="Sign up"
-              type="submit"
-              className="bg-[#31572C] rounded-3xl mt-5"
-            />
+            <div className="text-center">
+              <Button
+                label="Sign up"
+                type="submit"
+                className="bg-[#31572C] rounded-3xl mt-5"
+              />
+            </div>
           </form>
           <div className="mx-auto text-center">
             <span className="text-[#6C6C6C] font-light text-xs">

@@ -26,7 +26,6 @@ export const useSocketMessages = (user) => {
 
   useEffect(() => {
     setSocket(io(socketPort));
-    // setSocket(io("http://localhost:8080"));
   }, []);
 
   useEffect(() => {

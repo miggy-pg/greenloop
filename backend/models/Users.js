@@ -4,7 +4,7 @@ const userSchema = mongoose.Schema({
   companyName: {
     type: String,
     required: [true, "Please add a company name"],
-    maxLength: 100,
+    maxLength: 40,
   },
   username: {
     type: String,
@@ -43,6 +43,10 @@ const userSchema = mongoose.Schema({
     url: {
       type: String,
     },
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false,
   },
   token: {
     type: String,

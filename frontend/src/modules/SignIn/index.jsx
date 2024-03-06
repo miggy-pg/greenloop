@@ -38,14 +38,14 @@ const SignIn = () => {
   return (
     <div className="flex h-dvh w-dvw">
       <div className="flex shadow-lg justify-center my-auto w-2/4 h-9/10 items-center max-w-6xl mx-auto lg:flex-col md:items-start md:w-3/5 sm:w-3/4 sm:h-full xsm:w-full xsm:h-screen">
-        <div className="w-3/4 h-full border border-palette-lighter rounded shadow-lg lg:mb-3 md:mb-0 lg:h-1/6 lg:w-full">
+        <div className="w-2/4 h-full border border-palette-lighter rounded shadow-lg lg:mb-3 md:mb-0 lg:h-1/6 lg:w-full">
           <img
             src={forrestImage}
             alt="Forrest illustration"
             className="w-full h-full object-cover xsm:h-36"
           />
         </div>
-        <div className="flex flex-col justify-center h-full w-full max-w-lg mx-auto space-y-4 lg:w-4/6 xsm:w-3/4">
+        <div className="flex flex-col justify-center h-full w-full max-w-sm mx-auto space-y-4 lg:w-4/6 xsm:w-3/4">
           <div className="mx-auto w-20 h-20 justify-center lg:w-14 lg:h-14">
             <img
               src={greenLoopLogo}
@@ -56,7 +56,7 @@ const SignIn = () => {
           <div className="text-4xl font-extrabold text-[#31572C] text-center pb-9 lg:text-clamp-form-greenloop lg:pb-3">
             GreenLoop
           </div>
-          <div className="text-2xl font-extrabold mb-4 ml-12 md:ml-0 lg:text-clamp-form-header">
+          <div className="text-clamp-form-header font-extrabold px-12 md:ml-0">
             Sign In
           </div>
 
@@ -88,11 +88,13 @@ const SignIn = () => {
                 Forgot Password?
               </span>
             </span>
-            <Button
-              label="Sign in"
-              type="submit"
-              className="bg-[#31572C] rounded-3xl mb-2"
-            />
+            <div className="text-center">
+              <Button
+                label="Sign in"
+                type="submit"
+                className="bg-[#31572C] rounded-3xl mb-2"
+              />
+            </div>
           </form>
           <div className="mx-auto text-center">
             <span className="text-[#6C6C6C] font-light text-xs">

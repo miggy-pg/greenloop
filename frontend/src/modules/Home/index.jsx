@@ -6,10 +6,10 @@ import PostCard from "../../components/Common/PostCard";
 import { useWastes } from "../../hooks/useWaste";
 
 const Home = () => {
-  const user = JSON.parse(localStorage.getItem("user:detail"));
+  document.title = "Green Loop | Home";
 
+  const user = JSON.parse(localStorage.getItem("user:detail"));
   const { wastes, isLoading, error: wasteError } = useWastes();
-  console.log("wastes: ", wastes);
   const isLoggedIn = user !== null || false;
 
   const sortedWaste =
@@ -23,7 +23,6 @@ const Home = () => {
     });
 
   // useMemo(() => {
-  //   document.title = "Green Loop | Home";
   // }, []);
 
   if (isLoading) return;
