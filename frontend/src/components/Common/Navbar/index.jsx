@@ -15,7 +15,7 @@ import {
 
 import Notification from "../../../modules/Notification";
 import SettingsModal from "../SettingsModal";
-import Modal from "../Modal";
+import Logout from "../Modal/Logout";
 import { useSocketMessages } from "../../../hooks/useSocket";
 
 import greenloopLogo from "../../../assets/images/greenloop-logo.png";
@@ -240,7 +240,7 @@ const Navbar = () => {
               )}
 
               {isHoveredSettings && <SettingsModal />}
-              {isLoggingOut && <Modal setIsLoggingOut={setIsLoggingOut} />}
+              {isLoggingOut && <Logout setIsLoggingOut={setIsLoggingOut} />}
             </ul>
           </div>
         </nav>

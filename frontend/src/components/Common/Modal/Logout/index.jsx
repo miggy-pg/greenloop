@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { signOutUser } from "../../../api/user";
+import { signOutUser } from "../../../../api/user";
 
-const Modal = ({ setIsLoggingOut }) => {
+const Logout = ({ setIsLoggingOut }) => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
   const navigate = useNavigate();
 
@@ -42,4 +42,4 @@ const Modal = ({ setIsLoggingOut }) => {
   );
 };
 
-export default Modal;
+export default Logout;

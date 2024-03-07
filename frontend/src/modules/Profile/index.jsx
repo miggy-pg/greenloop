@@ -131,14 +131,13 @@ const Profile = (formData = {}) => {
                           onSubmit={handleSubmit(onSubmit)}
                           encType="multipart/form-data"
                         >
-                          <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-108 bg-white outline-none focus:outline-none xsm:h-3/4 xsm:w-80">
-                            <div className="flex items-center justify-center p-5 border-solid mx-auto border-blueGray-200 rounded-t md:p-2">
+                          <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-108 max-h-128 bg-white outline-none focus:outline-none xsm:h-3/4 xsm:w-80">
+                            <div className="flex items-center justify-center p-4 border-solid mx-auto border-blueGray-200 rounded-t md:p-2">
                               <h3 className="text-2xl font-semibold md:text-clamp">
                                 Edit Profile
                               </h3>
                             </div>
                             <hr />
-
                             <div className="relative p-6 pb-1">
                               <span className="flex justify-center items-center text-center mb-3">
                                 {imagePreview ? (
@@ -151,12 +150,12 @@ const Profile = (formData = {}) => {
                                     alt={
                                       imagePreview ? imagePreview.name : null
                                     }
-                                    className="relative w-40 h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
+                                    className="relative w-24 h-24 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
                                   />
                                 ) : (
                                   <img
                                     src={defaulImage}
-                                    className="relative w-40 h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
+                                    className="relative w-24 h-24 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
                                   />
                                 )}
                               </span>
@@ -280,7 +279,7 @@ const Profile = (formData = {}) => {
                                         id="organizationType"
                                         className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
                                         defaultValue={user[0].organizationType}
-                                        {...register("organizationType")}
+                                        disabled
                                       />
                                     </td>
                                   </tr>
@@ -324,7 +323,7 @@ const Profile = (formData = {}) => {
                               </table>
                             </div>
 
-                            <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b md:p-2">
+                            <div className="flex items-center justify-end p-3 border-t border-solid border-blueGray-200 rounded-b md:p-2">
                               <button
                                 className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
                                 type="button"
@@ -333,7 +332,7 @@ const Profile = (formData = {}) => {
                                 Close
                               </button>
                               <button
-                                className="bg-[#31572C] text-white active:bg-[#2e4d29] font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
+                                className="bg-[#31572C] text-white active:bg-[#2e4d29] font-bold uppercase text-sm px-6 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
                                 type="submit"
                               >
                                 Update Profile

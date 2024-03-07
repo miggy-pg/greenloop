@@ -14,8 +14,10 @@ export default {
       xsm: { max: "32em" },
       "2xsm": { max: "24em" },
     },
-
     extend: {
+      maxHeight: {
+        128: "40rem",
+      },
       height: {
         108: "30rem",
         dvh: "100dvh",
