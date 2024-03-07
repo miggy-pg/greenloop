@@ -69,7 +69,7 @@ const Listing = ({ myWaste }) => {
 
   if (isLoading) return;
 
-  if (error) return <p>Error</p>;
+  // if (error) return <p>Error</p>;
 
   return (
     <div
@@ -92,8 +92,7 @@ const Listing = ({ myWaste }) => {
         <p
           className={`w-screen font-normal lg:pl-20 lg:text-[2.5rem] md:pl-16 md:text-[2rem] md:justify-center sm:text-left sm:pl-14 sm:text-[2rem] xsm:text-[1.3rem] xsm:pl-11 2xsm:text-[1.2rem] ${
             myWaste ? "text-3xl pl-32 text-black" : "text-5xl pl-24 text-white"
-          }`}s
-          
+          }`}
         >
           {myWaste ? "My Waste" : "WASTE LISTING"}
         </p>
