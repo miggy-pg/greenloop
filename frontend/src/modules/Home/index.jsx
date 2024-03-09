@@ -22,9 +22,6 @@ const Home = () => {
       );
     });
 
-  // useMemo(() => {
-  // }, []);
-
   if (isLoading) return;
 
   return (

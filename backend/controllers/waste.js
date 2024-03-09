@@ -70,7 +70,7 @@ exports.postWasteImage = async (req, res) => {
     });
     res.json(newWaste);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error" });
+    console.error("Error: ", err);
+    res.status(500).json(err);
   }
 };

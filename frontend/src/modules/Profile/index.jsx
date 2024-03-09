@@ -18,6 +18,10 @@ const Profile = (formData = {}) => {
   const token = localStorage.getItem("user:token");
   console.log("userDetail: ", userDetail);
   const { id: profileId } = useParams();
+
+  const currUser = user && String(profileId) === String(userDetail.id);
+  const visitedUser = user && String(profileId) !== String(userDetail.id);
+  const profileType = profileId && isLoggedIn ? currUser : visitedUser;
   const { id: userId, ...editValues } = formData;
   const isLoggedIn = token !== null || false;
 
@@ -29,7 +33,7 @@ const Profile = (formData = {}) => {
     isLoading: userLoading,
     error: userError,
   } = useUser(userDetail.id);
-  console.log("userProfile: ", user);
+
   const { register, handleSubmit, getValues, reset } = useForm({
     defaultValues: isLoggedIn ? editValues : {},
   });
@@ -77,10 +81,6 @@ const Profile = (formData = {}) => {
     setImage([]);
     setImagePreview("");
   };
-
-  const currUser = user && String(profileId) === String(userDetail.id);
-  const visitedUser = user && String(profileId) !== String(userDetail.id);
-  const profileType = profileId && isLoggedIn ? currUser : visitedUser;
 
   return (
     <div
