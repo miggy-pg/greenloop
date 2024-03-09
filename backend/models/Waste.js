@@ -13,6 +13,7 @@ const wasteSCheme = mongoose.Schema(
       maxLength: 40,
     },
     image: {
+      required: true,
       public_id: {
         type: String,
       },

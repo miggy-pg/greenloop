@@ -25,7 +25,12 @@ const Post = () => {
   const { image, imagePreview, fetchImage, setImagePreview, setImage } =
     useUploadImage();
 
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const queryClient = useQueryClient();
 
@@ -49,15 +54,23 @@ const Post = () => {
     createWaste(formData);
   };
 
+  const onError = (errors) => {
+    console.log("errors: ", errors.wasteCategory.message);
+    alert("Error: ", JSON.stringify(errors?.wasteCategory?.message));
+  };
+
   return (
     <div
-      className="bg-[#F8F8F8] w-screen h-screen pt-[9rem] pb-11 md:pt-[7rem] md:pb-7"
+      className="bg-[#F8F8F8] w-screen h-screen pt-[7rem] pb-11 md:pt-[7rem] md:pb-7"
       id="post"
     >
       <div className="w-screen px-[15rem] flex flex-col text-center justify-center xl:px-[12rem] lg:px-[9rem] md:px-[5rem] sm:px-[2rem] ">
-        <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+        <form
+          onSubmit={handleSubmit(onSubmit, onError)}
+          encType="multipart/form-data"
+        >
           <div className="bg-white border w-[60%] justify-center items-center mx-auto border-gray-200 px-12 shadow-sm rounded-3xl xl:w-[80%] lg:w-[90%] md:w-full md:px-4 ">
-            <article className="p-6">
+            <article className="p-4">
               <footer className="flex justify-center items-center">
                 <div className="flex items-center mb-5">
                   <p className="inline-flex items-center text-3xl font-[500] text-[#4F772D]">
@@ -93,6 +106,7 @@ const Post = () => {
                   ))}
                 </select>
               </div>
+              {errors?.wasteCategory && errors.wasteCategory.message}
             </article>
 
             {imagePreview ? (
