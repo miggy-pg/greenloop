@@ -16,10 +16,8 @@ const SignUp = lazy(() => import("./modules/SignUp"));
 const Listing = lazy(() => import("./modules/Listing"));
 const Post = lazy(() => import("./modules/Post"));
 const Profile = lazy(() => import("./modules/Profile"));
-const Users = lazy(() => import("./modules/Users"));
-const MobileNotification = lazy(() =>
-  import("./modules/Notification/MobileNotification")
-);
+const Dashboard = lazy(() => import("./modules/Dashboard"));
+const MobileNotification = lazy(() => import("./modules/Notification/Mobile"));
 const FullPageSpinner = lazy(() =>
   import("./components/Common/FullPageSpinner")
 );
@@ -98,7 +96,7 @@ const App = () => {
               {!hideModals && (
                 <Route path="notifications" element={<MobileNotification />} />
               )}
-              <Route path="dashboard/users" element={<Users />} />
+              <Route path="dashboard/users" element={<Dashboard />} />
             </Route>
           </Routes>
         </Suspense>

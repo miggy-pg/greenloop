@@ -13,12 +13,13 @@ import {
   IoSettings,
 } from "react-icons/io5";
 
-import Notification from "../../../modules/Notification";
+import Notification from "../../../modules/Notification/Desktop";
 import SettingsModal from "../SettingsModal";
 import Logout from "../Modal/Logout";
 import { useSocketMessages } from "../../../hooks/useSocket";
 
 import greenloopLogo from "../../../assets/images/greenloop-logo.png";
+import { useUser } from "../../../hooks/useUser";
 
 const iconSizes = "h-4.5 w-4.5 lg:h-5 lg:w-5 md:h-5 md:w-5";
 
@@ -57,6 +58,9 @@ const Menus = [
 
 const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
+
+  // Just want to get the data from the backend
+  const { userData } = useUser(user?.id);
 
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -239,7 +243,9 @@ const Navbar = () => {
                 />
               )}
 
-              {isHoveredSettings && <SettingsModal />}
+              {isHoveredSettings && (
+                <SettingsModal userData={userData && userData[0]} />
+              )}
               {isLoggingOut && <Logout setIsLoggingOut={setIsLoggingOut} />}
             </ul>
           </div>

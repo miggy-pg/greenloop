@@ -40,7 +40,7 @@ const Chat = () => {
     setSocket(io(socketPort));
   }, []);
 
-  useEffect(() => {
+  useMemo(() => {
     socket?.emit("addUser", user?.id);
     socket?.on("getUsers", (users) => {
       console.log("activeUsers: ", users);
@@ -62,7 +62,7 @@ const Chat = () => {
     width > 512 && width < 768 ? setIsTable(true) : setIsTable(false);
   }, [messages?.messages, width]);
 
-  useEffect(() => {
+  useMemo(() => {
     const fetchConversations = async () => {
       const { data } = await getConversations(loggedInUser?.id);
       setConversations(data);
@@ -70,7 +70,7 @@ const Chat = () => {
     fetchConversations();
   }, []);
 
-  useEffect(() => {
+  useMemo(() => {
     const fetchUsers = async () => {
       const res = await fetch(`${getEndpoint}:8000/api/users`, {
         method: "GET",
@@ -84,7 +84,7 @@ const Chat = () => {
     fetchUsers();
   }, []);
 
-  useEffect(() => {
+  useMemo(() => {
     const getConversation = async () => {
       if (conversationId) {
         const receiver = conversations?.find(

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import defaultImage from "../../assets/default-image.jpg";
+import defaultImage from "../../../assets/default-image.jpg";
 
 const Notification = ({ newMessages, hasReadMessage }) => {
   const ref = useRef();
@@ -11,10 +11,10 @@ const Notification = ({ newMessages, hasReadMessage }) => {
       className="z-50 max-w-xs my-4 fixed top-[4.5rem] right-20 overflow-y-auto border h-96 w-72 list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg lg:w-56 lg:h-72"
       ref={ref}
     >
-      <div className="py-2 justify-center text-clamp-base font-medium text-center text-gray-700 bg-gray-100 ">
+      <header className="sticky top-0 py-2 justify-center text-clamp-base font-medium text-center text-gray-700 bg-gray-100 ">
         Notifications
-      </div>
-      <div>
+      </header>
+      <main className="flex-1 overflow-y-scroll h-[19rem]">
         {newMessages.map((message) => {
           return (
             <Link
@@ -58,7 +58,13 @@ const Notification = ({ newMessages, hasReadMessage }) => {
             </div>
           </div>
         )}
-      </div>
+      </main>
+      <footer
+        onClick={() => hasReadMessage(null, true)}
+        className="sticky bottom-0 text-center text-xs text-gray-500 py-2 bg-gray-100"
+      >
+        Mark all as read
+      </footer>
     </div>
   );
 };

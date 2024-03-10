@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { useSocketMessages } from "../../hooks/useSocket";
+import { useSocketMessages } from "../../../hooks/useSocket";
 import defaultImage from "../../assets/default-image.jpg";
 
 const MobileNotification = () => {

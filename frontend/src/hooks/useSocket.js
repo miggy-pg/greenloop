@@ -19,8 +19,15 @@ export const useSocketMessages = (user) => {
     },
   });
 
-  const hasReadMessage = (messageId) => {
-    readMessage(messageId);
+  const hasReadMessage = (messageId, all = false) => {
+    if (messageId) readMessage(messageId);
+
+    if (all) {
+      newMessages.forEach((message) => {
+        readMessage(message?.message?.id);
+      });
+    }
+
     setOnClickedRead(true);
   };
 

@@ -8,4 +8,6 @@ export const userHeader = [
   "Province",
   "Municipality",
   "Actions",
+  "",
+  "",
 ];

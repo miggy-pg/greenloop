@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { IoAddSharp } from "react-icons/io5";
 import ButtonOutline from "../../components/Common/ButtonOutline";
 
 import { useUploadImage } from "../../hooks/useUploadImage";
 import ErrorMessage from "../../components/Common/Message/ErrorMessage";
 import { uploadPost } from "../../api/user";
-import { user } from "../../constants/userData";
 
 const wasteCategories = [
   "Plastic",
@@ -23,6 +22,9 @@ const wasteCategories = [
 
 const Post = () => {
   document.title = "Green Loop | Post";
+
+  const user = localStorage.getItem("user:detail");
+
   const [errors, setErrors] = useState({});
   const { image, imagePreview, fetchImage, setImagePreview, setImage } =
     useUploadImage();

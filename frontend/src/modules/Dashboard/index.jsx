@@ -10,9 +10,11 @@ import { createUser, deleteUser } from "../../api/user";
 import { userHeader } from "../../constants/userHeader";
 
 import defaultImage from "../../assets/default-image.jpg";
+import citiesMunicipalities from "../../constants/citiesMunicipalities";
 import { organizationType } from "../../constants/organizationType";
 
 export default function Dasbhboard() {
+  document.title = "Green Loop | Dashboard";
   const queryClient = useQueryClient();
   const [userData, setUserData] = useState({});
   const [showModal, setShowModal] = useState(false);
@@ -25,6 +27,7 @@ export default function Dasbhboard() {
   const getUserData = (userId) => {
     setShowModal(true);
     const userRecord = allUsers.filter((user) => user.id == userId);
+    console.log("userRecord: ", userRecord[0]);
     setUserData(userRecord[0]);
   };
 
@@ -60,10 +63,6 @@ export default function Dasbhboard() {
     setImagePreview("");
     setImage("");
   };
-
-  useMemo(() => {
-    document.title = "Green Loop | Users";
-  }, []);
 
   useMemo(() => {
     reset(userData);
@@ -112,6 +111,7 @@ export default function Dasbhboard() {
             </Table>
             {showModal && (
               <>
+                {console.log("userDataHererere: ", userData)}
                 <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                   <div className="relative w-auto my-6 mx-auto max-w-2xl">
                     <form
@@ -119,9 +119,9 @@ export default function Dasbhboard() {
                       encType="multipart/form-data"
                     >
                       <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-108 bg-white outline-none focus:outline-none xsm:h-3/4 xsm:w-80">
-                        <div className="flex items-center justify-center p-5 border-solid mx-auto border-blueGray-200 rounded-t md:p-2">
+                        <div className="flex items-center justify-center p-4 border-solid mx-auto border-blueGray-200 rounded-t md:p-2">
                           <h3 className="text-2xl font-semibold md:text-clamp">
-                            Edit Profile
+                            {userData.id ? "Edit Profile" : "Create User"}
                           </h3>
                         </div>
                         <hr />
@@ -136,12 +136,12 @@ export default function Dasbhboard() {
                                     : null
                                 }
                                 alt={imagePreview ? imagePreview.name : null}
-                                className="relative w-40 h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
+                                className="relative w-24 h-24 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
                               />
                             ) : (
                               <img
                                 src={defaultImage}
-                                className="relative w-40 h-40 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
+                                className="relative w-24 h-24 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
                               />
                             )}
                           </span>
@@ -273,7 +273,7 @@ export default function Dasbhboard() {
                                   </select>
                                 </td>
                               </tr>
-                              <tr className="bg-white ">
+                              <tr className="bg-white">
                                 <th
                                   scope="row"
                                   className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
@@ -281,13 +281,25 @@ export default function Dasbhboard() {
                                   City/Municipality:
                                 </th>
                                 <td className="px-6 py-2">
-                                  <input
-                                    type="text"
-                                    name="cityMunicipality"
+                                  <select
                                     id="cityMunicipality"
-                                    className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                    {...register("cityMunicipality")}
-                                  />
+                                    name="cityMunicipality"
+                                    className="bg-gray-50 w-48 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
+                                    {...register("cityMunicipality", {
+                                      required:
+                                        "Please select organization type",
+                                    })}
+                                  >
+                                    {citiesMunicipalities.map((item, index) => (
+                                      <option
+                                        id={index}
+                                        key={index}
+                                        value={item}
+                                      >
+                                        {item}
+                                      </option>
+                                    ))}
+                                  </select>
                                 </td>
                               </tr>
                               <tr className="bg-white">
@@ -311,19 +323,19 @@ export default function Dasbhboard() {
                           </table>
                         </div>
 
-                        <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b md:p-2">
+                        <div className="flex items-center justify-end p-3 border-t border-solid border-blueGray-200 rounded-b md:p-2">
                           <button
-                            className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
+                            className="text-red-500 background-transparent font-bold uppercase px-3 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
                             type="button"
                             onClick={onClose}
                           >
                             Close
                           </button>
                           <button
-                            className="bg-[#31572C] text-white active:bg-[#2e4d29] font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
+                            className="bg-[#31572C] text-white active:bg-[#2e4d29] font-bold uppercase text-xs px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
                             type="submit"
                           >
-                            {!userData ? "Update Profile" : "Create User"}
+                            {userData?.id ? "Update Profile" : "Create User"}
                           </button>
                         </div>
                       </div>
