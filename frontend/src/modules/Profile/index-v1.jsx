@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
@@ -13,14 +13,19 @@ import defaulImage from "../../assets/default-image.jpg";
 import { useUploadImage } from "../../hooks/useUploadImage";
 import { useUser } from "../../hooks/useUser";
 
-const Profile = () => {
+const Profile = (formData = {}) => {
   document.title = "Green Loop | Profile";
 
+  const userDetail = JSON.parse(localStorage.getItem("user:detail"));
   const token = localStorage.getItem("user:token");
-  const decToken = jwtDecode(token);
 
+  const dataUser = jwtDecode(token);
+  console.log("dataUser: ", dataUser);
+  console.log("userDetail: ", userDetail);
   const { id: profileId } = useParams();
   const isLoggedIn = token !== null || false;
+
+  const { id: userId, ...editValues } = formData;
 
   const { image, imagePreview, fetchImage, setImage, setImagePreview } =
     useUploadImage();
@@ -29,13 +34,15 @@ const Profile = () => {
     userData: user,
     isLoading: userLoading,
     error: userError,
-  } = useUser(profileId === decToken.userId ? decToken.userId : profileId);
+  } = useUser(userDetail.id);
 
-  const currUser = user && profileId === decToken.userId;
-  const visitedUser = user && profileId !== decToken.userId;
+  const currUser = user && String(profileId) === String(userDetail.id);
+  const visitedUser = user && String(profileId) !== String(userDetail.id);
   const profileType = profileId && isLoggedIn ? currUser : visitedUser;
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: isLoggedIn ? editValues : {},
+  });
 
   const [inputType, setInputType] = useState("password");
 
@@ -43,7 +50,7 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const { mutate: messageCompany } = useMutation({
-    mutationFn: () => createConversation(decToken.userId, profileId),
+    mutationFn: () => createConversation(userDetail.id, profileId),
     onSuccess: (data) => {
       const { data: conversationId } = data;
       navigate(`/chats?id=${conversationId[0]._id}`);
@@ -67,7 +74,7 @@ const Profile = () => {
   const onSubmit = (data) => {
     try {
       const formData = { ...data, image };
-      editProfile({ userId: decToken?.userId, formData: formData });
+      editProfile({ userId: userDetail?.id, formData: formData });
 
       setShowModal(false);
     } catch (err) {

@@ -1,5 +1,5 @@
 import { transformText } from "../../../utils/plasticColors";
-import defaulImage from "../../../assets/default-image.jpg";
+import defaulImage from "../../../assets/waste-default-image.webp";
 
 const ListingCard = ({ waste }) => {
   const { image, post, wasteCategory } = waste;

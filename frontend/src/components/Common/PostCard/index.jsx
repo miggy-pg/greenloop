@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 
 import { transformText } from "../../../utils/plasticColors";
-import defaultImage from "../../../assets/waste-default-image.webp";
+import defaultImage from "../../../assets/default-image.jpg";
+import wasteDefaultImage from "../../../assets/waste-default-image.webp";
 
 const PostCard = ({ props }) => {
   console.log("PostCard: ", props);
@@ -45,7 +46,7 @@ const PostCard = ({ props }) => {
         <div className="h-[18rem] flex items-center justify-between lg:justify-evenly xsm:h-[10rem] 2xsm:h-[8rem]">
           <div className="w-screen border rounded-b-3xl">
             <img
-              src={image?.url ? image.url : defaultImage}
+              src={image?.url ? image.url : wasteDefaultImage}
               className="object-cover w-full h-[18rem] rounded-b-3xl xsm:h-[10rem] 2xsm:h-[8rem]"
             />
           </div>

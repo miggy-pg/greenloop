@@ -18,7 +18,7 @@ const Chat = () => {
 
   const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
   const [searchParams, setSearchParams] = useSearchParams();
-  const [receiverData, setReceiverData] = useState({});
+  const [receiverUser, setReceiverUser] = useState({});
 
   const [file, setFile] = useState([]);
   const [conversations, setConversations] = useState([]);
@@ -95,7 +95,7 @@ const Chat = () => {
           user?.id,
           receiver?.conversation.sender.senderId
         );
-
+        setReceiverUser(receiver?.conversation.sender);
         setMessages({
           messages: data,
           receiver: receiver?.conversation.sender.senderId,
@@ -151,7 +151,10 @@ const Chat = () => {
   const handleMoveBack = () => {
     searchParams.delete("id");
     setOpenConvo(false);
+    setReceiverUser({});
   };
+
+  console.log("receiverUserTest: ", receiverUser);
 
   return (
     <div className="w-full h-full bg-white" id="profile">
@@ -172,18 +175,16 @@ const Chat = () => {
                         onClick={handleMoveBack}
                       />
                       <img
-                        className="rounded-full items-start flex-shrink-0 ml-4 mr-3 border border-primary"
+                        className="rounded-full w-8 h-8 items-start flex-shrink-0 ml-4 mr-3 border border-primary"
                         src={
-                          receiverData?.image
-                            ? receiverData?.image
+                          receiverUser?.image?.url
+                            ? receiverUser.image.url
                             : defaultImage
                         }
-                        width="40"
-                        height="40"
                         alt="Marie Zulfikar"
                       />
                       <h4 className="text-sm font-semibold text-gray-900">
-                        {receiverData.receiver}
+                        {receiverUser?.companyName}
                       </h4>
                     </div>
                   </>
@@ -200,10 +201,6 @@ const Chat = () => {
                                 convo.conversation.conversationId,
                                 convo.conversation.sender.senderId
                               );
-                              setReceiverData({
-                                receiver: convo.conversation.sender.companyName,
-                                image: convo.conversation?.sender?.image?.url,
-                              });
                             }}
                           >
                             <div className="flex items-center">
@@ -220,8 +217,7 @@ const Chat = () => {
                               />
                               <div className="text-clamp-base">
                                 <h4 className="font-semibold text-gray-900 ">
-                                  {/* {convo.conversation.sender.companyName} */}
-                                  Test
+                                  {convo.conversation.sender.companyName}
                                 </h4>
                               </div>
                             </div>
@@ -258,7 +254,7 @@ const Chat = () => {
                                           <div className="flex flex-col-2 gap-4 text-right justify-end">
                                             <img
                                               src={message?.msgImage?.url}
-                                              className="rounded-lg w-auto h-24 ml-2"
+                                              className="rounded-lg w-24 h-24 ml-2"
                                             />
                                           </div>
                                         </div>
@@ -273,7 +269,7 @@ const Chat = () => {
                                         <img
                                           src={
                                             messageSender.image?.url?.length > 0
-                                              ? messageSender.url
+                                              ? messageSender.image.url
                                               : defaultImage
                                           }
                                           alt={messageSender?.companyName}
@@ -294,7 +290,7 @@ const Chat = () => {
                                               src={
                                                 messageSender.image?.url
                                                   ?.length > 0
-                                                  ? messageSender.url
+                                                  ? messageSender.image.url
                                                   : defaultImage
                                               }
                                               alt={messageSender?.companyName}
@@ -367,13 +363,39 @@ const Chat = () => {
           // Desktop View
           <>
             <div className="grid grid-cols-4 grid-rows-chat gap-0 md:h-[88vh] pt-[3.8rem] md:pt-0 h-[90dvh] w-full">
-              <div className="h-full">
+              <div className={`h-full ${conversationId && "border-r"}`}>
                 <div className=" py-2 bg-grey-lightest">
                   <span className="text-5xl text-gray-700 float-left px-5 font-semibold text-clamp">
                     Chats
                   </span>
                 </div>
               </div>
+
+              {/* Conversation User Name */}
+              <div className="row-start-1 col-start-2 col-span-3 px-3 bg-grey-lighter flex flex-row justify-between items-center border-b">
+                <div className="row-start-1 col-start-2 border-0 h-full">
+                  <div className="bg-grey-lighter overflow-y-auto">
+                    {conversationId && (
+                      <div className="flex items-center py-1 px-7 cursor-pointer">
+                        <img
+                          src={
+                            receiverUser?.image?.url
+                              ? receiverUser.image.url
+                              : defaultImage
+                          }
+                          className="w-[3rem] h-[3rem] rounded-full p-[2px] border border-primary"
+                        />
+                        <div className="ml-6">
+                          <h3 className="text-clamp-to-desktop font-normal">
+                            {!isTablet && receiverUser?.companyName}
+                          </h3>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               <div className="row-start-2 row-span-3 col-start-1 h-full border border-b-0">
                 <div className="bg-grey-lighter overflow-y-auto">
                   {conversations.length > 0 ? (
@@ -414,31 +436,6 @@ const Chat = () => {
                 </div>
               </div>
 
-              <div className="row-start-1 col-start-2 col-span-3 px-3 bg-grey-lighter flex flex-row justify-between items-center border-b">
-                <div className="flex items-center">
-                  <div className="flex">
-                    {messages?.receiver?.companyName && (
-                      <>
-                        <div className="cursor-pointer">
-                          <img
-                            src=""
-                            width={60}
-                            height={60}
-                            className="rounded-full"
-                          />
-                        </div>
-                        <div className="ml-6 mr-auto  py-5">
-                          <h3 className="text-clamp-to-desktop">
-                            {messages?.receiver?.companyName}
-                          </h3>
-                        </div>
-                        <div className="cursor-pointer"></div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div></div>
               <div className="row-start-2 col-span-3 w-full overflow-y-auto">
                 <div className="py-2 px-3">
                   <div className="flex justify-center mb-2">
@@ -513,8 +510,8 @@ const Chat = () => {
                                     <span className="text-clamp-xs w-12 sm:w-9">
                                       <img
                                         src={
-                                          messageSender.image?.url?.length > 0
-                                            ? messageSender.url
+                                          messageSender?.image?.url?.length > 0
+                                            ? messageSender.image.url
                                             : defaultImage
                                         }
                                         alt={messageSender?.companyName}
@@ -539,8 +536,9 @@ const Chat = () => {
                                       <span className="text-clamp-xs">
                                         <img
                                           src={
-                                            messageSender.image?.url?.length > 0
-                                              ? messageSender.url
+                                            messageSender?.image?.url?.length >
+                                            0
+                                              ? messageSender.image.url
                                               : defaultImage
                                           }
                                           alt={messageSender?.companyName}

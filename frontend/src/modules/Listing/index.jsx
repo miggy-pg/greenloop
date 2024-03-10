@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import {
@@ -68,8 +68,6 @@ const Listing = ({ myWaste }) => {
   };
 
   if (isLoading) return;
-
-  // if (error) return <p>Error</p>;
 
   return (
     <div
