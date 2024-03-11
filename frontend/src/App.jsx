@@ -7,16 +7,18 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter } from "react-router-dom";
 
 import "./App.css";
+import WasteList from "./components/Management/WasteList";
 
 const Home = lazy(() => import("./modules/Home"));
-const Layout = lazy(() => import("./components/Common/Layout"));
+const Layout = lazy(() => import("./components/Common/Layout/Main"));
 const Chat = lazy(() => import("./modules/Chat"));
 const SignIn = lazy(() => import("./modules/SignIn"));
 const SignUp = lazy(() => import("./modules/SignUp"));
 const Listing = lazy(() => import("./modules/Listing"));
 const Post = lazy(() => import("./modules/Post"));
 const Profile = lazy(() => import("./modules/Profile"));
-const Dashboard = lazy(() => import("./modules/Dashboard"));
+const Users = lazy(() => import("./modules/Users"));
+const DashboardLayout = lazy(() => import("./modules/Dashboard"));
 const MobileNotification = lazy(() => import("./modules/Notification/Mobile"));
 const FullPageSpinner = lazy(() =>
   import("./components/Common/FullPageSpinner")
@@ -96,7 +98,10 @@ const App = () => {
               {!hideModals && (
                 <Route path="notifications" element={<MobileNotification />} />
               )}
-              <Route path="dashboard/users" element={<Dashboard />} />
+              <Route path="dashboard" element={<DashboardLayout />}>
+                <Route index path="users" element={<Users />} />
+                <Route path="wastes" element={<WasteList />} />
+              </Route>
             </Route>
           </Routes>
         </Suspense>

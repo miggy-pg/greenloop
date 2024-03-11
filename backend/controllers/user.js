@@ -1,3 +1,4 @@
+const bcryptjs = require("bcryptjs");
 const Cloudinary = require("../utils/cloudinary");
 const Users = require("../models/Users");
 const Waste = require("../models/Waste");
@@ -20,6 +21,7 @@ exports.fetchUser = async (req, res) => {
           cityMunicipality: user.cityMunicipality,
           image: user.image.url,
           wastes: wastes,
+          isAdmin: user.isAdmin,
         };
       })
     );
@@ -82,7 +84,6 @@ exports.updateProfile = async (req, res) => {
       user.companyName = companyName;
       user.email = email;
       user.username = username;
-      user.password = password;
       user.organizationType = organizationType;
       user.province = province;
       user.cityMunicipality = cityMunicipality;
@@ -91,6 +92,10 @@ exports.updateProfile = async (req, res) => {
         url: result?.secure_url,
       };
     }
+    bcryptjs.hash(password, 10, (err, hashedPassword) => {
+      user.password = hashedPassword;
+      user.save();
+    });
     console.log("userupdateProfile: ", user);
     const updatedUser = await user.save();
 

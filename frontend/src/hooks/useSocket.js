@@ -23,7 +23,7 @@ export const useSocketMessages = (user) => {
     if (messageId) readMessage(messageId);
 
     if (all) {
-      newMessages.forEach((message) => {
+      newMessages?.forEach((message) => {
         readMessage(message?.message?.id);
       });
     }
