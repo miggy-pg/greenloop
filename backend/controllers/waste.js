@@ -74,3 +74,11 @@ exports.postWasteImage = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+exports.deleteWaste = async (req, res) => {
+  try {
+    await Waste.findByIdAndDelete(req.params.userId);
+  } catch (error) {
+    console.log("Error", error);
+  }
+};

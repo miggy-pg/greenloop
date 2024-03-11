@@ -1,12 +1,10 @@
-import { createContext, useContext, useState } from "react";
+import { createContext } from "react";
 
 const TableContext = createContext();
 
 export default function Table({ children }) {
-  const [sorting, setSorting] = useState({ field: "id", ascending: false });
-
   return (
-    <TableContext.Provider value={{ sorting, setSorting }}>
+    <TableContext.Provider>
       <table className="min-w-full table-fixed divide-y divide-gray-200 dark:divide-gray-600">
         {children}
       </table>
@@ -15,13 +13,10 @@ export default function Table({ children }) {
 }
 
 function Column({ header }) {
-  const { sorting, setSorting } = useContext(TableContext);
-
   return (
     <th
       scope="col"
       className="cursor-pointer p-4 text-left text-sm font-medium uppercase tracking-wider text-gray-500 hover:bg-zinc-200 sm:text-md md:text-sm lg:text-sm"
-      onClick={() => setSorting(header, !sorting.ascending)}
     >
       {header}
     </th>

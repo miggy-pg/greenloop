@@ -6,6 +6,7 @@ import Table from "../../components/Common/Table";
 import UserList from "../../components/Management/UserList";
 import { useUploadImage } from "../../hooks/useUploadImage";
 import { useUsers } from "../../hooks/useUser";
+import { useWastes } from "../../hooks/useWaste";
 import { createUser, deleteUser } from "../../api/user";
 import { userHeader } from "../../constants/userHeader";
 
@@ -13,13 +14,14 @@ import defaultImage from "../../assets/default-image.jpg";
 import citiesMunicipalities from "../../constants/citiesMunicipalities";
 import { organizationType } from "../../constants/organizationType";
 
-export default function Users() {
+export default function Wastes() {
   document.title = "Green Loop | Dashboard";
   const queryClient = useQueryClient();
   const [userData, setUserData] = useState({});
   const [showModal, setShowModal] = useState(false);
 
   const { allUsers, error } = useUsers();
+  const { wastes } = useWastes();
   const { image, fetchImage, imagePreview, setImage, setImagePreview } =
     useUploadImage();
   const { register, handleSubmit, reset } = useForm();
@@ -80,7 +82,7 @@ export default function Users() {
       </div>
 
       <div className="inline-block min-w-full align-middle">
-        <div className="overflow-hidden shadow rounded-lg">
+        <div className="overflow-x-scroll shadow rounded-lg">
           <Table>
             <Table.Header
               data={userHeader}
@@ -141,26 +143,24 @@ export default function Users() {
                             />
                           )}
                         </span>
-                        <div className="w-full text-center">
-                          <div className="relative w-48 h-[1.7rem] text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full inline-flex justify-center">
-                            <input
-                              type="file"
-                              id="image-upload"
-                              className="hidden"
-                              accept="image/*"
-                              onChange={(e) => fetchImage(e)}
-                            />
-                            <label
-                              htmlFor="image-upload"
-                              className="absolute cursor-pointer"
-                            >
-                              <p className="text-slate-400 text-clamp-xs">
-                                {image.length
-                                  ? "Replace"
-                                  : "Update Profile Picture"}
-                              </p>
-                            </label>
-                          </div>
+                        <div className="relative w-48 h-[1.7rem] text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full inline-flex justify-center items-center">
+                          <input
+                            type="file"
+                            id="image-upload"
+                            className="hidden"
+                            accept="image/*"
+                            onChange={(e) => fetchImage(e)}
+                          />
+                          <label
+                            htmlFor="image-upload"
+                            className="absolute cursor-pointer"
+                          >
+                            <p className="text-slate-400 text-clamp-xs">
+                              {image.length
+                                ? "Replace"
+                                : "Update Profile Picture"}
+                            </p>
+                          </label>
                         </div>
 
                         <p className="mt-5 mx-6 mb-0 text-[#5b5c61] text-clamp-xs leading-relaxed text-left xsm:mx-2">
@@ -184,6 +184,7 @@ export default function Users() {
                                   name="companyName"
                                   id="companyName"
                                   className=" w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
+                                  // defaultValue={userData.companyName}
                                   {...register("companyName")}
                                 />
                               </td>
@@ -219,6 +220,8 @@ export default function Users() {
                                   id="password"
                                   className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
                                   {...register("password")}
+                                  // onMouseOut={() => setInputType("password")}
+                                  // onMouseEnter={() => setInputType("text")}
                                 />
                               </td>
                             </tr>

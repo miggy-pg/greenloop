@@ -7,7 +7,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter } from "react-router-dom";
 
 import "./App.css";
-import WasteList from "./components/Management/WasteList";
 
 const Home = lazy(() => import("./modules/Home"));
 const Layout = lazy(() => import("./components/Common/Layout/Main"));
@@ -18,6 +17,7 @@ const Listing = lazy(() => import("./modules/Listing"));
 const Post = lazy(() => import("./modules/Post"));
 const Profile = lazy(() => import("./modules/Profile"));
 const Users = lazy(() => import("./modules/Users"));
+const Wastes = lazy(() => import("./modules/Wastes"));
 const DashboardLayout = lazy(() => import("./modules/Dashboard"));
 const MobileNotification = lazy(() => import("./modules/Notification/Mobile"));
 const FullPageSpinner = lazy(() =>
@@ -100,7 +100,7 @@ const App = () => {
               )}
               <Route path="dashboard" element={<DashboardLayout />}>
                 <Route index path="users" element={<Users />} />
-                <Route path="wastes" element={<WasteList />} />
+                <Route path="wastes" element={<Wastes />} />
               </Route>
             </Route>
           </Routes>
