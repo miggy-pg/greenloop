@@ -5,7 +5,10 @@ const Dashboard = () => {
   return (
     <>
       <DashboardLayout />
-      <div id="main-content" className="relative w-full h-full ml-64 mt-24">
+      <div
+        id="main-content"
+        className="relative overflow-hidden ml-64 h-full mt-24"
+      >
         <Outlet />
       </div>
     </>

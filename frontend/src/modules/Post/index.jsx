@@ -8,17 +8,7 @@ import ButtonOutline from "../../components/Common/ButtonOutline";
 import { useUploadImage } from "../../hooks/useUploadImage";
 import ErrorMessage from "../../components/Common/Message/ErrorMessage";
 import { uploadPost } from "../../api/user";
-
-const wasteCategories = [
-  "Plastic",
-  "Plastic Bottle",
-  "Glass",
-  "Scrap Metal",
-  "E-waste",
-  "Textile",
-  "Food waste",
-  "Biodegradable Waste",
-];
+import { wasteCategories } from "../../constants/wasteCategories";
 
 const Post = () => {
   document.title = "Green Loop | Post";

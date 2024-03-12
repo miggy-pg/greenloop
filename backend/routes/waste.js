@@ -2,6 +2,7 @@ const { Router } = require("express");
 const {
   postWasteImage,
   fetchUserWaste,
+  deleteWaste,
   fetchWastes,
 } = require("../controllers/waste");
 
@@ -17,6 +18,7 @@ const router = Router();
 
 router.post("/wastes/new", postWasteImage);
 router.get("/wastes", fetchWastes);
-router.get("/wastes/:userId", fetchUserWaste);
+//router.get("/wastes/:userId", fetchUserWaste);
+router.delete("/wastes/:wasteId", deleteWaste);
 
 module.exports = router;

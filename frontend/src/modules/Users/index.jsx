@@ -69,7 +69,7 @@ export default function Users() {
   }, [userData, reset]);
 
   return (
-    <>
+    <div className="overflow-x-scroll">
       <div className="px-4 justify-start mb-5">
         <button
           onClick={() => setShowModal(true)}
@@ -80,7 +80,7 @@ export default function Users() {
       </div>
 
       <div className="inline-block min-w-full align-middle">
-        <div className="overflow-hidden shadow rounded-lg">
+        <div className="shadow rounded-lg">
           <Table>
             <Table.Header
               data={userHeader}
@@ -336,6 +336,6 @@ export default function Users() {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }

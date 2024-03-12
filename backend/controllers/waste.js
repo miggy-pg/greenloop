@@ -10,6 +10,7 @@ exports.fetchWastes = async (req, res) => {
         const user = await Users.findById(waste.user);
         return {
           user: user,
+          id: waste._id,
           post: waste.post,
           wasteCategory: waste.wasteCategory,
           image: waste.image,
@@ -77,7 +78,8 @@ exports.postWasteImage = async (req, res) => {
 
 exports.deleteWaste = async (req, res) => {
   try {
-    await Waste.findByIdAndDelete(req.params.userId);
+    console.log("req.params", req.params);
+    await Waste.findByIdAndDelete(req.params.wasteId);
   } catch (error) {
     console.log("Error", error);
   }

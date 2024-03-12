@@ -4,11 +4,13 @@ import { useForm } from "react-hook-form";
 
 import Table from "../../components/Common/Table";
 import UserList from "../../components/Management/UserList";
+import WasteList from "../../components/Management/WasteList";
 import { useUploadImage } from "../../hooks/useUploadImage";
 import { useUsers } from "../../hooks/useUser";
 import { useWastes } from "../../hooks/useWaste";
 import { createUser, deleteUser } from "../../api/user";
-import { userHeader } from "../../constants/userHeader";
+import { deleteWaste } from "../../api/waste";
+import { wasteHeader } from "../../constants/wasteHeader";
 
 import defaultImage from "../../assets/default-image.jpg";
 import citiesMunicipalities from "../../constants/citiesMunicipalities";
@@ -26,11 +28,11 @@ export default function Wastes() {
     useUploadImage();
   const { register, handleSubmit, reset } = useForm();
 
-  const getUserData = (userId) => {
+  const getWasteData = (wasteId) => {
     setShowModal(true);
-    const userRecord = allUsers.filter((user) => user.id == userId);
-    console.log("userRecord: ", userRecord[0]);
-    setUserData(userRecord[0]);
+    const wasteRecord = wastes.filter((waste) => waste.id == wasteId);
+    console.log("wasteRecord: ", wasteRecord[0]);
+    setUserData(wasteRecord[0]);
   };
 
   const { mutate: createUserData } = useMutation({
@@ -46,11 +48,14 @@ export default function Wastes() {
     },
   });
 
-  const { mutate: deleteUserAction } = useMutation({
-    mutationFn: (userId) => deleteUser(userId),
+  const { mutate: deleteWasteAction } = useMutation({
+    mutationFn: (wasteId) => deleteWaste(wasteId),
     onSuccess: () => {
-      alert("User has been deleted");
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      alert("Waste has been deleted");
+      queryClient.invalidateQueries({ queryKey: ["wastes"] });
+    },
+    onError: (error) => {
+      console.log("error: ", error);
     },
   });
 
@@ -72,61 +77,78 @@ export default function Wastes() {
 
   return (
     <>
-      <div className="px-4 justify-start mb-5">
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-[#31572C] text-white text-clamp-base p-2 px-4 rounded-full hover:bg-[#3c6137] ease-linear transition-all duration-150 "
-        >
-          Create User
-        </button>
-      </div>
+      <div className="overflow-x-scroll shadow rounded-lg">
+        <Table>
+          <Table.Header
+            data={wasteHeader}
+            render={(header) => <Table.Column key={header} header={header} />}
+          />
+          <Table.Body>
+            {wastes?.map((waste, i) => (
+              <WasteList
+                key={i}
+                props={waste}
+                getWasteData={getWasteData}
+                deleteWasteAction={deleteWasteAction}
+              />
+            ))}
+          </Table.Body>
+        </Table>
+        {showModal && (
+          <>
+            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+              <div className="relative w-auto my-6 mx-auto max-w-2xl">
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  encType="multipart/form-data"
+                >
+                  <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-108 bg-white outline-none focus:outline-none xsm:h-3/4 xsm:w-80">
+                    <div className="flex items-center justify-end p-3 border-t border-solid border-blueGray-200 rounded-b md:p-2">
+                      <div className="bg-white border w-[60%] justify-center items-center mx-auto border-gray-200 px-12 shadow-sm rounded-3xl xl:w-[80%] lg:w-[90%] md:w-full md:px-4 ">
+                        <article className="p-4">
+                          <footer className="flex justify-center items-center">
+                            <div className="flex items-center mb-5">
+                              <p className="inline-flex items-center text-3xl font-[500] text-[#4F772D]">
+                                Post Details
+                              </p>
+                            </div>
+                          </footer>
+                          <hr className="py-3" />
+                          {/* {errors?.post && (
+                              <ErrorMessage error={errors?.post.message} />
+                            )} */}
 
-      <div className="inline-block min-w-full align-middle">
-        <div className="overflow-x-scroll shadow rounded-lg">
-          <Table>
-            <Table.Header
-              data={userHeader}
-              render={(header) => <Table.Column key={header} header={header} />}
-            />
-            <Table.Body>
-              {allUsers?.map((user, i) => (
-                <UserList
-                  key={i}
-                  id={user.id}
-                  image={user?.image}
-                  companyName={user.companyName}
-                  email={user.email}
-                  organizationType={user.organizationType}
-                  password={user.password}
-                  province={user.province}
-                  cityMunicipality={user.cityMunicipality}
-                  username={user.username}
-                  userId={user.id}
-                  getUserData={getUserData}
-                  deleteUserAction={deleteUserAction}
-                />
-              ))}
-            </Table.Body>
-          </Table>
-          {showModal && (
-            <>
-              <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                <div className="relative w-auto my-6 mx-auto max-w-2xl">
-                  <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    encType="multipart/form-data"
-                  >
-                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-108 bg-white outline-none focus:outline-none xsm:h-3/4 xsm:w-80">
-                      <div className="flex items-center justify-center p-4 border-solid mx-auto border-blueGray-200 rounded-t md:p-2">
-                        <h3 className="text-2xl font-semibold md:text-clamp">
-                          {userData.id ? "Edit Profile" : "Create User"}
-                        </h3>
-                      </div>
-                      <hr />
+                          <textarea
+                            id="post"
+                            name="post"
+                            rows="4"
+                            className="text-gray-900 text-left w-full overflow-y-hidden mb-3 focus:outline-none focus: border-0"
+                            placeholder="Say something about the waste"
+                            {...register("post")}
+                          />
+                          <div className="grid">
+                            {/* {errors?.wasteCategory && (
+                                <ErrorMessage
+                                  error={errors?.wasteCategory.message}
+                                />
+                              )} */}
+                            <select
+                              id="wasteCategory"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-2/5 p-2.5 md:w-[10rem]"
+                              {...register("wasteCategory")}
+                            >
+                              <option value="">Select an option</option>
+                              {/* {wasteCategories.map((category) => (
+                                  <option key={category} value={category}>
+                                    {category}
+                                  </option>
+                                ))} */}
+                            </select>
+                          </div>
+                        </article>
 
-                      <div className="relative p-6 pb-1">
-                        <span className="flex justify-center items-center text-center mb-3">
-                          {imagePreview ? (
+                        {imagePreview ? (
+                          <>
                             <img
                               src={
                                 imagePreview
@@ -134,210 +156,79 @@ export default function Wastes() {
                                   : null
                               }
                               alt={imagePreview ? imagePreview.name : null}
-                              className="relative w-24 h-24 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
+                              className="relative w-full h-[20rem] border-2 bg-white rounded-lg flex justify-center items-center mb-5"
                             />
-                          ) : (
-                            <img
-                              src={defaultImage}
-                              className="relative w-24 h-24 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
+                            <label
+                              htmlFor="image-upload"
+                              className="w-full px-7 py-1 cursor-pointer mb-0 border rounded-full bg-[#F8F8F8]"
+                            >
+                              Replace
+                            </label>
+                            <input
+                              type="file"
+                              id="image-upload"
+                              className="hidden"
+                              accept="image/*"
+                              onChange={fetchImage}
                             />
-                          )}
-                        </span>
-                        <div className="relative w-48 h-[1.7rem] text-black border bg-primary-700 cursor-pointer hover:bg-[#F8F8F8] focus:ring-4 focus:ring-primary-300 font-semithin rounded-full inline-flex justify-center items-center">
-                          <input
-                            type="file"
-                            id="image-upload"
-                            className="hidden"
-                            accept="image/*"
-                            onChange={(e) => fetchImage(e)}
-                          />
-                          <label
-                            htmlFor="image-upload"
-                            className="absolute cursor-pointer"
+                          </>
+                        ) : (
+                          <>
+                            <div className="relative w-full h-[20rem] border-dashed border-[#e9e4e4] border-2 bg-white rounded-lg flex justify-center items-center mb-5 md:h-[12rem] xsm:mb-0 xsm:h-[6rem]">
+                              <input
+                                type="file"
+                                id="image-upload"
+                                className="hidden"
+                                accept="image/*"
+                                onChange={fetchImage}
+                              />
+                              <label
+                                htmlFor="image-upload"
+                                className="absolute cursor-pointer"
+                              >
+                                {/* <IoAddSharp className="w-14 h-14 bg-[#F1F1F1] text-slate-400 rounded-lg m-2" /> */}
+                                <p className="text-slate-400 text-clamp-base">
+                                  Add Image
+                                </p>
+                              </label>
+                            </div>
+                            {/* {errors["image.url"] && (
+                                <ErrorMessage
+                                  error={errors["image.url"].message}
+                                />
+                              )} */}
+                          </>
+                        )}
+
+                        {/* <ButtonOutline
+                            disabled={isCreating}
+                            className="w-full my-10 sm:text-clamp-xs sm:py-2"
+                            type="submit"
                           >
-                            <p className="text-slate-400 text-clamp-xs">
-                              {image.length
-                                ? "Replace"
-                                : "Update Profile Picture"}
-                            </p>
-                          </label>
-                        </div>
-
-                        <p className="mt-5 mx-6 mb-0 text-[#5b5c61] text-clamp-xs leading-relaxed text-left xsm:mx-2">
-                          Generate Account Settings:
-                        </p>
+                            Upload
+                          </ButtonOutline> */}
                       </div>
-
-                      <div className="relative overflow-hidden py-5">
-                        <table className="w-full mx-6 text-clamp-xs text-left  rtl:text-right text-gray-500 sm:mx-2">
-                          <tbody>
-                            <tr className="bg-white">
-                              <th
-                                scope="row"
-                                className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                              >
-                                Name:
-                              </th>
-                              <td className="px-6 py-2">
-                                <input
-                                  type="text"
-                                  name="companyName"
-                                  id="companyName"
-                                  className=" w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                  // defaultValue={userData.companyName}
-                                  {...register("companyName")}
-                                />
-                              </td>
-                            </tr>
-                            <tr className="bg-white">
-                              <th
-                                scope="row"
-                                className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                              >
-                                Username:
-                              </th>
-                              <td className="px-6 py-2">
-                                <input
-                                  type="text"
-                                  name="username"
-                                  id="username"
-                                  className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                  {...register("username")}
-                                />
-                              </td>
-                            </tr>
-                            <tr className="bg-white ">
-                              <th
-                                scope="row"
-                                className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                              >
-                                Password:
-                              </th>
-                              <td className="px-6 py-2">
-                                <input
-                                  type="password"
-                                  name="password"
-                                  id="password"
-                                  className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                  {...register("password")}
-                                  // onMouseOut={() => setInputType("password")}
-                                  // onMouseEnter={() => setInputType("text")}
-                                />
-                              </td>
-                            </tr>
-                            <tr className="bg-white ">
-                              <th
-                                scope="row"
-                                className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                              >
-                                Email:
-                              </th>
-                              <td className="px-6 py-2">
-                                <input
-                                  type="email"
-                                  name="email"
-                                  id="email"
-                                  className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                  {...register("email")}
-                                />
-                              </td>
-                            </tr>
-                            <tr className="bg-white ">
-                              <th
-                                scope="row"
-                                className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                              >
-                                Org Type:
-                              </th>
-                              <td className="px-6 py-2">
-                                <select
-                                  id="organization-type"
-                                  name="organizationType"
-                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
-                                  {...register("organizationType", {
-                                    required: "Please select organization type",
-                                  })}
-                                >
-                                  {organizationType.map((item, index) => (
-                                    <option
-                                      id={index}
-                                      key={index}
-                                      value={item.value}
-                                    >
-                                      {item.label}
-                                    </option>
-                                  ))}
-                                </select>
-                              </td>
-                            </tr>
-                            <tr className="bg-white">
-                              <th
-                                scope="row"
-                                className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                              >
-                                City/Municipality:
-                              </th>
-                              <td className="px-6 py-2">
-                                <select
-                                  id="cityMunicipality"
-                                  name="cityMunicipality"
-                                  className="bg-gray-50 w-48 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
-                                  {...register("cityMunicipality", {
-                                    required: "Please select organization type",
-                                  })}
-                                >
-                                  {citiesMunicipalities.map((item, index) => (
-                                    <option id={index} key={index} value={item}>
-                                      {item}
-                                    </option>
-                                  ))}
-                                </select>
-                              </td>
-                            </tr>
-                            <tr className="bg-white">
-                              <th
-                                scope="row"
-                                className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
-                              >
-                                Province:
-                              </th>
-                              <td className="px-6 py-2">
-                                <input
-                                  type="text"
-                                  name="province"
-                                  id="province"
-                                  className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                  {...register("province")}
-                                />
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-
-                      <div className="flex items-center justify-end p-3 border-t border-solid border-blueGray-200 rounded-b md:p-2">
-                        <button
-                          className="text-red-500 background-transparent font-bold uppercase px-3 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
-                          type="button"
-                          onClick={onClose}
-                        >
-                          Close
-                        </button>
-                        <button
-                          className="bg-[#31572C] text-white active:bg-[#2e4d29] font-bold uppercase text-xs px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
-                          type="submit"
-                        >
-                          {userData?.id ? "Update Profile" : "Create User"}
-                        </button>
-                      </div>
+                      <button
+                        className="text-red-500 background-transparent font-bold uppercase px-3 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
+                        type="button"
+                        onClick={onClose}
+                      >
+                        Close
+                      </button>
+                      <button
+                        className="bg-[#31572C] text-white active:bg-[#2e4d29] font-bold uppercase text-xs px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 md:text-clamp-button md:px-3 md:py-1"
+                        type="submit"
+                      >
+                        Update Profile
+                      </button>
                     </div>
-                  </form>
-                </div>
+                  </div>
+                </form>
               </div>
-              <div className="opacity-25 fixed inset-0 z-40 bg-black" />
-            </>
-          )}
-        </div>
+            </div>
+            <div className="opacity-25 fixed inset-0 z-40 bg-black" />
+          </>
+        )}
       </div>
     </>
   );

@@ -29,12 +29,13 @@ export default function UserList({
       </Table.Row>
       <Table.Row type="name">
         <div className="text-sm font-semibold text-gray-900 sm:text-md md:text-sm lg:text-sm">
-          {companyName}
+          {/* {companyName} */}
+          Aliquip velit magna sint ipsum esse deserunt.
         </div>
       </Table.Row>
       <Table.Row type="default">{email}</Table.Row>
       <Table.Row type="default">{username}</Table.Row>
-      <Table.Row type="default">{password}</Table.Row>
+      <Table.Row type="default">************</Table.Row>
       <Table.Row type="default">{organizationType}</Table.Row>
       <Table.Row type="default">{province}</Table.Row>
       <Table.Row type="default">{cityMunicipality}</Table.Row>
@@ -59,7 +60,7 @@ export default function UserList({
           Delete
         </StyledButton>
       </Table.Row>
-      <Table.Row>
+      <Table.Row type="actionButton">
         <StyledButton
           $variations="secondary"
           $size="small"
