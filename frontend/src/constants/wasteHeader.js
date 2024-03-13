@@ -1,8 +1,1 @@
-export const wasteHeader = [
-  "Image",
-  "Description",
-  "Category",
-  "Actions",
-  "",
-  "",
-];
+export const wasteHeader = ["Image", "Description", "Category", "Actions", ""];

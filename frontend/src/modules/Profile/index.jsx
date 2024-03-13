@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 
 import Listing from "../Listing";
-import { updateProfile } from "../../api/user";
+import { updateUser } from "../../api/user";
 import { createConversation } from "../../api/conversation";
 
 import defaulImage from "../../assets/default-image.jpg";
@@ -51,7 +51,7 @@ const Profile = () => {
   });
 
   const { mutate: editProfile } = useMutation({
-    mutationFn: (data) => updateProfile(data.userId, data.formData),
+    mutationFn: (data) => updateUser(data.userId, data.formData),
     onSuccess: () => {
       alert("Profile updated successfully");
       reset();

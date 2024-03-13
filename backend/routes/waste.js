@@ -4,6 +4,7 @@ const {
   fetchUserWaste,
   deleteWaste,
   fetchWastes,
+  updateWaste,
 } = require("../controllers/waste");
 
 const router = Router();
@@ -18,7 +19,7 @@ const router = Router();
 
 router.post("/wastes/new", postWasteImage);
 router.get("/wastes", fetchWastes);
-//router.get("/wastes/:userId", fetchUserWaste);
+router.put("/wastes/update/:wasteId", updateWaste);
 router.delete("/wastes/:wasteId", deleteWaste);
 
 module.exports = router;

@@ -19,7 +19,7 @@ const router = Router();
 
 router.get("/users", fetchUsers);
 router.get("/users/:userId", fetchUser);
-router.post("/users/:userId", updateProfile);
+router.put("/users/:userId", updateProfile);
 router.delete("/users/:userId", deleteUser);
 
 module.exports = router;

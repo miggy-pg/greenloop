@@ -69,10 +69,43 @@ exports.postWasteImage = async (req, res) => {
       },
       user,
     });
-    res.json(newWaste);
+    res.status(200).json(newWaste);
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json(err);
+  }
+};
+
+exports.updateWaste = async (req, res) => {
+  try {
+    const { post, wasteCategory, image } = req.body;
+    const wasteId = req.params.wasteId;
+
+    const waste = await Waste.findById(wasteId);
+    if (waste) {
+      let newImage;
+      if (image?.length > 0) {
+        newImage = await Cloudinary.uploader.upload(image, {
+          folder: "wastes",
+          width: 450,
+          crop: "scale",
+        });
+      }
+      if (waste?.image?.public_id !== newImage?.public_id) {
+        await Cloudinary.uploader.destroy(waste.image.public_id);
+        waste.image = {
+          url: newImage?.secure_url,
+          public_id: newImage?.public_id,
+        };
+      }
+      waste.post = post;
+      waste.wasteCategory = wasteCategory;
+    }
+    await waste.save({ validateBeforeSave: false });
+    res.status(200).json(waste);
+  } catch (error) {
+    res.status(500).json(error);
+    console.log("Error", error);
   }
 };
 

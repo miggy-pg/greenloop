@@ -14,7 +14,7 @@ import {
 } from "react-icons/io5";
 
 import Notification from "../../../modules/Notification/Desktop";
-import SettingsModal from "../SettingsModal";
+import SettingsDropdown from "../SettingsDropdown";
 import Logout from "../Modal/Logout";
 import { useSocketMessages } from "../../../hooks/useSocket";
 
@@ -101,6 +101,7 @@ const Navbar = () => {
     width > 900 ? setHideMenuLabels(true) : setHideMenuLabels(false);
   }, [width]);
 
+  console.log("userData: ", userData);
   return (
     <>
       <header
@@ -244,7 +245,7 @@ const Navbar = () => {
               )}
 
               {isHoveredSettings && (
-                <SettingsModal userData={userData && userData[0]} />
+                <SettingsDropdown userData={userData && userData[0]} />
               )}
               {isLoggingOut && <Logout setIsLoggingOut={setIsLoggingOut} />}
             </ul>

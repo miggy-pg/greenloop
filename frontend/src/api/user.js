@@ -9,12 +9,8 @@ export const fetchUsers = async () => {
   return axios.get(`${getEndpoint}/api/users`);
 };
 
-export const uploadPost = async (post) => {
-  return axios.post(`${getEndpoint}/api/wastes/new`, post);
-};
-
-export const updateProfile = async (userId, user) => {
-  return axios.post(`${getEndpoint}/api/users/${userId}`, user);
+export const updateUser = async (userId, user) => {
+  return axios.put(`${getEndpoint}/api/users/${userId}`, user);
 };
 
 export const createUser = async (user) => {

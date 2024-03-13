@@ -9,13 +9,12 @@ export default function UserList({
   companyName,
   email,
   organizationType,
-  password,
   province,
   username,
   cityMunicipality,
   userId,
   getUserData,
-  deleteUserAction,
+  handleDeleteUser,
 }) {
   const navigate = useNavigate();
 
@@ -29,8 +28,7 @@ export default function UserList({
       </Table.Row>
       <Table.Row type="name">
         <div className="text-sm font-semibold text-gray-900 sm:text-md md:text-sm lg:text-sm">
-          {/* {companyName} */}
-          Aliquip velit magna sint ipsum esse deserunt.
+          {companyName}
         </div>
       </Table.Row>
       <Table.Row type="default">{email}</Table.Row>
@@ -55,7 +53,7 @@ export default function UserList({
         <StyledButton
           $variations="danger"
           $size="small"
-          onClick={() => deleteUserAction(userId)}
+          onClick={() => handleDeleteUser(userId)}
         >
           Delete
         </StyledButton>

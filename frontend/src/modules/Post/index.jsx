@@ -7,7 +7,7 @@ import ButtonOutline from "../../components/Common/ButtonOutline";
 
 import { useUploadImage } from "../../hooks/useUploadImage";
 import ErrorMessage from "../../components/Common/Message/ErrorMessage";
-import { uploadPost } from "../../api/user";
+import { uploadPost } from "../../api/waste";
 import { wasteCategories } from "../../constants/wasteCategories";
 
 const Post = () => {

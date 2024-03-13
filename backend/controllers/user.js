@@ -47,6 +47,7 @@ exports.fetchUsers = async (req, res) => {
           province: user.province,
           cityMunicipality: user.cityMunicipality,
           image: user.image.url,
+          isAdmin: user.isAdmin,
         };
       })
     );
@@ -69,6 +70,7 @@ exports.updateProfile = async (req, res) => {
       organizationType,
       province,
       cityMunicipality,
+      isAdmin,
     } = req.body;
 
     let result;
@@ -91,12 +93,12 @@ exports.updateProfile = async (req, res) => {
         public_id: result?.public_id,
         url: result?.secure_url,
       };
+      user.isAdmin = isAdmin;
     }
     bcryptjs.hash(password, 10, (err, hashedPassword) => {
       user.password = hashedPassword;
       user.save();
     });
-    console.log("userupdateProfile: ", user);
     const updatedUser = await user.save();
 
     res.status(200).json({
