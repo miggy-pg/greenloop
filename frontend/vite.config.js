@@ -2,6 +2,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 import { viteCommonjs } from "@originjs/vite-plugin-commonjs";
+import commonjs from "@rollup/plugin-commonjs";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 const aliases = {
   api: "src/api",
@@ -23,22 +25,28 @@ const resolvedAliases = Object.fromEntries(
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  plugins: [
+    nodeResolve({
+      browser: true,
+    }),
+    commonjs(),
+  ],
   plugins: [react(), viteCommonjs()],
   // define: { global: "globalThis" },
-  build: {
-    rollupOptions: {
-      external: [
-        "react", // ignore react stuff
-        "react-dom",
-      ],
-    },
-  },
-  resolve: {
-    alias: {
-      ...resolvedAliases,
-      "./runtimeConfig": "./runtimeConfig.browser",
-      "jss-plugin-{}": "jss-plugin-global",
-    },
-  },
-  define: { global: "globalThis" },
+  // build: {
+  //   rollupOptions: {
+  //     external: [
+  //       "react", // ignore react stuff
+  //       "react-dom",
+  //     ],
+  //   },
+  // },
+  // resolve: {
+  //   alias: {
+  //     ...resolvedAliases,
+  //     "./runtimeConfig": "./runtimeConfig.browser",
+  //     "jss-plugin-{}": "jss-plugin-global",
+  //   },
+  // },
+  // define: { global: "globalThis" },
 });
