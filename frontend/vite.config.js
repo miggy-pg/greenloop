@@ -1,15 +1,41 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import InjectCSS from "@itsy/vite-css-inject";
-import path from "path";
+import { resolve } from "path";
+
+const aliases = {
+  api: "src/api",
+  assets: "src/assets",
+  components: "src/components",
+  constants: "src/constants",
+  hooks: "src/hooks",
+  modules: "src/modules",
+  utils: "src/utils",
+  types: "src/types",
+};
+
+const resolvedAliases = Object.fromEntries(
+  Object.entries(aliases).map(([key, value]) => [
+    key,
+    resolve(__dirname, value),
+  ])
+);
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), InjectCSS()],
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      external: [
+        "react", // ignore react stuff
+        "react-dom",
+      ],
+    },
+  },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-      "@tests": path.resolve(__dirname, "./tests"),
+      ...resolvedAliases,
+      "./runtimeConfig": "./runtimeConfig.browser",
+      "jss-plugin-{}": "jss-plugin-global",
     },
   },
   // define: { global: "globalThis" },
