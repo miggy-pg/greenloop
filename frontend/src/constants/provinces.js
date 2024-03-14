@@ -1,4 +1,4 @@
-export const province = [
+export const provinces = [
   { value: "ILOCOS NORTE", label: "ILOCOS NORTE" },
   { value: "ILOCOS SUR", label: "ILOCOS SUR" },
   { value: "LA UNION", label: "LA UNION" },

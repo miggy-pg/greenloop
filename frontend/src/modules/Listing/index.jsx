@@ -12,6 +12,8 @@ import Pagination from "../../components/Common/Pagination";
 import ListingCard from "../../components/Common/ListingCard";
 import FilterCard from "../../components/Common/FilterCard";
 import SortByCard from "../../components/Common/SortByCard";
+import { cityMunicipality } from "../../constants/cityMunicipality";
+import { provinces } from "../../constants/provinces";
 import { useWastes } from "../../hooks/useWaste";
 import { usePaginate } from "../../hooks/usePaginate";
 
@@ -145,9 +147,46 @@ const Listing = ({ myWaste }) => {
       </div>
 
       <div className="flex justify-center md:px-0">
+        <div className="grid grid-col-1 w-96 max-w-72">
+          <div className="mx-12 mt-24 w-56 max-w-48 h-96">
+            <h1>Filter</h1>
+            <label
+              htmlFor="countries"
+              className="block mb-2 text-sm font-medium text-gray-900"
+            >
+              Select a City or Municipality
+            </label>
+            <select
+              id="countries"
+              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+            >
+              {cityMunicipality.map((city, index) => (
+                <option key={index} value={city.value} className="">
+                  {city.label}
+                </option>
+              ))}
+            </select>
+            <label
+              htmlFor="countries"
+              className="block mb-2 text-sm font-medium text-gray-900"
+            >
+              Select a Province
+            </label>
+            <select
+              id="countries"
+              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+            >
+              {provinces.map((province, index) => (
+                <option key={index} value={province.value} className="">
+                  {province.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
         <div
           className={`mt-7 grid gap-10 px-32 ${
-            currentPosts?.length && "grid-cols-3"
+            currentPosts?.length && "grid-cols-2"
           } lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:mt-4 md:gap-2 md:grid-cols-1 md:px-24 sm:px-16 xsm:px-4`}
         >
           {currentPosts?.length ? (

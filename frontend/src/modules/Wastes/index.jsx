@@ -47,7 +47,7 @@ export default function Wastes() {
       setErrors(error?.response.data.errors);
     },
   });
-  console.log("errors: ", errors);
+
   const { mutate: deleteWasteAction } = useMutation({
     mutationFn: (wasteId) => deleteWaste(wasteId),
     onSuccess: () => {
