@@ -24,21 +24,21 @@ const resolvedAliases = Object.fromEntries(
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), viteCommonjs()],
-  define: { global: "globalThis" },
-  // build: {
-  //   rollupOptions: {
-  //     external: [
-  //       "react", // ignore react stuff
-  //       "react-dom",
-  //     ],
-  //   },
-  // },
-  // resolve: {
-  //   alias: {
-  //     ...resolvedAliases,
-  //     "./runtimeConfig": "./runtimeConfig.browser",
-  //     "jss-plugin-{}": "jss-plugin-global",
-  //   },
-  // },
   // define: { global: "globalThis" },
+  build: {
+    rollupOptions: {
+      external: [
+        "react", // ignore react stuff
+        "react-dom",
+      ],
+    },
+  },
+  resolve: {
+    alias: {
+      ...resolvedAliases,
+      "./runtimeConfig": "./runtimeConfig.browser",
+      "jss-plugin-{}": "jss-plugin-global",
+    },
+  },
+  define: { global: "globalThis" },
 });
