@@ -31,7 +31,19 @@ export default defineConfig({
       browser: true,
     }),
     // commonjs(),
-    react(),
+    react({
+      babel: {
+        plugins: [["babel-plugin-styled-components", { displayName: false }]],
+
+        env: {
+          development: {
+            plugins: [
+              ["babel-plugin-styled-components", { displayName: true }],
+            ],
+          },
+        },
+      },
+    }),
   ],
   // resolve: {
   //   alias: [{ find: "src", replacement: path.resolve(__dirname, "src") }],
@@ -39,14 +51,15 @@ export default defineConfig({
 
   // plugins: [react(), viteCommonjs()],
   // define: { global: "globalThis" },
-  // build: {
-  //   rollupOptions: {
-  //     external: [
-  //       "react", // ignore react stuff
-  //       "react-dom",
-  //     ],
-  //   },
-  // },
+  build: {
+    rollupOptions: {
+      external: [
+        "react", // ignore react stuff
+        "react-dom",
+        "styled-components",
+      ],
+    },
+  },
   resolve: {
     alias: {
       ...resolvedAliases,
