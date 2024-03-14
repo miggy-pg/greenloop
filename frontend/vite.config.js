@@ -4,6 +4,7 @@ import { resolve } from "path";
 import { viteCommonjs } from "@originjs/vite-plugin-commonjs";
 import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
+import * as path from "path";
 
 const aliases = {
   api: "src/api",
@@ -26,12 +27,15 @@ const resolvedAliases = Object.fromEntries(
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    nodeResolve({
-      browser: true,
-    }),
-    commonjs(),
+    // nodeResolve({
+    //   browser: true,
+    // }),
+    // commonjs(),
     react(),
   ],
+  resolve: {
+    alias: [{ find: "src", replacement: path.resolve(__dirname, "src") }],
+  },
   // plugins: [react(), viteCommonjs()],
   // define: { global: "globalThis" },
   // build: {
