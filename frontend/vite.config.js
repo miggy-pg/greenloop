@@ -24,6 +24,7 @@ const resolvedAliases = Object.fromEntries(
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), viteCommonjs()],
+  define: { global: "globalThis" },
   // build: {
   //   rollupOptions: {
   //     external: [
