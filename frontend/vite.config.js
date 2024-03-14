@@ -27,15 +27,16 @@ const resolvedAliases = Object.fromEntries(
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    // nodeResolve({
-    //   browser: true,
-    // }),
+    nodeResolve({
+      browser: true,
+    }),
     // commonjs(),
     react(),
   ],
   resolve: {
     alias: [{ find: "src", replacement: path.resolve(__dirname, "src") }],
   },
+
   // plugins: [react(), viteCommonjs()],
   // define: { global: "globalThis" },
   // build: {
