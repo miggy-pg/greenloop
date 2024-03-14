@@ -11,7 +11,7 @@ import { userHeader } from "../../constants/userHeader";
 
 import defaultImage from "../../assets/default-image.jpg";
 import { cityMunicipality } from "../../constants/cityMunicipality";
-import { province } from "../../constants/province";
+import { provinces } from "../../constants/provinces";
 import { organizationType } from "../../constants/organizationType";
 
 export default function Users() {
@@ -333,7 +333,7 @@ export default function Users() {
                                     required: "Please select a province",
                                   })}
                                 >
-                                  {province.map((item, index) => (
+                                  {provinces.map((item, index) => (
                                     <option
                                       id={index}
                                       key={item.value}
