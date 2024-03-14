@@ -30,8 +30,9 @@ export default defineConfig({
       browser: true,
     }),
     commonjs(),
+    react(),
   ],
-  plugins: [react(), viteCommonjs()],
+  // plugins: [react(), viteCommonjs()],
   // define: { global: "globalThis" },
   // build: {
   //   rollupOptions: {
