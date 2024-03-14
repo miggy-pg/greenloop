@@ -1,4 +1,5 @@
 const express = require("express");
+const app = express();
 // const cors = require("cors");
 const prodOrigin = [process.env.ORIGIN_1, process.env.ORIGIN_2];
 const devOrigin = ["http://localhost:5173"];
@@ -26,7 +27,6 @@ dotenv.config();
 // Connect DB
 require("./db/connection");
 
-const app = express();
 app.use(
   express.json({
     limit: "50mb",
