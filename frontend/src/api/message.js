@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "redaxios";
 import { getEndpoint } from "../utils/Helper";
 
 export const sendUserMessage = async (newMessage) => {

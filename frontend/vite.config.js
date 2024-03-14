@@ -33,9 +33,9 @@ export default defineConfig({
     // commonjs(),
     react(),
   ],
-  // resolve: {
-  //   alias: [{ find: "src", replacement: path.resolve(__dirname, "src") }],
-  // },
+  resolve: {
+    alias: [{ find: "src", replacement: path.resolve(__dirname, "src") }],
+  },
 
   // plugins: [react(), viteCommonjs()],
   // define: { global: "globalThis" },
@@ -47,12 +47,12 @@ export default defineConfig({
   //     ],
   //   },
   // },
-  resolve: {
-    alias: {
-      ...resolvedAliases,
-      "./runtimeConfig": "./runtimeConfig.browser",
-      "jss-plugin-{}": "jss-plugin-global",
-    },
-  },
+  // resolve: {
+  //   alias: {
+  //     ...resolvedAliases,
+  //     "./runtimeConfig": "./runtimeConfig.browser",
+  //     "jss-plugin-{}": "jss-plugin-global",
+  //   },
+  // },
   // define: { global: "globalThis" },
 });
