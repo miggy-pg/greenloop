@@ -31,19 +31,7 @@ export default defineConfig({
       browser: true,
     }),
     // commonjs(),
-    react({
-      babel: {
-        plugins: [["babel-plugin-styled-components", { displayName: false }]],
-
-        env: {
-          development: {
-            plugins: [
-              ["babel-plugin-styled-components", { displayName: true }],
-            ],
-          },
-        },
-      },
-    }),
+    react(),
   ],
   // resolve: {
   //   alias: [{ find: "src", replacement: path.resolve(__dirname, "src") }],
