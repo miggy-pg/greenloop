@@ -1,5 +1,25 @@
 const express = require("express");
-const cors = require("cors");
+// const cors = require("cors");
+const prodOrigin = [process.env.ORIGIN_1, process.env.ORIGIN_2];
+const devOrigin = ["http://localhost:5173"];
+const allowedOrigins =
+  process.env.NODE_ENV === "production" ? prodOrigin : devOrigin;
+
+app.use(function (req, res, next) {
+  // res.header("Access-Control-Allow-Origin", "*");
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-credentials", true);
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
+  next();
+});
+
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -14,24 +34,19 @@ app.use(
 );
 app.use(express.urlencoded({ extended: false }));
 
-const prodOrigin = [process.env.ORIGIN_1, process.env.ORIGIN_2];
-const devOrigin = ["http://localhost:5173"];
-const allowedOrigins =
-  process.env.NODE_ENV === "production" ? prodOrigin : devOrigin;
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (allowedOrigins.includes(origin)) {
-        console.log(origin, allowedOrigins);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  })
-);
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (allowedOrigins.includes(origin)) {
+//         console.log(origin, allowedOrigins);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//   })
+// );
 
 const port = process.env.PORT || 8000;
 
