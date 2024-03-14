@@ -42,18 +42,18 @@ export default defineConfig({
   build: {
     rollupOptions: {
       external: [
-        "react", // ignore react stuff
-        "react-dom",
+        // "react", // ignore react stuff
+        // "react-dom",
         "styled-components",
       ],
     },
   },
-  resolve: {
-    alias: {
-      ...resolvedAliases,
-      "./runtimeConfig": "./runtimeConfig.browser",
-      "jss-plugin-{}": "jss-plugin-global",
-    },
-  },
+  // resolve: {
+  //   alias: {
+  //     ...resolvedAliases,
+  //     "./runtimeConfig": "./runtimeConfig.browser",
+  //     "jss-plugin-{}": "jss-plugin-global",
+  //   },
+  // },
   // define: { global: "globalThis" },
 });
