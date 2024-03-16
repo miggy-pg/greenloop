@@ -1,13 +1,9 @@
 import { Link } from "react-router-dom";
 
 import { transformText } from "../../../utils/plasticColors";
-import defaultImage from "../../../assets/default-image.jpg";
-import wasteDefaultImage from "../../../assets/waste-default-image.webp";
 
-const PostCard = ({ props }) => {
-  console.log("PostCard: ", props);
+const PostCard = ({ props, defaultImage, wasteDefaultImage }) => {
   const { post, image, wasteCategory, user } = props;
-
   const transformedTexts = transformText(wasteCategory);
 
   return (
@@ -20,11 +16,10 @@ const PostCard = ({ props }) => {
                 <Link to={`profile/${user?._id}`}>
                   <img
                     className="w-11 h-11 mr-5 rounded-full cursor-pointer hover:opacity-80 xsm:w-9 xsm:h-9 xsm:mr-3"
-                    src={user.image ? user.image?.url : defaultImage}
+                    src={user?.image ? image?.url : defaultImage}
                     alt={user?.companyName}
                   />
                 </Link>
-                {console.log("imgUrl: ", image)}
                 <Link
                   className="hover:underline cursor-pointer xsm:text-[0.8rem]"
                   to={`profile/${user?._id}`}

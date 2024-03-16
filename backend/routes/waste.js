@@ -19,6 +19,7 @@ const router = Router();
 
 router.post("/wastes/new", postWasteImage);
 router.get("/wastes", fetchWastes);
+// router.get("/wastes/:q", fetchWastes);
 router.put("/wastes/update/:wasteId", updateWaste);
 router.delete("/wastes/:wasteId", deleteWaste);
 

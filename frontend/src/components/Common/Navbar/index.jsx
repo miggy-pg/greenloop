@@ -63,7 +63,7 @@ const Navbar = () => {
   const { userData } = useUser(user?.id);
 
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -81,7 +81,7 @@ const Navbar = () => {
     e.preventDefault();
 
     setSearchQuery("");
-    navigate(`/listing?search=${searchQuery}`);
+    navigate(`/listing?filter=${searchQuery}`);
   };
 
   const { newMessages, hasReadMessage } = useSocketMessages(user);

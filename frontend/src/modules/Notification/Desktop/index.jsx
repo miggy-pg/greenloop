@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import defaultImage from "../../../assets/default-image.jpg";
+import defaultImage from "../../../assets/images/default-image.jpg";
 
 const Notification = ({ newMessages, hasReadMessage }) => {
   const ref = useRef();

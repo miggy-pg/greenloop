@@ -24,7 +24,7 @@ const SignIn = () => {
       reset();
     },
     onError: (error) => {
-      alert(error.response?.data);
+      alert(error.response?.data || error?.data);
       console.log("error: ", error);
       reset();
     },

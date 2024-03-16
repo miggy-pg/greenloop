@@ -10,7 +10,7 @@ import { sendUserMessage } from "../../api/message";
 import { TbSend, TbCirclePlus, TbArrowLeft } from "react-icons/tb";
 
 import { useWindowSize } from "@uidotdev/usehooks";
-import defaultImage from "../../assets/default-image.jpg";
+import defaultImage from "../../assets/images/default-image.jpg";
 import { getEndpoint, socketPort } from "../../utils/Helper";
 
 const Chat = () => {

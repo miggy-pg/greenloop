@@ -1,5 +1,5 @@
 import { transformText } from "../../../utils/plasticColors";
-import defaulImage from "../../../assets/waste-default-image.webp";
+import defaultImage from "../../../assets/images/waste-default-image.webp";
 
 const ListingCard = ({ waste }) => {
   const { image, post, wasteCategory } = waste;
@@ -10,7 +10,7 @@ const ListingCard = ({ waste }) => {
       <div className="h-[20rem] flex items-center justify-between lg:justify-evenly sm:h-[10rem] 2xsm:h-[7rem]">
         <div className="w-screen border rounded-t-3xl">
           <img
-            src={image?.url ? image.url : defaulImage}
+            src={image?.url ? image?.url : defaultImage}
             className="object-cover w-full h-[20rem] rounded-t-3xl sm:h-[10rem] 2xsm:h-[8rem]"
           />
         </div>

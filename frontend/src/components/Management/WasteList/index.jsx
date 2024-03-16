@@ -1,6 +1,6 @@
 import Table from "../../Common/Table";
 import StyledButton from "../../Common/Button/StyledButton";
-import defaultImage from "../../../assets/waste-default-image.webp";
+import defaultImage from "../../../assets/images/waste-default-image.webp";
 
 export default function WasteList({ props, getWasteData, deleteWasteAction }) {
   console.log("props", props);

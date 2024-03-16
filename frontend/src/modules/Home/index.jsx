@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import Card from "../../components/Common/Card";
 import GreetingCard from "../../components/Common/GreetingCard";
 import PostCard from "../../components/Common/PostCard";
+import defaultImage from "../../assets/images/default-image.jpg";
+import wasteDefaultImage from "../../assets/images/waste-default-image.webp";
 import { useWastes } from "../../hooks/useWaste";
 
 const Home = () => {
@@ -35,7 +37,12 @@ const Home = () => {
           {wastes &&
             wastes?.length > 0 &&
             sortedWaste?.map((waste, index) => (
-              <PostCard key={index} props={waste} />
+              <PostCard
+                key={index}
+                props={waste}
+                defaultImage={defaultImage}
+                wasteDefaultImage={wasteDefaultImage}
+              />
             ))}
         </div>
       )}

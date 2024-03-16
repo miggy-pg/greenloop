@@ -20,7 +20,7 @@ import { usePaginate } from "../../hooks/usePaginate";
 const Listing = ({ myWaste }) => {
   document.title = "Green Loop | Listing";
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
 
   const { wastes, isLoading, error } = useWastes();
@@ -42,18 +42,23 @@ const Listing = ({ myWaste }) => {
 
   const {
     searchParams: paginatePage,
-    setSearchParams,
+    setSearchParams: setPaginatePage,
     currentPage,
     currentPosts,
   } = usePaginate(origWaste);
 
   const handleOnChangeFilter = (e) => {
-    setFilterValue(e.target.textContent);
-    const filteredWaste = origWaste.filter(
-      (waste) => waste.wasteCategory == e.target.textContent
-    );
-    setFilteredWaste(filteredWaste);
-    setIsFilter(false);
+    // console.log("e.target.textContent", "test");
+    // searchParams.set("filter", e.target.textContent);
+    // searchParams.set("filter", "test");
+    setSearchParams({ wasteCategory: e.target.textContent });
+    // setSearchParams("filter", filterType);
+    // setFilterValue(e.target.textContent);
+    // const filteredWaste = origWaste.filter(
+    //   (waste) => waste.wasteCategory == e.target.textContent
+    // );
+    // setFilteredWaste(filteredWaste);
+    // setIsFilter(false);
   };
 
   const handleSortBy = (e) => {
@@ -70,10 +75,10 @@ const Listing = ({ myWaste }) => {
   };
 
   if (isLoading) return;
-
+  // console.log("origWaste", !origWaste?.length);
   return (
     <div
-      className={`grid w-full h-full overflow-x-hidden ${
+      className={`grid overflow-hidden w-full h-full ${
         myWaste
           ? "bg-[#F3F4F6] py-0"
           : !currentPosts?.length
@@ -133,11 +138,11 @@ const Listing = ({ myWaste }) => {
           </div>
         </div>
 
-        {isFilter && (
+        {/* {isFilter && (
           <div className="absolute z-10 right-[30rem] top-[18rem] border border-green-500 md:top-[15rem] md:right-[21rem] sm:right-[20rem] sm:top-[14rem] xsm:top-[13rem]">
             <FilterCard handleOnChangeFilter={handleOnChangeFilter} />
           </div>
-        )}
+        )} */}
 
         {isSortBy && (
           <div className="absolute z-10 right-[26rem] top-[18rem] border border-green-500 md:top-[15rem] md:right-[21rem] sm:right-[20rem] sm:top-[14rem] xsm:top-[13rem]">
@@ -147,43 +152,61 @@ const Listing = ({ myWaste }) => {
       </div>
 
       <div className="flex justify-center md:px-0">
-        <div className="grid grid-col-1 w-96 max-w-72">
-          <div className="mx-12 mt-24 w-56 max-w-48 h-96">
-            <h1>Filter</h1>
-            <label
-              htmlFor="countries"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
-              Select a City or Municipality
-            </label>
-            <select
-              id="countries"
-              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-            >
-              {cityMunicipality.map((city, index) => (
-                <option key={index} value={city.value} className="">
-                  {city.label}
-                </option>
-              ))}
-            </select>
-            <label
-              htmlFor="countries"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
-              Select a Province
-            </label>
-            <select
-              id="countries"
-              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-            >
-              {provinces.map((province, index) => (
-                <option key={index} value={province.value} className="">
-                  {province.label}
-                </option>
-              ))}
-            </select>
+        {origWaste?.length > 0 && (
+          <div className="grid grid-col-1 w-96 max-w-72">
+            <div className="mx-12 mt-24 w-56 max-w-48 h-96">
+              <h1>Filter</h1>
+              <label
+                htmlFor="countries"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Select a City or Municipality
+              </label>
+              <select
+                id="countries"
+                className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              >
+                {cityMunicipality.map((city, index) => (
+                  <option key={index} value={city.value}>
+                    {city.label}
+                  </option>
+                ))}
+              </select>
+              <label
+                htmlFor="countries"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Select a Province
+              </label>
+              <select
+                id="countries"
+                className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              >
+                {provinces.map((province, index) => (
+                  <option key={index} value={province.value}>
+                    {province.label}
+                  </option>
+                ))}
+              </select>
+              <label
+                htmlFor="countries"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Waste Category
+              </label>
+              <select
+                id="countries"
+                className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              >
+                {provinces.map((province, index) => (
+                  <option key={index} value={province.value}>
+                    {province.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-        </div>
+        )}
         <div
           className={`mt-7 grid gap-10 px-32 ${
             currentPosts?.length && "grid-cols-2"
@@ -207,7 +230,7 @@ const Listing = ({ myWaste }) => {
           <Pagination
             origWaste={origWaste}
             paginatePage={paginatePage}
-            setSearchParams={setSearchParams}
+            setSearchParams={setPaginatePage}
             currentPage={currentPage}
           />
         </div>

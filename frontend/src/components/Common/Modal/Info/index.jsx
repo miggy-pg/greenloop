@@ -23,7 +23,7 @@ const Info = ({ handleSubmit, onCloseModal, user }) => {
                     />
                   ) : (
                     <img
-                      src={defaulImage}
+                      src={defaultImage}
                       className="relative w-24 h-24 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
                     />
                   )}

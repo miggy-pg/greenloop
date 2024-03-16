@@ -9,7 +9,7 @@ import Listing from "../Listing";
 import { updateUser } from "../../api/user";
 import { createConversation } from "../../api/conversation";
 
-import defaulImage from "../../assets/default-image.jpg";
+import defaultImage from "../../assets/images/default-image.jpg";
 import { useUploadImage } from "../../hooks/useUploadImage";
 import { useUser } from "../../hooks/useUser";
 
@@ -93,7 +93,7 @@ const Profile = () => {
               <div className="block py-10 h-80 md:max-w-md">
                 <span className="flex justify-center items-center text-center mb-3">
                   <img
-                    src={user[0].image ? user[0].image : defaulImage}
+                    src={user[0].image ? user[0].image : defaultImage}
                     className="rounded-full w-40 h-40 sm:h-28 sm:w-28 xsm:h-24 xsm:w-24"
                   />
                 </span>
@@ -153,7 +153,7 @@ const Profile = () => {
                                   />
                                 ) : (
                                   <img
-                                    src={defaulImage}
+                                    src={defaultImage}
                                     className="relative w-24 h-24 bg-white rounded-full flex justify-center items-center sm:w-28 sm:h-28 xsm:h-16 xsm:w-16"
                                   />
                                 )}
