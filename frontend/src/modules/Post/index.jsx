@@ -13,7 +13,7 @@ import { wasteCategories } from "../../constants/wasteCategories";
 const Post = () => {
   document.title = "Green Loop | Post";
 
-  const user = localStorage.getItem("user:detail");
+  const user = JSON.parse(localStorage.getItem("user:detail"));
 
   const [errors, setErrors] = useState({});
   const { image, imagePreview, fetchImage, setImagePreview, setImage } =
