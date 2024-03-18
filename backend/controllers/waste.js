@@ -21,17 +21,7 @@ exports.fetchWastes = async (req, res) => {
     var province = req.query?.province;
     var cityMunicipality = req.query?.cityMunicipality;
 
-    // if (
-    //   (wasteCategory && !province && !cityMunicipality) ||
-    //   (wasteCategory && province && !cityMunicipality) ||
-    //   (wasteCategory && cityMunicipality && !province)
-    // ) {
-    //   var wastes = await Waste.find({
-    //     wasteCategory: wasteCategory,
-    //   });
-    // } else {
     var wastes = await Waste.find({});
-    // }
 
     if (cityMunicipality && !province && !wasteCategory) {
       console.log("1");
