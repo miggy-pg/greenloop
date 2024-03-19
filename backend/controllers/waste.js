@@ -21,6 +21,7 @@ exports.fetchWastes = async (req, res) => {
     var province = req.query?.province;
     var cityMunicipality = req.query?.cityMunicipality;
 
+    // Test
     var wastes = await Waste.find({});
 
     if (cityMunicipality && !province && !wasteCategory) {
