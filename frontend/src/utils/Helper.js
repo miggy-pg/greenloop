@@ -11,7 +11,7 @@ export const getEndpoint = envRoute(
 
 export const socketPort =
   import.meta.env.VITE_ENV === "production"
-    ? process.env.VITE_PROD_BASE_URL + ":8080"
+    ? import.meta.env.VITE_PROD_BASE_URL + ":8080"
     : "http://localhost:8080";
 
 export const devPrint = (message, ...rest) => {
