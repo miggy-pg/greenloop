@@ -6,7 +6,6 @@ export const fetchWastes = async () => {
 };
 
 export const uploadPost = async (post) => {
-  console.log("post", post);
   return axios.post(`${getEndpoint}/api/wastes/new`, post);
 };
 

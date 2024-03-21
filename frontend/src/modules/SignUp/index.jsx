@@ -16,7 +16,7 @@ const organizationType = [
 const SignUp = () => {
   document.title = "Green Loop | Sign Up";
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const { mutate: createUser } = useMutation({
     mutationFn: (data) => signUpUser(data),

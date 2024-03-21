@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
+import { useForm } from "react-hook-form";
 import {
   IoFilter,
   IoSwapVerticalSharp,
@@ -12,8 +13,10 @@ import Pagination from "../../components/Common/Pagination";
 import ListingCard from "../../components/Common/ListingCard";
 import FilterCard from "../../components/Common/FilterCard";
 import SortByCard from "../../components/Common/SortByCard";
-import { cityMunicipality } from "../../constants/cityMunicipality";
-import { provinces } from "../../constants/provinces";
+import mindanaoPlaces from "../../constants/mindanaoPlaces";
+// import { cityMunicipality } from "../../constants/cityMunicipality";
+// import { provinces } from "../../constants/provinces";
+
 import { useWastes } from "../../hooks/useWaste";
 import { usePaginate } from "../../hooks/usePaginate";
 
@@ -22,7 +25,6 @@ const Listing = ({ myWaste }) => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
-
   const { wastes, isLoading, error } = useWastes();
 
   let wasteItems;
@@ -34,12 +36,12 @@ const Listing = ({ myWaste }) => {
 
   const [isFilter, setIsFilter] = useState(false);
   const [isSortBy, setIsSortBy] = useState(false);
+  const [places, setPlaces] = useState([]);
   const [filteredWaste, setFilteredWaste] = useState({});
   const [filterValue, setFilterValue] = useState("");
 
   const wasteToDisplay = myWaste ? myWaste : wasteItems;
   const origWaste = filterValue ? filteredWaste : wasteToDisplay;
-
   const {
     searchParams: paginatePage,
     setSearchParams: setPaginatePage,
@@ -48,17 +50,34 @@ const Listing = ({ myWaste }) => {
   } = usePaginate(origWaste);
 
   const handleOnChangeFilter = (e) => {
-    // console.log("e.target.textContent", "test");
-    // searchParams.set("filter", e.target.textContent);
-    // searchParams.set("filter", "test");
-    setSearchParams({ wasteCategory: e.target.textContent });
-    // setSearchParams("filter", filterType);
-    // setFilterValue(e.target.textContent);
-    // const filteredWaste = origWaste.filter(
-    //   (waste) => waste.wasteCategory == e.target.textContent
-    // );
-    // setFilteredWaste(filteredWaste);
-    // setIsFilter(false);
+    let params = {};
+    if (e.target.id == "provinces") {
+      const filteredMunicipalities = mindanaoPlaces.filter((province) =>
+        province.name.includes(e.target.value)
+      );
+      setPlaces(filteredMunicipalities[0].places);
+      const items = e.target.value.split(" ");
+      if (items.length > 3) {
+        params["province"] = items.slice(0, 3).join();
+        params["cityMunicipality"] = filteredMunicipalities[0].places[0];
+
+        document.getElementById("municipalities").value =
+          filteredMunicipalities[0].places[0];
+        setSearchParams(params);
+      } else {
+        params["province"] = e.target.value;
+        params["cityMunicipality"] = filteredMunicipalities[0].places[0];
+        document.getElementById("municipalities").value =
+          searchParams.get("cityMunicipality");
+        setSearchParams(params);
+      }
+    }
+
+    if (e.target.id == "municipalities") {
+      params["province"] = searchParams.get("province");
+      params["cityMunicipality"] = e.target.value;
+      setSearchParams(params);
+    }
   };
 
   const handleSortBy = (e) => {
@@ -152,61 +171,48 @@ const Listing = ({ myWaste }) => {
       </div>
 
       <div className="flex justify-center md:px-0">
-        {origWaste?.length > 0 && (
-          <div className="grid grid-col-1 w-96 max-w-72">
-            <div className="mx-12 mt-24 w-56 max-w-48 h-96">
-              <h1>Filter</h1>
-              <label
-                htmlFor="countries"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Select a City or Municipality
-              </label>
-              <select
-                id="countries"
-                className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              >
-                {cityMunicipality.map((city, index) => (
-                  <option key={index} value={city.value}>
-                    {city.label}
-                  </option>
-                ))}
-              </select>
-              <label
-                htmlFor="countries"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Select a Province
-              </label>
-              <select
-                id="countries"
-                className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              >
-                {provinces.map((province, index) => (
-                  <option key={index} value={province.value}>
-                    {province.label}
-                  </option>
-                ))}
-              </select>
-              <label
-                htmlFor="countries"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Waste Category
-              </label>
-              <select
-                id="countries"
-                className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              >
-                {provinces.map((province, index) => (
-                  <option key={index} value={province.value}>
-                    {province.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+        {/* {origWaste?.length > 0 && ( */}
+        <div className="grid grid-col-1 w-96 max-w-72">
+          <div className="mx-12 mt-24 w-56 max-w-48 h-96">
+            <h1>Filter</h1>
+
+            <label
+              htmlFor="provinces"
+              className="block mb-2 text-sm font-medium text-gray-900"
+            >
+              Select a Province
+            </label>
+            <select
+              id="provinces"
+              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              onChange={(e) => handleOnChangeFilter(e)}
+            >
+              {mindanaoPlaces.map((province, index) => (
+                <option key={index} value={province.name}>
+                  {province.name}
+                </option>
+              ))}
+            </select>
+            <label
+              htmlFor="municipalities"
+              className="block mb-2 text-sm font-medium text-gray-900"
+            >
+              Select a City or Municipality
+            </label>
+            <select
+              id="municipalities"
+              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              onChange={(e) => handleOnChangeFilter(e)}
+            >
+              {places?.map((place, index) => (
+                <option key={index} value={place}>
+                  {place}
+                </option>
+              ))}
+            </select>
           </div>
-        )}
+        </div>
+        {/* )} */}
         <div
           className={`mt-7 grid gap-10 px-32 ${
             currentPosts?.length && "grid-cols-2"
