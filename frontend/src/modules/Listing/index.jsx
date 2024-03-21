@@ -11,7 +11,6 @@ import {
 
 import Pagination from "../../components/Common/Pagination";
 import ListingCard from "../../components/Common/ListingCard";
-import FilterCard from "../../components/Common/FilterCard";
 import SortByCard from "../../components/Common/SortByCard";
 import mindanaoPlaces from "../../constants/mindanaoPlaces";
 // import { cityMunicipality } from "../../constants/cityMunicipality";
@@ -25,7 +24,7 @@ const Listing = ({ myWaste }) => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
-  const { wastes, isLoading, error } = useWastes();
+  const { wastes, isLoading } = useWastes();
 
   let wasteItems;
   if (searchQuery) {
@@ -51,10 +50,12 @@ const Listing = ({ myWaste }) => {
 
   const handleOnChangeFilter = (e) => {
     let params = {};
+
     if (e.target.id == "provinces") {
       const filteredMunicipalities = mindanaoPlaces.filter((province) =>
         province.name.includes(e.target.value)
       );
+
       setPlaces(filteredMunicipalities[0].places);
       const items = e.target.value.split(" ");
       if (items.length > 3) {
@@ -63,12 +64,15 @@ const Listing = ({ myWaste }) => {
 
         document.getElementById("municipalities").value =
           filteredMunicipalities[0].places[0];
+
         setSearchParams(params);
       } else {
         params["province"] = e.target.value;
         params["cityMunicipality"] = filteredMunicipalities[0].places[0];
+
         document.getElementById("municipalities").value =
           searchParams.get("cityMunicipality");
+
         setSearchParams(params);
       }
     }
@@ -94,7 +98,7 @@ const Listing = ({ myWaste }) => {
   };
 
   if (isLoading) return;
-  // console.log("origWaste", !origWaste?.length);
+
   return (
     <div
       className={`grid overflow-hidden w-full h-full ${

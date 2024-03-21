@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { useSocketMessages } from "../../../hooks/useSocket";
-import defaultImage from "../../../assets/default-image.jpg";
+import defaultImage from "../../../assets/images/default-image.jpg";
 
 const MobileNotification = () => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
