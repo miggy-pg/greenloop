@@ -184,17 +184,6 @@ const Listing = ({ myWaste }) => {
           );
         setFilteredWaste(wastesCategory);
       }
-      // Filter the waste by province
-      // const wastesProvince = wasteToDisplay.filter((waste) =>
-      //   waste.user.province.includes(province)
-      // );
-
-      // const wastesMunicipality = wasteToDisplay.filter((waste) =>
-      //   waste.user.cityMunicipality.includes(e.target.value)
-      // );
-      // wastesProvince &&
-      //   wastesMunicipality &&
-      //   setFilteredWaste(wastesMunicipality);
     }
   };
   const handleOnChangeCategory = (e) => {
@@ -343,7 +332,12 @@ const Listing = ({ myWaste }) => {
     setSearchParams(searchParams);
   };
 
-  useEffect(() => handleClearFilter, []);
+  useEffect(() => {
+    searchParams.delete("category");
+    searchParams.delete("province");
+    searchParams.delete("cityMunicipality");
+    setSearchParams(searchParams);
+  }, []);
 
   if (isLoading) return;
 
