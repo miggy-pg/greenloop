@@ -11,7 +11,7 @@ export const usePaginate = (origWaste, POST_PER_PAGE = 6) => {
   const indexOfFirstPost = indexOfLastPost - POST_PER_PAGE;
 
   const currentPosts =
-    origWaste.length && origWaste?.slice(indexOfFirstPost, indexOfLastPost);
+    origWaste?.length && origWaste?.slice(indexOfFirstPost, indexOfLastPost);
 
   return {
     searchParams,

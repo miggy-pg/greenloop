@@ -3,6 +3,7 @@ const mindanaoPlaces = [
   {
     name: "Agusan del Norte (incl. City of Butuan)",
     places: [
+      "Select a City/Municipality",
       "Buenavista",
       "Butuan",
       "Cabadbaran",
@@ -20,6 +21,7 @@ const mindanaoPlaces = [
   {
     name: "Agusan del Sur",
     places: [
+      "Select a City/Municipality",
       "Bayugan",
       "Bunawan",
       "Esperanza",
@@ -39,6 +41,7 @@ const mindanaoPlaces = [
   {
     name: "Basilan",
     places: [
+      "Select a City/Municipality",
       "Akbar",
       "Al-Barka",
       "Hadji Mohammad Ajul",
@@ -56,6 +59,7 @@ const mindanaoPlaces = [
   {
     name: "Bukidnon",
     places: [
+      "Select a City/Municipality",
       "Baungon",
       "Cabanglasan",
       "Damulog",
@@ -84,6 +88,7 @@ const mindanaoPlaces = [
   {
     name: "Cotabato (North Cotabato)",
     places: [
+      "Select a City/Municipality",
       "Alamada",
       "Aleosan",
       "Antipas",
@@ -107,6 +112,7 @@ const mindanaoPlaces = [
   {
     name: "Davao del Norte",
     places: [
+      "Select a City/Municipality",
       "Asuncion (Saug)",
       "Braulio E. Dujali",
       "Carmen",
@@ -123,6 +129,7 @@ const mindanaoPlaces = [
   {
     name: "Davao del Sur",
     places: [
+      "Select a City/Municipality",
       "Bansalan",
       "Davao",
       "Digos",
@@ -139,6 +146,7 @@ const mindanaoPlaces = [
   {
     name: "Davao de Oro",
     places: [
+      "Select a City/Municipality",
       "Compostela",
       "Laak (San Vicente)",
       "Mabini (Doña Alicia)",
@@ -155,6 +163,7 @@ const mindanaoPlaces = [
   {
     name: "Davao Occidental",
     places: [
+      "Select a City/Municipality",
       "Don Marcelino",
       "Jose Abad Santos (Trinidad)",
       "Malita",
@@ -165,6 +174,7 @@ const mindanaoPlaces = [
   {
     name: "Davao Oriental",
     places: [
+      "Select a City/Municipality",
       "Baganga",
       "Banaybanay",
       "Boston",
@@ -181,6 +191,7 @@ const mindanaoPlaces = [
   {
     name: "Dinagat Islands",
     places: [
+      "Select a City/Municipality",
       "Basilisa (Rizal)",
       "Cagdianao",
       "Dinagat",
@@ -193,6 +204,7 @@ const mindanaoPlaces = [
   {
     name: "Interim Province",
     places: [
+      "Select a City/Municipality",
       "Carmen Cluster",
       "Kabacan Cluster",
       "Midsayap Cluster I",
@@ -206,6 +218,7 @@ const mindanaoPlaces = [
   {
     name: "Lanao del Norte",
     places: [
+      "Select a City/Municipality",
       "Bacolod",
       "Baloi (Balo-i)",
       "Baroy",
@@ -234,6 +247,7 @@ const mindanaoPlaces = [
   {
     name: "Lanao del Sur",
     places: [
+      "Select a City/Municipality",
       "Amai Manabilang (Bumbaran)",
       "Bacolod-Kalawi (Bacolod Grande)",
       "Balabagan",
@@ -279,6 +293,7 @@ const mindanaoPlaces = [
   {
     name: "Maguindanao del Norte",
     places: [
+      "Select a City/Municipality",
       "Barira",
       "Buldon",
       "Cotabato",
@@ -297,6 +312,7 @@ const mindanaoPlaces = [
   {
     name: "Maguindanao del Sur",
     places: [
+      "Select a City/Municipality",
       "Ampatuan",
       "Buluan",
       "Datu Abdullah Sangki",
@@ -326,6 +342,7 @@ const mindanaoPlaces = [
   {
     name: "Misamis Occidental",
     places: [
+      "Select a City/Municipality",
       "Aloran",
       "Baliangao",
       "Bonifacio",
@@ -348,6 +365,7 @@ const mindanaoPlaces = [
   {
     name: "Misamis Oriental",
     places: [
+      "Select a City/Municipality",
       "Alubijid",
       "Balingasag",
       "Balingoan",
@@ -379,6 +397,7 @@ const mindanaoPlaces = [
   {
     name: "Sarangani",
     places: [
+      "Select a City/Municipality",
       "Alabel",
       "Glan",
       "Kiamba",
@@ -391,6 +410,7 @@ const mindanaoPlaces = [
   {
     name: "South Cotabato",
     places: [
+      "Select a City/Municipality",
       "Banga",
       "General Santos (Dadiangas)",
       "Koronadal",
@@ -408,6 +428,7 @@ const mindanaoPlaces = [
   {
     name: "Sultan Kudarat",
     places: [
+      "Select a City/Municipality",
       "Bagumbayan",
       "Columbio",
       "Esperanza",
@@ -425,6 +446,7 @@ const mindanaoPlaces = [
   {
     name: "Sulu",
     places: [
+      "Select a City/Municipality",
       "Hadji Panglima Tahil (Marunggas)",
       "Indanan",
       "Jolo",
@@ -449,6 +471,7 @@ const mindanaoPlaces = [
   {
     name: "Surigao del Norte",
     places: [
+      "Select a City/Municipality",
       "Alegria",
       "Bacuag",
       "Burgos",
@@ -475,6 +498,7 @@ const mindanaoPlaces = [
   {
     name: "Surigao del Sur",
     places: [
+      "Select a City/Municipality",
       "Barobo",
       "Bayabas",
       "Bislig",
@@ -499,6 +523,7 @@ const mindanaoPlaces = [
   {
     name: "Tawi-Tawi",
     places: [
+      "Select a City/Municipality",
       "Bongao",
       "Languyan",
       "Mapun (Cagayan de Tawi-Tawi)",
@@ -515,6 +540,7 @@ const mindanaoPlaces = [
   {
     name: "Zamboanga del Norte",
     places: [
+      "Select a City/Municipality",
       "Bacungan (Leon T. Postigo)",
       "Baliguian",
       "Dapitan",
@@ -548,6 +574,7 @@ const mindanaoPlaces = [
   {
     name: "Zamboanga del Sur",
     places: [
+      "Select a City/Municipality",
       "Aurora",
       "Bayog",
       "Dimataling",
@@ -581,6 +608,7 @@ const mindanaoPlaces = [
   {
     name: "Zamboanga Sibugay",
     places: [
+      "Select a City/Municipality",
       "Alicia",
       "Buug",
       "Diplahan",

@@ -7,11 +7,11 @@ const ListingCard = ({ waste }) => {
 
   return (
     <div className="bg-white border border-gray-200 shadow-sm rounded-3xl my-2 md:my-4">
-      <div className="h-[20rem] flex items-center justify-between lg:justify-evenly sm:h-[10rem] 2xsm:h-[7rem]">
+      <div className="h-80 flex items-center justify-between lg:justify-evenly sm:h-40 2xsm:h-28">
         <div className="w-screen border rounded-t-3xl">
           <img
             src={image?.url ? image?.url : defaultImage}
-            className="object-cover w-full h-[20rem] rounded-t-3xl sm:h-[10rem] 2xsm:h-[8rem]"
+            className="object-cover w-full h-80 rounded-t-3xl sm:h-40 2xsm:h-32"
           />
         </div>
       </div>

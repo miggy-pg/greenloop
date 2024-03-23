@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import {
@@ -8,6 +8,7 @@ import {
   IoClose,
   IoTrashBinSharp,
 } from "react-icons/io5";
+import { TbArrowBarLeft } from "react-icons/tb";
 
 import Pagination from "../../components/Common/Pagination";
 import ListingCard from "../../components/Common/ListingCard";
@@ -34,6 +35,9 @@ const Listing = ({ myWaste }) => {
   document.title = "Green Loop | Listing";
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const history = useNavigate();
+
   const searchQuery = searchParams.get("search") || "";
   const province = searchParams.get("province") || "";
   const cityMunicipality = searchParams.get("cityMunicipality") || "";
@@ -50,10 +54,10 @@ const Listing = ({ myWaste }) => {
 
   const [currentCategories, setCategoryQuery] = useState([]);
 
+  const [open, setOpen] = useState(true);
   const [isSortBy, setIsSortBy] = useState(false);
   const [places, setPlaces] = useState([]);
   const [filteredWaste, setFilteredWaste] = useState({});
-  const [filterValue, setFilterValue] = useState("");
 
   const wasteToDisplay = myWaste ? myWaste : wasteItems;
   const origWaste =
@@ -70,41 +74,47 @@ const Listing = ({ myWaste }) => {
 
   const handleOnChangeProvince = (e) => {
     let params = {};
+    searchParams.delete("category");
+    setSearchParams(searchParams);
 
-    category && (params["category"] = category);
+    setCategoryQuery([]);
+
     if (
       e.target.id == "provinces" &&
       province &&
-      cityMunicipality &&
       e.target.value == "Select a Province"
     ) {
       searchParams.delete("province");
       searchParams.delete("cityMunicipality");
-      setPlaces([]);
       setSearchParams(searchParams);
+
+      setPlaces([]);
+      setFilteredWaste({});
     } else {
       const filteredMunicipalities = mindanaoPlaces.filter((province) =>
         province.name.includes(e.target.value)
       );
 
-      const wastesByProvince = wasteToDisplay.filter((waste) =>
+      const wastesProvince = wasteToDisplay.filter((waste) =>
         waste.user.province.includes(e.target.value)
       );
 
-      const wastesByCityMunicipality = wasteToDisplay.filter((waste) =>
-        waste.user.cityMunicipality.includes(
-          filteredMunicipalities[0].places[0]
-        )
-      );
+      setFilteredWaste(wastesProvince);
 
-      wastesByProvince &&
-        wastesByCityMunicipality &&
-        setFilteredWaste(wastesByProvince);
       setPlaces(filteredMunicipalities[0].places);
+      categories.map((category) => {
+        document.getElementById(category).checked = false;
+      });
+
+      // if (searchParams.has("category")) {
+      searchParams.delete("category");
+      setSearchParams(searchParams);
+      // }
+
       const items = e.target.value.split(" ");
       if (items.length > 3) {
         params["province"] = items.slice(0, 3).join();
-        params["cityMunicipality"] = filteredMunicipalities[0].places[0];
+        // params["cityMunicipality"] = filteredMunicipalities[0].places[0];
 
         document.getElementById("municipalities").value =
           filteredMunicipalities[0].places[0];
@@ -112,7 +122,7 @@ const Listing = ({ myWaste }) => {
         setSearchParams(params);
       } else {
         params["province"] = e.target.value;
-        params["cityMunicipality"] = filteredMunicipalities[0].places[0];
+        // params["cityMunicipality"] = filteredMunicipalities[0].places[0];
 
         document.getElementById("municipalities").value =
           filteredMunicipalities[0].places[0];
@@ -123,38 +133,117 @@ const Listing = ({ myWaste }) => {
 
   const handleOnChangeCityMunicipality = (e) => {
     let params = {};
+    if (!e.target.value.includes("Select a City/Municipality")) {
+      // Get the current category from the URL
+      category && (params["category"] = category);
 
-    category && (params["category"] = category);
-    params["province"] = province;
-    params["cityMunicipality"] = e.target.value;
+      // Get the current province from the URL
+      params["province"] = province;
+      params["cityMunicipality"] = e.target.value;
 
-    setSearchParams(params);
-    const wastesByProvince = wasteToDisplay.filter((waste) =>
-      waste.user.province.includes(province)
-    );
+      setSearchParams(params);
+      if (province && cityMunicipality && category) {
+        console.log("CityMunicipality: True ehere");
+        const wastesCategory = wasteToDisplay
+          .filter((waste) => waste.user.province.includes(province))
+          .filter((waste) =>
+            waste.user.cityMunicipality.includes(cityMunicipality)
+          )
+          .filter((waste) =>
+            categories.some((category) => waste.wasteCategory == category)
+          );
+        setFilteredWaste(wastesCategory);
+      } else if (province && !cityMunicipality && categories) {
+        console.log("CityMunicipality: True ehere - 1");
+        const wastesCategory = wasteToDisplay
+          .filter((waste) => waste.user.province.includes(province))
+          .filter((waste) =>
+            categories.some((category) => waste.wasteCategory == category)
+          );
+        setFilteredWaste(wastesCategory);
+      } else if (province && cityMunicipality && !categories) {
+        console.log("CityMunicipality: True ehere - 2");
+        const wastesCategory = wasteToDisplay
+          .filter((waste) => waste.user.province.includes(province))
+          .filter((waste) =>
+            waste.user.cityMunicipality.includes(cityMunicipality)
+          );
+        setFilteredWaste(wastesCategory);
+      } else if (province && !cityMunicipality && !categories) {
+        console.log("CityMunicipality: True ehere - 3");
+        const wastesProvince = wasteToDisplay.filter((waste) =>
+          waste.user.province.includes(province)
+        );
+        setFilteredWaste(wastesProvince);
+      } else {
+        console.log("CityMunicipality: True ehere reay - 4");
+        const wastesCategory = wasteToDisplay
+          .filter((waste) => waste.user.province.includes(province))
+          .filter((waste) =>
+            waste.user.cityMunicipality.includes(cityMunicipality)
+          );
+        setFilteredWaste(wastesCategory);
+      }
+      // Filter the waste by province
+      // const wastesProvince = wasteToDisplay.filter((waste) =>
+      //   waste.user.province.includes(province)
+      // );
 
-    const wastesByMunicipality = wasteToDisplay.filter((waste) =>
-      waste.user.cityMunicipality.includes(e.target.value)
-    );
-    wastesByProvince &&
-      wastesByMunicipality &&
-      setFilteredWaste(wastesByMunicipality);
+      // const wastesMunicipality = wasteToDisplay.filter((waste) =>
+      //   waste.user.cityMunicipality.includes(e.target.value)
+      // );
+      // wastesProvince &&
+      //   wastesMunicipality &&
+      //   setFilteredWaste(wastesMunicipality);
+    }
   };
-
   const handleOnChangeCategory = (e) => {
     if (e.target.checked) {
-      setCategoryQuery((prev) => [...prev, e.target.value]);
-      searchParams.set(
-        "category",
-        [...currentCategories, e.target.value].join(",")
-      );
+      var categories = [...currentCategories, e.target.value];
 
-      const fWastesCategory = wasteToDisplay.filter((waste) => {
-        return [...currentCategories, e.target.value].some(
-          (category) => waste.wasteCategory == category
+      setCategoryQuery((prev) => [...prev, e.target.value]);
+      searchParams.set("category", categories.join(","));
+
+      if (province && cityMunicipality && categories) {
+        console.log("True Category:");
+        const wastesCategory = wasteToDisplay
+          .filter((waste) => waste.user.province.includes(province))
+          .filter((waste) =>
+            waste.user.cityMunicipality.includes(cityMunicipality)
+          )
+          .filter((waste) =>
+            categories.some((category) => waste.wasteCategory == category)
+          );
+        setFilteredWaste(wastesCategory);
+      } else if (province && !cityMunicipality && categories) {
+        console.log("True Category: - 1");
+        const wastesCategory = wasteToDisplay
+          .filter((waste) => waste.user.province.includes(province))
+          .filter((waste) =>
+            categories.some((category) => waste.wasteCategory == category)
+          );
+        setFilteredWaste(wastesCategory);
+      } else if (province && cityMunicipality && !categories) {
+        console.log("True Category: - 2");
+        const wastesCategory = wasteToDisplay
+          .filter((waste) => waste.user.province.includes(province))
+          .filter((waste) =>
+            waste.user.cityMunicipality.includes(cityMunicipality)
+          );
+        setFilteredWaste(wastesCategory);
+      } else if (province && !cityMunicipality && !categories) {
+        console.log("True Category: - 3");
+        const wastesProvince = wasteToDisplay.filter((waste) =>
+          waste.user.province.includes(province)
         );
-      });
-      setFilteredWaste(fWastesCategory);
+        setFilteredWaste(wastesProvince);
+      } else {
+        console.log("True Category: - 4");
+        const wastesCategory = wasteToDisplay.filter((waste) =>
+          categories.some((category) => waste.wasteCategory == category)
+        );
+        setFilteredWaste(wastesCategory);
+      }
 
       searchParams.get("province");
       searchParams.get("cityMunicipality");
@@ -168,15 +257,57 @@ const Listing = ({ myWaste }) => {
       const popCategory = categoryItems.indexOf(e.target.value);
       categoryItems.splice(popCategory, 1);
       if (categoryItems.length == 0) {
+        if (province && cityMunicipality) {
+          console.log("Remove: -1");
+          const wastesCategory = wasteToDisplay
+            .filter((waste) => waste.user.province.includes(province))
+            .filter((waste) =>
+              waste.user.cityMunicipality.includes(cityMunicipality)
+            );
+
+          setFilteredWaste(wastesCategory);
+        } else {
+          console.log("Remove: -2");
+          const wastesCategory = wasteToDisplay.filter((waste) =>
+            waste.user.province.includes(province)
+          );
+          setFilteredWaste(wastesCategory);
+        }
+
         searchParams.delete("category");
         setSearchParams(searchParams);
       } else {
-        const fWastesCategory = wasteToDisplay.filter((waste) => {
-          return categoryItems.some(
-            (category) => waste.wasteCategory == category
+        if (province && cityMunicipality && categoryItems) {
+          console.log("Else Category: - 1");
+          const wastesCategory = wasteToDisplay
+            .filter((waste) => waste.user.province.includes(province))
+            .filter((waste) =>
+              waste.user.cityMunicipality.includes(cityMunicipality)
+            )
+            .filter((waste) =>
+              categoryItems.some((category) => waste.wasteCategory == category)
+            );
+          setFilteredWaste(wastesCategory);
+        } else if (province && !cityMunicipality && categoryItems) {
+          console.log("Else Category: - 2");
+          const wastesCategory = wasteToDisplay
+            .filter((waste) => waste.user.province.includes(province))
+            .filter((waste) =>
+              categoryItems.some((category) => waste.wasteCategory == category)
+            );
+          setFilteredWaste(wastesCategory);
+        } else if (province && !cityMunicipality && !categoryItems) {
+          console.log("Else Category: - 3");
+          const wastesCategory = wasteToDisplay.filter((waste) =>
+            waste.user.province.includes(province)
           );
-        });
-        setFilteredWaste(fWastesCategory);
+          setFilteredWaste(wastesCategory);
+        } else {
+          const wastesCategory = wasteToDisplay.filter((waste) =>
+            categoryItems.some((category) => waste.wasteCategory == category)
+          );
+          setFilteredWaste(wastesCategory);
+        }
 
         searchParams.set("category", categoryItems.join(","));
         searchParams.get("province");
@@ -197,8 +328,22 @@ const Listing = ({ myWaste }) => {
   };
 
   const handleClearFilter = () => {
-    setFilterValue("");
+    document.getElementById("provinces").value = mindanaoPlaces[0].name;
+    categories.map((category) => {
+      document.getElementById(category).checked = false;
+    });
+
+    setPlaces([]);
+    setCategoryQuery([]);
+
+    searchParams.delete("category");
+    searchParams.delete("province");
+    searchParams.delete("cityMunicipality");
+
+    setSearchParams(searchParams);
   };
+
+  useEffect(() => handleClearFilter, []);
 
   if (isLoading) return;
 
@@ -230,15 +375,26 @@ const Listing = ({ myWaste }) => {
       </div>
       <div className="w-screen px-32 grid md:px-0">
         <div className="flex items-center justify-between">
-          <div className="md:ml-3" />
-          <div>
+          <div className="flex md:ml-3" />
+
+          <div className="flex items-center">
             {!myWaste && (
-              <button
-                className="p-2 m-4 rounded-lg bg-[#31572C] cursor-pointer"
-                onClick={() => setIsSortBy((sortby) => !sortby)}
-              >
-                <IoSwapVerticalSharp className="text-white " />
-              </button>
+              <>
+                {province || cityMunicipality || category ? (
+                  <span
+                    className="text-clamp-base hover:underline font-semibold cursor-pointer"
+                    onClick={handleClearFilter}
+                  >
+                    Remove Filter
+                  </span>
+                ) : null}
+                <button
+                  className="p-2 m-4 rounded-lg bg-[#31572C] cursor-pointer"
+                  onClick={() => setIsSortBy((sortby) => !sortby)}
+                >
+                  <IoSwapVerticalSharp className="text-white" />
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -250,11 +406,32 @@ const Listing = ({ myWaste }) => {
         )}
       </div>
 
-      <div className="flex justify-center md:px-0">
-        <div className="grid grid-col-1 w-96 max-w-72">
-          <div className="mx-12 mt-24 w-56 max-w-48 h-96">
-            <h1 className="">Filter</h1>
-
+      <div className="flex">
+        <div
+          className={`z-50  ${open ? "w-80" : "w-0"} ${
+            currentPosts?.length ? "bg-white" : "bg-[#F8F8F8]"
+          } pt-8 relative duration-300`}
+        >
+          <TbArrowBarLeft
+            className={`absolute h-6 w-6 cursor-pointer -right-8 top-9 border-dark-purple
+           border-2 ${!open && "rotate-180"}`}
+            onClick={() => setOpen(!open)}
+          />
+          <div className="flex px-4 items-center">
+            <IoFilter
+              className={`cursor-pointer duration-500 ${
+                open && "rotate-[360deg]"
+              }`}
+            />
+            <h1
+              className={`origin-left px-4 font-medium text-xl duration-200 ${
+                !open && "scale-0"
+              }`}
+            >
+              Filter
+            </h1>
+          </div>
+          <ul className="absolute -right-0 px-6">
             <label
               htmlFor="provinces"
               className="block mb-2 text-sm font-medium text-gray-900 mt-5"
@@ -290,22 +467,22 @@ const Listing = ({ myWaste }) => {
               ))}
             </select>
             <label
-              htmlFor="wasteCategory"
+              htmlFor="category"
               className="block mb-2 text-sm rounded-lg w-full mt-5"
             >
               Category
             </label>
             {categories.map((category, index) => (
               <div
-                id="wasteCategory"
+                id="category"
                 key={index}
                 className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]"
               >
                 <input
+                  id={category}
                   className="relative float-left -ml-[1.5rem] mt-1.5"
                   type="checkbox"
                   value={category}
-                  id={category}
                   onChange={(e) => handleOnChangeCategory(e)}
                 />
                 <label
@@ -316,13 +493,13 @@ const Listing = ({ myWaste }) => {
                 </label>
               </div>
             ))}
-          </div>
+          </ul>
         </div>
 
         <div
-          className={`mt-7 grid gap-10 px-32 ${
-            currentPosts?.length && "grid-cols-2"
-          } lg:grid-cols-2 lg:w-[90%] lg:px-16 lg:gap-10 md:mt-4 md:gap-2 md:grid-cols-1 md:px-24 sm:px-16 xsm:px-4`}
+          className={`w-full mt-7 grid gap-10 px-32 ${
+            currentPosts?.length ? "grid-cols-3" : "h-108"
+          } lg:grid-cols-2 lg:px-16 lg:gap-10 md:mt-4 md:gap-2 md:grid-cols-1 md:px-24 sm:px-16 xsm:px-4`}
         >
           {currentPosts?.length ? (
             currentPosts?.map((waste, index) => (
