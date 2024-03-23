@@ -37,7 +37,7 @@ const Chat = () => {
   const conversationId = searchParams.get("id");
 
   useEffect(() => {
-    setSocket(io(socketPort));
+    setSocket(io.connect(socketPort));
   }, []);
 
   useMemo(() => {
