@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
-import { useForm } from "react-hook-form";
 import {
   IoFilter,
   IoSwapVerticalSharp,
-  IoClose,
   IoTrashBinSharp,
 } from "react-icons/io5";
 import { TbArrowBarLeft } from "react-icons/tb";
@@ -14,8 +12,6 @@ import Pagination from "../../components/Common/Pagination";
 import ListingCard from "../../components/Common/ListingCard";
 import SortByCard from "../../components/Common/SortByCard";
 import mindanaoPlaces from "../../constants/mindanaoPlaces";
-// import { cityMunicipality } from "../../constants/cityMunicipality";
-// import { provinces } from "../../constants/provinces";
 
 import { useWastes } from "../../hooks/useWaste";
 import { usePaginate } from "../../hooks/usePaginate";
@@ -35,8 +31,6 @@ const Listing = ({ myWaste }) => {
   document.title = "Green Loop | Listing";
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const location = useLocation();
-  const history = useNavigate();
 
   const searchQuery = searchParams.get("search") || "";
   const province = searchParams.get("province") || "";
@@ -64,7 +58,7 @@ const Listing = ({ myWaste }) => {
     province.length > 0 || category?.length > 0
       ? filteredWaste
       : wasteToDisplay;
-  // console.log("origWaste: ", origWaste);
+
   const {
     searchParams: paginatePage,
     setSearchParams: setPaginatePage,
@@ -401,94 +395,96 @@ const Listing = ({ myWaste }) => {
       </div>
 
       <div className="flex">
-        <div
-          className={`z-50  ${open ? "w-80" : "w-0"} ${
-            currentPosts?.length ? "bg-white" : "bg-[#F8F8F8]"
-          } pt-8 relative duration-300`}
-        >
-          <TbArrowBarLeft
-            className={`absolute h-6 w-6 cursor-pointer -right-8 top-9 border-dark-purple
+        {!myWaste && (
+          <div
+            className={`z-50  ${open ? "w-80" : "w-0"} ${
+              currentPosts?.length ? "bg-white" : "bg-[#F8F8F8]"
+            } pt-8 relative duration-300`}
+          >
+            <TbArrowBarLeft
+              className={`absolute h-6 w-6 cursor-pointer -right-8 top-9 border-dark-purple
            border-2 ${!open && "rotate-180"}`}
-            onClick={() => setOpen(!open)}
-          />
-          <div className="flex px-4 items-center">
-            <IoFilter
-              className={`cursor-pointer duration-500 ${
-                open && "rotate-[360deg]"
-              }`}
+              onClick={() => setOpen(!open)}
             />
-            <h1
-              className={`origin-left px-4 font-medium text-xl duration-200 ${
-                !open && "scale-0"
-              }`}
-            >
-              Filter
-            </h1>
-          </div>
-          <ul className="absolute -right-0 px-6">
-            <label
-              htmlFor="provinces"
-              className="block mb-2 text-sm font-medium text-gray-900 mt-5"
-            >
-              Select a Province
-            </label>
-            <select
-              id="provinces"
-              className="border border-gray-300 text-sm rounded-lg block w-full p-2.5 "
-              onChange={(e) => handleOnChangeProvince(e)}
-            >
-              {mindanaoPlaces.map((province, index) => (
-                <option key={index} value={province.name}>
-                  {province.name}
-                </option>
-              ))}
-            </select>
-            <label
-              htmlFor="municipalities"
-              className="block mb-2 text-sm font-medium text-gray-900 mt-5"
-            >
-              Select a City or Municipality
-            </label>
-            <select
-              id="municipalities"
-              className="border text-sm rounded-lg w-full p-2.5 "
-              onChange={(e) => handleOnChangeCityMunicipality(e)}
-            >
-              {places?.map((place, index) => (
-                <option key={index} value={place}>
-                  {place}
-                </option>
-              ))}
-            </select>
-            <label
-              htmlFor="category"
-              className="block mb-2 text-sm rounded-lg w-full mt-5"
-            >
-              Category
-            </label>
-            {categories.map((category, index) => (
-              <div
-                id="category"
-                key={index}
-                className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]"
+            <div className="flex px-4 items-center">
+              <IoFilter
+                className={`cursor-pointer duration-500 ${
+                  open && "rotate-[360deg]"
+                }`}
+              />
+              <h1
+                className={`origin-left px-4 font-medium text-xl duration-200 ${
+                  !open && "scale-0"
+                }`}
               >
-                <input
-                  id={category}
-                  className="relative float-left -ml-[1.5rem] mt-1.5"
-                  type="checkbox"
-                  value={category}
-                  onChange={(e) => handleOnChangeCategory(e)}
-                />
-                <label
-                  className="inline-block pl-[0.15rem] hover:cursor-pointer"
-                  htmlFor={category}
+                Filter
+              </h1>
+            </div>
+            <ul className="absolute -right-0 px-6">
+              <label
+                htmlFor="provinces"
+                className="block mb-2 text-sm font-medium text-gray-900 mt-5"
+              >
+                Select a Province
+              </label>
+              <select
+                id="provinces"
+                className="border border-gray-300 text-sm rounded-lg block w-full p-2.5 "
+                onChange={(e) => handleOnChangeProvince(e)}
+              >
+                {mindanaoPlaces.map((province, index) => (
+                  <option key={index} value={province.name}>
+                    {province.name}
+                  </option>
+                ))}
+              </select>
+              <label
+                htmlFor="municipalities"
+                className="block mb-2 text-sm font-medium text-gray-900 mt-5"
+              >
+                Select a City or Municipality
+              </label>
+              <select
+                id="municipalities"
+                className="border text-sm rounded-lg w-full p-2.5 "
+                onChange={(e) => handleOnChangeCityMunicipality(e)}
+              >
+                {places?.map((place, index) => (
+                  <option key={index} value={place}>
+                    {place}
+                  </option>
+                ))}
+              </select>
+              <label
+                htmlFor="category"
+                className="block mb-2 text-sm rounded-lg w-full mt-5"
+              >
+                Category
+              </label>
+              {categories.map((category, index) => (
+                <div
+                  id="category"
+                  key={index}
+                  className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]"
                 >
-                  {category}
-                </label>
-              </div>
-            ))}
-          </ul>
-        </div>
+                  <input
+                    id={category}
+                    className="relative float-left -ml-[1.5rem] mt-1.5"
+                    type="checkbox"
+                    value={category}
+                    onChange={(e) => handleOnChangeCategory(e)}
+                  />
+                  <label
+                    className="inline-block pl-[0.15rem] hover:cursor-pointer"
+                    htmlFor={category}
+                  >
+                    {category}
+                  </label>
+                </div>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div
           className={`w-full mt-7 grid gap-10 px-32 ${

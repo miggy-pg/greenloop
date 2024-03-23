@@ -4,7 +4,7 @@ import defaultImage from "../../../assets/images/waste-default-image.webp";
 const ListingCard = ({ waste }) => {
   const { image, post, wasteCategory } = waste;
   const transformedTexts = transformText(wasteCategory);
-
+  console.log("props: ", waste);
   return (
     <div className="bg-white border border-gray-200 shadow-sm rounded-3xl my-2 md:my-4">
       <div className="h-80 flex items-center justify-between lg:justify-evenly sm:h-40 2xsm:h-28">
