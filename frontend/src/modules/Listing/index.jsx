@@ -19,11 +19,26 @@ import mindanaoPlaces from "../../constants/mindanaoPlaces";
 import { useWastes } from "../../hooks/useWaste";
 import { usePaginate } from "../../hooks/usePaginate";
 
+const categories = [
+  "Plastic",
+  "Plastic Bottle",
+  "Glass",
+  "Scrap Metal",
+  "E-waste",
+  "Textile",
+  "Food waste",
+  "Biodegradable waste",
+];
+
 const Listing = ({ myWaste }) => {
   document.title = "Green Loop | Listing";
 
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
+  const province = searchParams.get("province") || "";
+  const cityMunicipality = searchParams.get("cityMunicipality") || "";
+  const category = searchParams.get("category") || "";
+
   const { wastes, isLoading } = useWastes();
 
   let wasteItems;
@@ -33,14 +48,19 @@ const Listing = ({ myWaste }) => {
     wasteItems = wastes;
   }
 
-  const [isFilter, setIsFilter] = useState(false);
+  const [currentCategories, setCategoryQuery] = useState([]);
+
   const [isSortBy, setIsSortBy] = useState(false);
   const [places, setPlaces] = useState([]);
   const [filteredWaste, setFilteredWaste] = useState({});
   const [filterValue, setFilterValue] = useState("");
 
   const wasteToDisplay = myWaste ? myWaste : wasteItems;
-  const origWaste = filterValue ? filteredWaste : wasteToDisplay;
+  const origWaste =
+    province.length > 0 || category?.length > 0
+      ? filteredWaste
+      : wasteToDisplay;
+  // console.log("origWaste: ", origWaste);
   const {
     searchParams: paginatePage,
     setSearchParams: setPaginatePage,
@@ -48,14 +68,38 @@ const Listing = ({ myWaste }) => {
     currentPosts,
   } = usePaginate(origWaste);
 
-  const handleOnChangeFilter = (e) => {
+  const handleOnChangeProvince = (e) => {
     let params = {};
 
-    if (e.target.id == "provinces") {
+    category && (params["category"] = category);
+    if (
+      e.target.id == "provinces" &&
+      province &&
+      cityMunicipality &&
+      e.target.value == "Select a Province"
+    ) {
+      searchParams.delete("province");
+      searchParams.delete("cityMunicipality");
+      setPlaces([]);
+      setSearchParams(searchParams);
+    } else {
       const filteredMunicipalities = mindanaoPlaces.filter((province) =>
         province.name.includes(e.target.value)
       );
 
+      const wastesByProvince = wasteToDisplay.filter((waste) =>
+        waste.user.province.includes(e.target.value)
+      );
+
+      const wastesByCityMunicipality = wasteToDisplay.filter((waste) =>
+        waste.user.cityMunicipality.includes(
+          filteredMunicipalities[0].places[0]
+        )
+      );
+
+      wastesByProvince &&
+        wastesByCityMunicipality &&
+        setFilteredWaste(wastesByProvince);
       setPlaces(filteredMunicipalities[0].places);
       const items = e.target.value.split(" ");
       if (items.length > 3) {
@@ -71,16 +115,75 @@ const Listing = ({ myWaste }) => {
         params["cityMunicipality"] = filteredMunicipalities[0].places[0];
 
         document.getElementById("municipalities").value =
-          searchParams.get("cityMunicipality");
-
+          filteredMunicipalities[0].places[0];
         setSearchParams(params);
       }
     }
+  };
 
-    if (e.target.id == "municipalities") {
-      params["province"] = searchParams.get("province");
-      params["cityMunicipality"] = e.target.value;
-      setSearchParams(params);
+  const handleOnChangeCityMunicipality = (e) => {
+    let params = {};
+
+    category && (params["category"] = category);
+    params["province"] = province;
+    params["cityMunicipality"] = e.target.value;
+
+    setSearchParams(params);
+    const wastesByProvince = wasteToDisplay.filter((waste) =>
+      waste.user.province.includes(province)
+    );
+
+    const wastesByMunicipality = wasteToDisplay.filter((waste) =>
+      waste.user.cityMunicipality.includes(e.target.value)
+    );
+    wastesByProvince &&
+      wastesByMunicipality &&
+      setFilteredWaste(wastesByMunicipality);
+  };
+
+  const handleOnChangeCategory = (e) => {
+    if (e.target.checked) {
+      setCategoryQuery((prev) => [...prev, e.target.value]);
+      searchParams.set(
+        "category",
+        [...currentCategories, e.target.value].join(",")
+      );
+
+      const fWastesCategory = wasteToDisplay.filter((waste) => {
+        return [...currentCategories, e.target.value].some(
+          (category) => waste.wasteCategory == category
+        );
+      });
+      setFilteredWaste(fWastesCategory);
+
+      searchParams.get("province");
+      searchParams.get("cityMunicipality");
+      setSearchParams(searchParams);
+    } else {
+      setCategoryQuery((prev) =>
+        prev.filter((category) => category !== e.target.value)
+      );
+
+      const categoryItems = category.split(",");
+      const popCategory = categoryItems.indexOf(e.target.value);
+      categoryItems.splice(popCategory, 1);
+      if (categoryItems.length == 0) {
+        searchParams.delete("category");
+        setSearchParams(searchParams);
+      } else {
+        const fWastesCategory = wasteToDisplay.filter((waste) => {
+          return categoryItems.some(
+            (category) => waste.wasteCategory == category
+          );
+        });
+        setFilteredWaste(fWastesCategory);
+
+        searchParams.set("category", categoryItems.join(","));
+        searchParams.get("province");
+        searchParams.get("cityMunicipality");
+
+        setSearchParams(searchParams);
+      }
     }
   };
 
@@ -127,29 +230,8 @@ const Listing = ({ myWaste }) => {
       </div>
       <div className="w-screen px-32 grid md:px-0">
         <div className="flex items-center justify-between">
-          <div className="md:ml-3">
-            {filterValue && (
-              <>
-                <span className="text-clamp-base mr-5">Applied Filter:</span>
-                <span className="text-clamp-base font-semibold bg-gray-300 px-2 rounded-full">
-                  {filterValue}
-                  <button
-                    className="absolute pl-2 pt-1 focus:outline-none"
-                    onClick={handleClearFilter}
-                  >
-                    <IoClose className="text-gray-500" />
-                  </button>
-                </span>
-              </>
-            )}
-          </div>
+          <div className="md:ml-3" />
           <div>
-            <button
-              className="p-2 m-4 rounded-lg bg-[#31572C] cursor-pointer"
-              onClick={() => setIsFilter((filter) => !filter)}
-            >
-              <IoFilter className="text-white" />
-            </button>
             {!myWaste && (
               <button
                 className="p-2 m-4 rounded-lg bg-[#31572C] cursor-pointer"
@@ -161,12 +243,6 @@ const Listing = ({ myWaste }) => {
           </div>
         </div>
 
-        {/* {isFilter && (
-          <div className="absolute z-10 right-[30rem] top-[18rem] border border-green-500 md:top-[15rem] md:right-[21rem] sm:right-[20rem] sm:top-[14rem] xsm:top-[13rem]">
-            <FilterCard handleOnChangeFilter={handleOnChangeFilter} />
-          </div>
-        )} */}
-
         {isSortBy && (
           <div className="absolute z-10 right-[26rem] top-[18rem] border border-green-500 md:top-[15rem] md:right-[21rem] sm:right-[20rem] sm:top-[14rem] xsm:top-[13rem]">
             <SortByCard handleSortBy={handleSortBy} />
@@ -175,21 +251,20 @@ const Listing = ({ myWaste }) => {
       </div>
 
       <div className="flex justify-center md:px-0">
-        {/* {origWaste?.length > 0 && ( */}
         <div className="grid grid-col-1 w-96 max-w-72">
           <div className="mx-12 mt-24 w-56 max-w-48 h-96">
-            <h1>Filter</h1>
+            <h1 className="">Filter</h1>
 
             <label
               htmlFor="provinces"
-              className="block mb-2 text-sm font-medium text-gray-900"
+              className="block mb-2 text-sm font-medium text-gray-900 mt-5"
             >
               Select a Province
             </label>
             <select
               id="provinces"
-              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              onChange={(e) => handleOnChangeFilter(e)}
+              className="border border-gray-300 text-sm rounded-lg block w-full p-2.5 "
+              onChange={(e) => handleOnChangeProvince(e)}
             >
               {mindanaoPlaces.map((province, index) => (
                 <option key={index} value={province.name}>
@@ -199,14 +274,14 @@ const Listing = ({ myWaste }) => {
             </select>
             <label
               htmlFor="municipalities"
-              className="block mb-2 text-sm font-medium text-gray-900"
+              className="block mb-2 text-sm font-medium text-gray-900 mt-5"
             >
               Select a City or Municipality
             </label>
             <select
               id="municipalities"
-              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              onChange={(e) => handleOnChangeFilter(e)}
+              className="border text-sm rounded-lg w-full p-2.5 "
+              onChange={(e) => handleOnChangeCityMunicipality(e)}
             >
               {places?.map((place, index) => (
                 <option key={index} value={place}>
@@ -214,9 +289,36 @@ const Listing = ({ myWaste }) => {
                 </option>
               ))}
             </select>
+            <label
+              htmlFor="wasteCategory"
+              className="block mb-2 text-sm rounded-lg w-full mt-5"
+            >
+              Category
+            </label>
+            {categories.map((category, index) => (
+              <div
+                id="wasteCategory"
+                key={index}
+                className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]"
+              >
+                <input
+                  className="relative float-left -ml-[1.5rem] mt-1.5"
+                  type="checkbox"
+                  value={category}
+                  id={category}
+                  onChange={(e) => handleOnChangeCategory(e)}
+                />
+                <label
+                  className="inline-block pl-[0.15rem] hover:cursor-pointer"
+                  htmlFor={category}
+                >
+                  {category}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
-        {/* )} */}
+
         <div
           className={`mt-7 grid gap-10 px-32 ${
             currentPosts?.length && "grid-cols-2"
