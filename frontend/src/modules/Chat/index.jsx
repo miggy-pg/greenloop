@@ -155,6 +155,7 @@ const Chat = () => {
   };
 
   console.log("receiverUserTest: ", receiverUser);
+  console.log("conversations: ", conversations);
 
   return (
     <div className="w-full h-full bg-white" id="profile">
@@ -181,7 +182,7 @@ const Chat = () => {
                             ? receiverUser.image.url
                             : defaultImage
                         }
-                        alt="Marie Zulfikar"
+                        alt={receiverUser?.companyName}
                       />
                       <h4 className="text-sm font-semibold text-gray-900">
                         {receiverUser?.companyName}
@@ -189,12 +190,12 @@ const Chat = () => {
                     </div>
                   </>
                 )}
-                <div className="divide-y divide-gray-200">
+                <div className="divide-y divide-gray-200 bg-red-500">
                   {conversations && !openConvo
                     ? conversations.map((convo) => {
                         return (
                           <Link
-                            key={conversationId}
+                            key={convo.conversation.conversationId}
                             className="w-full flex justify-center text-left py-8 sm:px-5 sm:py-1 sm:my-2 xsm:justify-start overflow-x-hidden"
                             onClick={() => {
                               fetchMessages(
@@ -230,6 +231,7 @@ const Chat = () => {
                         </div>
                       )}
                 </div>
+                {console.log("onMessages: ", messages)}
                 <div className="h-full overflow-y-auto mb-[6.5rem]">
                   <div className="p-14 sm:p-0 ">
                     {messages?.messages?.length > 0 && openConvo
