@@ -32,7 +32,7 @@ const Listing = ({ myWaste }) => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const searchQuery = searchParams.get("search") || "";
+  const filterQuery = searchParams.get("filter") || "";
   const province = searchParams.get("province") || "";
   const cityMunicipality = searchParams.get("cityMunicipality") || "";
   const category = searchParams.get("category") || "";
@@ -40,8 +40,8 @@ const Listing = ({ myWaste }) => {
   const { wastes, isLoading } = useWastes();
 
   let wasteItems;
-  if (searchQuery) {
-    wasteItems = wastes?.filter((waste) => waste.post.includes(searchQuery));
+  if (filterQuery) {
+    wasteItems = wastes?.filter((waste) => waste.post.includes(filterQuery));
   } else {
     wasteItems = wastes;
   }
@@ -54,6 +54,7 @@ const Listing = ({ myWaste }) => {
   const [filteredWaste, setFilteredWaste] = useState({});
 
   const wasteToDisplay = myWaste ? myWaste : wasteItems;
+  console.log("wasteToDisplay: ", wasteToDisplay);
   const origWaste =
     province.length > 0 || category?.length > 0
       ? filteredWaste

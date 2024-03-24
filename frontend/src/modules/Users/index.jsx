@@ -10,8 +10,6 @@ import { createUser, deleteUser, updateUser } from "../../api/user";
 import { userHeader } from "../../constants/userHeader";
 
 import defaultImage from "../../assets/images/default-image.jpg";
-import { cityMunicipality } from "../../constants/cityMunicipality";
-import { provinces } from "../../constants/provinces";
 import { organizationType } from "../../constants/organizationType";
 import mindanaoPlaces from "../../constants/mindanaoPlaces";
 
@@ -22,7 +20,7 @@ export default function Users() {
   const [showModal, setShowModal] = useState(false);
   const [places, setPlaces] = useState([]);
 
-  const { allUsers, error } = useUsers();
+  const { allUsers } = useUsers();
   const { image, fetchImage, imagePreview, setImage, setImagePreview } =
     useUploadImage();
   const { register, handleSubmit, reset } = useForm({

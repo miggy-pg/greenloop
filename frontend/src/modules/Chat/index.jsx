@@ -2,14 +2,14 @@ import { io } from "socket.io-client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useWindowSize } from "@uidotdev/usehooks";
+
+import { TbSend, TbCirclePlus, TbArrowLeft } from "react-icons/tb";
 
 import Input from "../../components/Common/Input";
 import { getConversations, getMessages } from "../../api/conversation";
 import { sendUserMessage } from "../../api/message";
 
-import { TbSend, TbCirclePlus, TbArrowLeft } from "react-icons/tb";
-
-import { useWindowSize } from "@uidotdev/usehooks";
 import defaultImage from "../../assets/images/default-image.jpg";
 import { getEndpoint, socketPort } from "../../utils/Helper";
 
@@ -158,7 +158,7 @@ const Chat = () => {
   console.log("conversations: ", conversations);
 
   return (
-    <div className="w-full h-full bg-white" id="profile">
+    <div className="w-full h-full" id="profile">
       <div className="flex pt-[3.8rem] border-grey rounded">
         {isMobile ? (
           <>
@@ -190,7 +190,7 @@ const Chat = () => {
                     </div>
                   </>
                 )}
-                <div className="divide-y divide-gray-200 bg-red-500">
+                <div className="divide-y divide-gray-200">
                   {conversations && !openConvo
                     ? conversations.map((convo) => {
                         return (
@@ -206,7 +206,7 @@ const Chat = () => {
                           >
                             <div className="flex items-center">
                               <img
-                                className="rounded-full flex-shrink-0 mr-5 border border-primary"
+                                className="h-10 w-10 rounded-full flex-shrink-0 mr-5 border border-primary"
                                 src={
                                   convo.conversation?.sender?.image?.url
                                     ? convo.conversation.sender.image.url
