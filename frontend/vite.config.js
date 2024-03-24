@@ -39,15 +39,15 @@ export default defineConfig({
 
   // plugins: [react(), viteCommonjs()],
   // define: { global: "globalThis" },
-  build: {
-    rollupOptions: {
-      external: [
-        // "react", // ignore react stuff
-        // "react-dom",
-        "styled-components",
-      ],
-    },
-  },
+  // build: {
+  //   rollupOptions: {
+  //     external: [
+  //       // "react", // ignore react stuff
+  //       // "react-dom",
+  //       "styled-components",
+  //     ],
+  //   },
+  // },
   // resolve: {
   //   alias: {
   //     ...resolvedAliases,
