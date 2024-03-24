@@ -13,12 +13,14 @@ import defaultImage from "../../assets/images/default-image.jpg";
 import { cityMunicipality } from "../../constants/cityMunicipality";
 import { provinces } from "../../constants/provinces";
 import { organizationType } from "../../constants/organizationType";
+import mindanaoPlaces from "../../constants/mindanaoPlaces";
 
 export default function Users() {
   document.title = "Green Loop | Dashboard";
   const queryClient = useQueryClient();
   const [userData, setUserData] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [places, setPlaces] = useState([]);
 
   const { allUsers, error } = useUsers();
   const { image, fetchImage, imagePreview, setImage, setImagePreview } =
@@ -26,6 +28,21 @@ export default function Users() {
   const { register, handleSubmit, reset } = useForm({
     defaultValues: { isAdmin: userData?.isAdmin },
   });
+
+  const handleOnChangeProvince = (e) => {
+    if (e.target.id == "provinces" && e.target.value == "Select a Province") {
+      setPlaces([]);
+    } else {
+      const filteredMunicipalities = mindanaoPlaces.filter((province) =>
+        province.name.includes(e.target.value)
+      );
+      console.log("filteredMunicipalities: ", filteredMunicipalities);
+      setPlaces(filteredMunicipalities[0].places);
+
+      document.getElementById("municipalities").value =
+        filteredMunicipalities[0].places[0];
+    }
+  };
 
   const getUserData = (userId) => {
     const userRecord = allUsers.filter((user) => user.id == userId);
@@ -272,7 +289,7 @@ export default function Users() {
                                 <select
                                   id="organization-type"
                                   name="organizationType"
-                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
+                                  className="bg-gray-50 border w-44 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
                                   {...register("organizationType", {
                                     required: "Please select organization type",
                                   })}
@@ -294,24 +311,20 @@ export default function Users() {
                                 scope="row"
                                 className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
                               >
-                                City/Municipality:
+                                Province:
                               </th>
                               <td className="px-6 py-2">
                                 <select
-                                  id="cityMunicipality"
-                                  name="cityMunicipality"
-                                  className="bg-gray-50 w-48 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
-                                  {...register("cityMunicipality", {
-                                    required: "Please select organization type",
+                                  id="province"
+                                  className="bg-gray-50 border w-44 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
+                                  {...register("province", {
+                                    onChange: (e) => handleOnChangeProvince(e),
+                                    required: "Please select a province",
                                   })}
                                 >
-                                  {cityMunicipality.map((item, index) => (
-                                    <option
-                                      id={index}
-                                      key={item.valuye}
-                                      value={item.value}
-                                    >
-                                      {item.label}
+                                  {mindanaoPlaces.map((province, index) => (
+                                    <option key={index} value={province.name}>
+                                      {province.name}
                                     </option>
                                   ))}
                                 </select>
@@ -322,24 +335,20 @@ export default function Users() {
                                 scope="row"
                                 className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
                               >
-                                Province:
+                                City/Municipality:
                               </th>
                               <td className="px-6 py-2">
                                 <select
-                                  id="province"
-                                  name="province"
-                                  className="bg-gray-50 w-48 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
-                                  {...register("province", {
-                                    required: "Please select a province",
+                                  id="cityMunicipality"
+                                  className="bg-gray-50 border border-gray-300 w-44 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
+                                  {...register("cityMunicipality", {
+                                    required:
+                                      "Please select a city or municipality",
                                   })}
                                 >
-                                  {provinces.map((item, index) => (
-                                    <option
-                                      id={index}
-                                      key={item.value}
-                                      value={item.value}
-                                    >
-                                      {item.label}
+                                  {places?.map((place, index) => (
+                                    <option key={index} value={place}>
+                                      {place}
                                     </option>
                                   ))}
                                 </select>
