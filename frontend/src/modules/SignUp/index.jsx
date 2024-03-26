@@ -18,7 +18,9 @@ const organizationType = [
 const SignUp = () => {
   document.title = "Green Loop | Sign Up";
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm({
+    defaultValues: { organizationType: "Waste Generator" },
+  });
   const [places, setPlaces] = useState([]);
 
   const { mutate: createUser } = useMutation({
@@ -37,6 +39,7 @@ const SignUp = () => {
 
   const onSubmit = (data, e) => {
     e.preventDefault();
+    console.log("data: ", data);
     createUser(data);
   };
 
