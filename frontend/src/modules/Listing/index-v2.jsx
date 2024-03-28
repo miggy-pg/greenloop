@@ -19,17 +19,12 @@ import { useWastes } from "../../hooks/useWaste";
 import { usePaginate } from "../../hooks/usePaginate";
 
 const filterWastes = (wastes, province, cityMunicipality, categories) => {
-  console.log("Filter Wastes");
-  console.log("wastes: ", wastes);
-  console.log("province: ", province);
-  console.log("cityMunicipality: ", cityMunicipality);
-  console.log("categories: ", categories);
   let filteredWaste = wastes;
   let provinceItem = province?.toLowerCase();
   let cityMunicipalityItem = cityMunicipality?.toLowerCase();
   
   if (provinceItem && cityMunicipalityItem && categories) {
-    return filteredWaste
+    filteredWaste
       .filter((waste) => waste.user.province.toLowerCase().includes(provinceItem))
       .filter((waste) =>
         waste.user.cityMunicipality.toLowerCase().includes(cityMunicipalityItem)
@@ -38,30 +33,30 @@ const filterWastes = (wastes, province, cityMunicipality, categories) => {
         categories.some((category) => waste.wasteCategory == category)
       );
   } else if (provinceItem && !cityMunicipalityItem && categories) {
-    return filteredWaste
+    filteredWaste
       .filter((waste) => waste.user.province.toLowerCase().includes(provinceItem))
       .filter((waste) =>
         categories.some((category) => waste.wasteCategory.toLowerCase().includes(category.toLowerCase()))
       );
   } else if (provinceItem && cityMunicipalityItem && !categories) {
-    return filteredWaste
+    filteredWaste
       .filter((waste) => waste.user.province.toLowerCase().includes(provinceItem))
       .filter((waste) =>
         waste.user.cityMunicipality.toLowerCase().includes(cityMunicipalityItem)
       );
   } else if (provinceItem && !cityMunicipalityItem && !categories) {
-    return filteredWaste.filter((waste) =>
+    filteredWaste((waste) =>
       waste.user.province.toLowerCase().includes(provinceItem)
     );
   } else if (!provinceItem && !cityMunicipalityItem && categories) {
-    return filteredWaste.filter((waste) =>
+    filteredWaste((waste) =>
       categories.some((category) => waste.wasteCategory.toLowerCase().includes(category.toLowerCase()))
     );
-  } else if (!provinceItem && cityMunicipalityItem && !categories) {
-    return filteredWaste.filter((waste) => waste.user.cityMunicipality.toLowerCase().includes(cityMunicipalityItem));
   } else {
-    return {} 
+    filteredWaste.filter((waste) => waste.user.cityMunicipality.toLowerCase().includes(cityMunicipalityItem));
   }
+
+  return filteredWaste;
 
 }
 
@@ -155,60 +150,58 @@ const Listing = ({ myWaste }) => {
   };
 
   const handleOnChangeCityMunicipality = (e) => {
-    // let params = {};
+    let params = {};
     let selectedCityMunicipality = e.target.value;
     
     if (!e.target.value.includes("Select a City/Municipality")) {
       // Get the current category from the URL
-      categoryParams && params.set("category", categoryParams);
+      categoryParams && (params.set("category", categoryParams));
       
       params.set("province", provinceParams);
       params.set("cityMunicipality", selectedCityMunicipality) 
 
       setSearchParams(params);
-      const filteredWaste =  filterWastes(displayedWaste, provinceParams, selectedCityMunicipality, categoryParams);
-      setFilteredWaste(filteredWaste);
-    //   if (provinceParams && selectedCityMunicipality && categoryParams) {
-    //     const wastesCategory = displayedWaste
-    //       .filter((waste) => waste.user.province.includes(provinceParams))
-    //       .filter((waste) =>
-    //         waste.user.cityMunicipality.includes(cityMunicipalityParams)
-    //       )
-    //       .filter((waste) =>
-    //         wasteCategories.some((category) => waste.wasteCategory == category)
-    //       );
-    //     setFilteredWaste(wastesCategory);
-    //   } else if (provinceParams && !selectedCityMunicipality && categoryParams) {
-    //     const wastesCategory = displayedWaste
-    //       .filter((waste) => waste.user.province.includes(provinceParams))
-    //       .filter((waste) =>
-    //         wasteCategories.some((category) => waste.wasteCategory == category)
-    //       );
-    //     setFilteredWaste(wastesCategory);
-    //   } else if (provinceParams && selectedCityMunicipality && !categoryParams) {
-    //     const wastesCategory = displayedWaste
-    //       .filter((waste) => waste.user.province.includes(provinceParams))
-    //       .filter((waste) =>
-    //         waste.user.cityMunicipality.includes(selectedCityMunicipality)
-    //       );
-    //     setFilteredWaste(wastesCategory);
-    //   } else if (provinceParams && !selectedCityMunicipality && !categoryParams) {
-    //     const wastesProvince = displayedWaste.filter((waste) =>
-    //       waste.user.province.includes(provinceParams)
-    //     );
-    //     setFilteredWaste(wastesProvince);
-    //   } else {
-    //     const wastesCategory = displayedWaste
-    //       .filter((waste) => waste.user.province.includes(provinceParams))
-    //       .filter((waste) =>
-    //         waste.user.cityMunicipality.includes(selectedCityMunicipality)
-    //       );
-    //     setFilteredWaste(wastesCategory);
-    //   }
-    // } else {
-    //     const wastesCategory = displayedWaste
-    //       .filter((waste) => waste.user.province.includes(provinceParams))
-    //     setFilteredWaste(wastesCategory);
+      if (provinceParams && selectedCityMunicipality && categoryParams) {
+        const wastesCategory = displayedWaste
+          .filter((waste) => waste.user.province.includes(provinceParams))
+          .filter((waste) =>
+            waste.user.cityMunicipality.includes(cityMunicipalityParams)
+          )
+          .filter((waste) =>
+            wasteCategories.some((category) => waste.wasteCategory == category)
+          );
+        setFilteredWaste(wastesCategory);
+      } else if (provinceParams && !selectedCityMunicipality && categoryParams) {
+        const wastesCategory = displayedWaste
+          .filter((waste) => waste.user.province.includes(provinceParams))
+          .filter((waste) =>
+            wasteCategories.some((category) => waste.wasteCategory == category)
+          );
+        setFilteredWaste(wastesCategory);
+      } else if (provinceParams && selectedCityMunicipality && !categoryParams) {
+        const wastesCategory = displayedWaste
+          .filter((waste) => waste.user.province.includes(provinceParams))
+          .filter((waste) =>
+            waste.user.cityMunicipality.includes(selectedCityMunicipality)
+          );
+        setFilteredWaste(wastesCategory);
+      } else if (provinceParams && !selectedCityMunicipality && !categoryParams) {
+        const wastesProvince = displayedWaste.filter((waste) =>
+          waste.user.province.includes(provinceParams)
+        );
+        setFilteredWaste(wastesProvince);
+      } else {
+        const wastesCategory = displayedWaste
+          .filter((waste) => waste.user.province.includes(provinceParams))
+          .filter((waste) =>
+            waste.user.cityMunicipality.includes(selectedCityMunicipality)
+          );
+        setFilteredWaste(wastesCategory);
+      }
+    } else {
+        const wastesCategory = displayedWaste
+          .filter((waste) => waste.user.province.includes(provinceParams))
+        setFilteredWaste(wastesCategory);
 
     }
   };
@@ -531,18 +524,14 @@ const Listing = ({ myWaste }) => {
           )}
         </div>
       </div>
-
-      {origWaste?.length > 2 && (
-        <div className="flex justify-center px-6 mb-4 mt-10 lg:mb-16 sm:px-0 sm:pb-0 ">
-          <Pagination
-            origWaste={origWaste}
-            paginatePage={paginatePage}
-            setSearchParams={setPaginatePage}
-            currentPage={currentPage}
-          />
-        </div>
-      )}
-
+      <div className="flex justify-center px-6 mb-4 mt-10 lg:mb-16 sm:px-0 sm:pb-0 ">
+        <Pagination
+          origWaste={origWaste}
+          paginatePage={paginatePage}
+          setSearchParams={setPaginatePage}
+          currentPage={currentPage}
+        />
+      </div>
     </Body>
   );
 };
