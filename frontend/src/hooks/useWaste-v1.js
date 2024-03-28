@@ -3,13 +3,16 @@ import { fetchWastes } from "../api/waste";
 
 export const useWastes = () => {
   const {
-    data: wasteQuery = [],
+    data: wasteObject,
     isLoading,
     error,
   } = useQuery({
     queryKey: ["userWastes"],
     queryFn: fetchWastes,
+    initialData: [],
   });
 
-  return { wasteQuery, isLoading, error };
+  // const { data: wastes } = !isLoading && wasteObject;
+
+  return { wastes, isLoading, error };
 };

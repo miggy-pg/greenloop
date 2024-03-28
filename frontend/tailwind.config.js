@@ -26,8 +26,11 @@ export default {
       width: {
         "clamp-form-input": "clamp(100%, 20vw, 20rem)",
         dvw: "100dvw",
+        "4/10": "40%",
+        "45/10": "45%",
       },
       fontSize: {
+        xxs: "0.6rem",
         clamp: "clamp(1rem, 4vw, 1.8rem)",
         "clamp-form-greenloop": "clamp(1rem, 40vw, 2.2rem)",
         "clamp-form-header": "clamp(1.3rem, 40vw, 1.4rem)",

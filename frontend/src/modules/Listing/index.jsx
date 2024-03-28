@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import {
@@ -37,7 +37,8 @@ const Listing = ({ myWaste }) => {
   const cityMunicipality = searchParams.get("cityMunicipality") || "";
   const category = searchParams.get("category") || "";
 
-  const { wastes, isLoading } = useWastes();
+  const wasteQuery = useWastes();
+  const { wasteQuery: {data: wastes}, isLoading, error } = useMemo(() => wasteQuery, [wasteQuery]);
 
   let wasteItems;
   if (filterQuery) {
