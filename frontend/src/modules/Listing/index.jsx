@@ -18,34 +18,46 @@ import wasteCategories from "../../constants/wasteCategories";
 import { useWastes } from "../../hooks/useWaste";
 import { usePaginate } from "../../hooks/usePaginate";
 
-const filterWastes = (wastes, province, cityMunicipality, categories) => {
-  console.log("Filter Wastes");
-  console.log("wastes: ", wastes);
-  console.log("province: ", province);
-  console.log("cityMunicipality: ", cityMunicipality);
-  console.log("categories: ", categories);
-  let filteredWaste = wastes;
+const filterWastes = (
+  unfilteredWastes,
+  province,
+  cityMunicipality,
+  categories
+) => {
+  let filteredWaste = unfilteredWastes;
   let provinceItem = province?.toLowerCase();
   let cityMunicipalityItem = cityMunicipality?.toLowerCase();
-  
+
+  if (!provinceItem && !cityMunicipalityItem && !categories) return [];
+
   if (provinceItem && cityMunicipalityItem && categories) {
     return filteredWaste
-      .filter((waste) => waste.user.province.toLowerCase().includes(provinceItem))
+      .filter((waste) =>
+        waste.user.province.toLowerCase().includes(provinceItem)
+      )
       .filter((waste) =>
         waste.user.cityMunicipality.toLowerCase().includes(cityMunicipalityItem)
       )
       .filter((waste) =>
-        categories.some((category) => waste.wasteCategory == category)
+        categories.some((category) =>
+          waste.wasteCategory.toLowerCase().includes(category.toLowerCase())
+        )
       );
   } else if (provinceItem && !cityMunicipalityItem && categories) {
     return filteredWaste
-      .filter((waste) => waste.user.province.toLowerCase().includes(provinceItem))
       .filter((waste) =>
-        categories.some((category) => waste.wasteCategory.toLowerCase().includes(category.toLowerCase()))
+        waste.user.province.toLowerCase().includes(provinceItem)
+      )
+      .filter((waste) =>
+        categories.some((category) =>
+          waste.wasteCategory.toLowerCase().includes(category.toLowerCase())
+        )
       );
   } else if (provinceItem && cityMunicipalityItem && !categories) {
     return filteredWaste
-      .filter((waste) => waste.user.province.toLowerCase().includes(provinceItem))
+      .filter((waste) =>
+        waste.user.province.toLowerCase().includes(provinceItem)
+      )
       .filter((waste) =>
         waste.user.cityMunicipality.toLowerCase().includes(cityMunicipalityItem)
       );
@@ -55,15 +67,16 @@ const filterWastes = (wastes, province, cityMunicipality, categories) => {
     );
   } else if (!provinceItem && !cityMunicipalityItem && categories) {
     return filteredWaste.filter((waste) =>
-      categories.some((category) => waste.wasteCategory.toLowerCase().includes(category.toLowerCase()))
+      categories.some((category) =>
+        waste.wasteCategory.toLowerCase().includes(category.toLowerCase())
+      )
     );
   } else if (!provinceItem && cityMunicipalityItem && !categories) {
-    return filteredWaste.filter((waste) => waste.user.cityMunicipality.toLowerCase().includes(cityMunicipalityItem));
-  } else {
-    return {} 
+    return filteredWaste.filter((waste) =>
+      waste.user.cityMunicipality.toLowerCase().includes(cityMunicipalityItem)
+    );
   }
-
-}
+};
 
 const Listing = ({ myWaste }) => {
   document.title = "Green Loop | Listing";
@@ -75,10 +88,14 @@ const Listing = ({ myWaste }) => {
   const [open, setOpen] = useState(true);
   const [isSortBy, setIsSortBy] = useState(false);
   const [places, setPlaces] = useState([]);
-  const [filteredWaste, setFilteredWaste] = useState({});
-  
+  const [filteredWaste, setFilteredWaste] = useState([]);
+
   const wasteQuery = useWastes();
-  const { wasteQuery: {data: wastes}, isLoading, error } = useMemo(() => wasteQuery, [wasteQuery]);
+  const {
+    wasteQuery: { data: wastes },
+    isLoading,
+    error,
+  } = useMemo(() => wasteQuery, [wasteQuery]);
 
   let filterQuery = searchParams.get("filter") || "";
   let provinceParams = searchParams.get("province") || "";
@@ -94,24 +111,24 @@ const Listing = ({ myWaste }) => {
 
   const displayedWaste = myWaste ? myWaste : wasteItems;
   const origWaste =
-  provinceParams.length > 0 || categoryParams?.length > 0
-  ? filteredWaste
-  : displayedWaste;
-  
+    provinceParams.length > 0 || categoryParams?.length > 0
+      ? filteredWaste
+      : displayedWaste;
+
   const {
     searchParams: paginatePage,
     setSearchParams: setPaginatePage,
     currentPage,
     currentPosts,
   } = usePaginate(origWaste);
-  
+
   const handleOnChangeProvince = (e) => {
     searchParams.delete("category");
     setSearchParams(searchParams);
 
     setCategoryQuery([]);
-    
-    let selectedProvince = e.target.value;  
+
+    let selectedProvince = e.target.value;
 
     if (
       e.target.id == "provinces" &&
@@ -155,61 +172,24 @@ const Listing = ({ myWaste }) => {
   };
 
   const handleOnChangeCityMunicipality = (e) => {
-    // let params = {};
     let selectedCityMunicipality = e.target.value;
-    
+
     if (!e.target.value.includes("Select a City/Municipality")) {
       // Get the current category from the URL
       categoryParams && params.set("category", categoryParams);
-      
+
       params.set("province", provinceParams);
-      params.set("cityMunicipality", selectedCityMunicipality) 
+      params.set("cityMunicipality", selectedCityMunicipality);
 
       setSearchParams(params);
-      const filteredWaste =  filterWastes(displayedWaste, provinceParams, selectedCityMunicipality, categoryParams);
-      setFilteredWaste(filteredWaste);
-    //   if (provinceParams && selectedCityMunicipality && categoryParams) {
-    //     const wastesCategory = displayedWaste
-    //       .filter((waste) => waste.user.province.includes(provinceParams))
-    //       .filter((waste) =>
-    //         waste.user.cityMunicipality.includes(cityMunicipalityParams)
-    //       )
-    //       .filter((waste) =>
-    //         wasteCategories.some((category) => waste.wasteCategory == category)
-    //       );
-    //     setFilteredWaste(wastesCategory);
-    //   } else if (provinceParams && !selectedCityMunicipality && categoryParams) {
-    //     const wastesCategory = displayedWaste
-    //       .filter((waste) => waste.user.province.includes(provinceParams))
-    //       .filter((waste) =>
-    //         wasteCategories.some((category) => waste.wasteCategory == category)
-    //       );
-    //     setFilteredWaste(wastesCategory);
-    //   } else if (provinceParams && selectedCityMunicipality && !categoryParams) {
-    //     const wastesCategory = displayedWaste
-    //       .filter((waste) => waste.user.province.includes(provinceParams))
-    //       .filter((waste) =>
-    //         waste.user.cityMunicipality.includes(selectedCityMunicipality)
-    //       );
-    //     setFilteredWaste(wastesCategory);
-    //   } else if (provinceParams && !selectedCityMunicipality && !categoryParams) {
-    //     const wastesProvince = displayedWaste.filter((waste) =>
-    //       waste.user.province.includes(provinceParams)
-    //     );
-    //     setFilteredWaste(wastesProvince);
-    //   } else {
-    //     const wastesCategory = displayedWaste
-    //       .filter((waste) => waste.user.province.includes(provinceParams))
-    //       .filter((waste) =>
-    //         waste.user.cityMunicipality.includes(selectedCityMunicipality)
-    //       );
-    //     setFilteredWaste(wastesCategory);
-    //   }
-    // } else {
-    //     const wastesCategory = displayedWaste
-    //       .filter((waste) => waste.user.province.includes(provinceParams))
-    //     setFilteredWaste(wastesCategory);
+      const wasteMunicipality = filterWastes(
+        displayedWaste,
+        provinceParams,
+        selectedCityMunicipality,
+        categoryParams
+      );
 
+      setFilteredWaste(wasteMunicipality);
     }
   };
   const handleOnChangeCategory = (e) => {
@@ -306,7 +286,11 @@ const Listing = ({ myWaste }) => {
               categoryItems.some((category) => waste.wasteCategory == category)
             );
           setFilteredWaste(wastesCategory);
-        } else if (provinceParams && !cityMunicipalityParams && !categoryItems) {
+        } else if (
+          provinceParams &&
+          !cityMunicipalityParams &&
+          !categoryItems
+        ) {
           console.log("Else Category: - 3");
           const wastesCategory = displayedWaste.filter((waste) =>
             waste.user.province.includes(provinceParams)
@@ -366,12 +350,12 @@ const Listing = ({ myWaste }) => {
     <Body
       bodyClass={`${
         myWaste
-          ? "bg-[#F3F4F6] py-0"
+          ? "bg-[#F3F4F6] py-0 mt-0"
           : !currentPosts?.length
           ? "bg-[#F8F8F8]"
           : "bg-white py-6 mt-0"
       }`}
-      pageId="listings"
+      pageId="listing"
     >
       <div
         className={`flex text-left justify-start items-center lg:h-[11rem] md:h-[10rem] sm:h-[9rem] xsm:h-[8rem] ${
@@ -424,7 +408,7 @@ const Listing = ({ myWaste }) => {
       <div className="flex">
         {!myWaste && (
           <div
-            className={`z-50  ${open ? "w-80" : "w-0"} ${
+            className={`z-10  ${open ? "w-80" : "w-0"} ${
               currentPosts?.length ? "bg-white" : "bg-[#F8F8F8]"
             } pt-8 relative duration-300`}
           >
@@ -542,7 +526,6 @@ const Listing = ({ myWaste }) => {
           />
         </div>
       )}
-
     </Body>
   );
 };

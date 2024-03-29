@@ -212,11 +212,12 @@ const Navbar = () => {
                   );
                 } else {
                   return (
-                      !menu.name.includes("Post") && !user.organizationType.includes("Recycling Startup") && (
+                    !menu.name.includes("Post") &&
+                    !user.organizationType.includes("Recycling Startup") && (
                       <NavLink
-                      key={index}
-                      to={menu.route}
-                      className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] sm:h-[3rem] md:px-[1.1rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
+                        key={index}
+                        to={menu.route}
+                        className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] sm:h-[3rem] md:px-[1.1rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
                       >
                         <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] md:h-[3.5rem] sm:h-[3rem] sm:text-xl">
                           {menu.name.includes("Notifications") &&
