@@ -1,5 +1,8 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
+const dotenv = require("dotenv");
+dotenv.config();
 
 const prodOrigin = [process.env.ORIGIN_1, process.env.ORIGIN_2];
 const devOrigin = ["http://localhost:5173"];
@@ -23,11 +26,12 @@ app.use(function (req, res, next) {
   next();
 });
 
-const dotenv = require("dotenv");
-dotenv.config();
+app.use(morgan("combined"));
 
 // Connect DB
-const db = require("./db/connection");
+require("./db/connection");
+
+require("./controllers/socket");
 
 app.use(
   express.json({
@@ -36,9 +40,7 @@ app.use(
 );
 app.use(express.urlencoded({ extended: false }));
 
-const socket = require("./controllers/socket");
-
-app.use("/api", require("./routes/auth"));
+app.use("/api", require("./routes/auth/auth"));
 app.use("/api", require("./routes/user"));
 app.use("/api", require("./routes/waste"));
 app.use("/api", require("./routes/conversation"));
