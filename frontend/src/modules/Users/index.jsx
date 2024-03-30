@@ -25,32 +25,32 @@ export default function Users() {
   const { image, fetchImage, imagePreview, setImage, setImagePreview } =
     useUploadImage();
   const { register, handleSubmit, reset } = useForm({
-    defaultValues: { isAdmin: userData?.isAdmin,  },
+    defaultValues: {
+      isAdmin: userData?.isAdmin,
+      cityMunicipality: userData?.cityMunicipality,
+    },
   });
   console.log("userData: ", userData.cityMunicipality);
 
   const handleOnChangeProvince = (e) => {
     if (e.target.id == "provinces" && e.target.value == "Select a Province") {
-      setPlaces([])
-      ;
+      setPlaces([]);
     } else {
       const filteredMunicipalities = mindanaoPlaces.filter((province) =>
         province.name.includes(e.target.value)
       );
       setPlaces(filteredMunicipalities[0].places);
-
     }
   };
 
   const getUserData = (userId) => {
     const userRecord = allUsers.filter((user) => user.id == userId);
-    console.log("userRecord: ", userRecord[0]);
     setUserData(userRecord[0]);
-    // document.getElementById("cityMunicipality").value = userRecord[0].cityMunicipality;
+    const filteredMunicipalities = mindanaoPlaces.filter((province) =>
+      province.name.includes(userRecord[0].province)
+    )[0];
+    setPlaces(filteredMunicipalities.places);
     setShowModal(true);
-    // console.log("userRecord: ", userRecord[0]);
-    // console.log("doc: ", document.getElementById("cityMunicipality").value);
-
   };
 
   const { mutate: handleCreateUser } = useMutation({
@@ -126,7 +126,9 @@ export default function Users() {
           <Table>
             <Table.Header
               data={userHeader}
-              render={(header) => <Table.Column key={header} header={header} />}
+              render={(header, index) => (
+                <Table.Column key={index} header={header} />
+              )}
             />
             <Table.Body>
               {allUsers?.map((user, i) => (
@@ -348,7 +350,6 @@ export default function Users() {
                                     required:
                                       "Please select a city or municipality",
                                   })}
-                                  defaultValue={userData?.cityMunicipality}
                                 >
                                   {places?.map((place, index) => (
                                     <option key={index} value={place}>
