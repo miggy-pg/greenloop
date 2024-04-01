@@ -1,8 +1,5 @@
 const { Router } = require("express");
-const {
-  conversation,
-  userConversation,
-} = require("../controllers/conversation");
+const { conversation, userConversation } = require("./conversation.controller");
 
 const router = Router();
 

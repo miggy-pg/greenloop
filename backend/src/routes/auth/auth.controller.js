@@ -1,7 +1,7 @@
 const bcryptjs = require("bcryptjs");
-const Cloudinary = require("../utils/cloudinary");
+const Cloudinary = require("../../utils/cloudinary");
 const jwt = require("jsonwebtoken");
-const Users = require("../models/Users");
+const Users = require("../../models/Users");
 
 exports.registerUser = async (req, res, next) => {
   try {
@@ -59,7 +59,7 @@ exports.registerUser = async (req, res, next) => {
           newUser.save();
           next();
         });
-        return res.status(200).send("Company registered successfully");
+        return res.status(201).send("Company registered successfully");
       }
     }
   } catch (error) {

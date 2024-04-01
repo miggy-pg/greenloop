@@ -5,7 +5,7 @@ const {
   deleteWaste,
   fetchWastes,
   updateWaste,
-} = require("../controllers/waste");
+} = require("./waste");
 
 const router = Router();
 

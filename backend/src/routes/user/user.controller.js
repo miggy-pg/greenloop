@@ -1,7 +1,7 @@
 const bcryptjs = require("bcryptjs");
-const Cloudinary = require("../utils/cloudinary");
-const Users = require("../models/Users");
-const Waste = require("../models/Waste");
+const Cloudinary = require("../../utils/cloudinary");
+const Users = require("../../models/Users");
+const Waste = require("../../models/Waste");
 
 exports.fetchUser = async (req, res) => {
   try {

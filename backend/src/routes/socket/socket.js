@@ -3,9 +3,9 @@ const io = require("socket.io")(process.env.SOCKET_PORT, {
     origin: "*",
   },
 });
-const Users = require("../models/Users");
-const Conversations = require("../models/Conversations");
-const { checkMessages } = require("../utils/checkMessages");
+const Users = require("../../models/Users");
+const Conversations = require("../../models/Conversations");
+const { checkMessages } = require("../../utils/checkMessages");
 
 let users = [];
 io.on("connection", (socket) => {

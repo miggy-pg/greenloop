@@ -1,7 +1,7 @@
-const Messages = require("../models/Messages");
-const Conversations = require("../models/Conversations");
-const Users = require("../models/Users");
-const Cloudinary = require("../utils/cloudinary");
+const Messages = require("../../models/Messages");
+const Conversations = require("../../models/Conversations");
+const Users = require("../../models/Users");
+const Cloudinary = require("../../utils/cloudinary");
 
 exports.message = async (req, res) => {
   try {
