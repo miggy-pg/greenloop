@@ -19,6 +19,7 @@ const Profile = () => {
 
   const token = localStorage.getItem("user:token");
   const decToken = jwtDecode(token);
+  console.log("decToken: ", decToken);
 
   const { id: profileId } = useParams();
   const isLoggedIn = token !== null || false;
@@ -210,7 +211,7 @@ const Profile = () => {
                               </p>
                             </div>
 
-                            <div className="relative overflow-hidden py-5">
+                            <div className="relative overflow-hidden py-1">
                               <table className="w-full mx-6 text-clamp-xs text-left  rtl:text-right text-gray-500 sm:mx-2">
                                 <tbody>
                                   <tr className="bg-white">
@@ -301,6 +302,7 @@ const Profile = () => {
                                         name="organizationType"
                                         id="organizationType"
                                         className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
+                                        {...register("organizationType")}
                                         disabled
                                       />
                                     </td>

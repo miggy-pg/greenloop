@@ -26,6 +26,10 @@ const wasteSCheme = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    status: {
+      type: String,
+      default: "Available",
+    },
   },
   { timestamps: true }
 );

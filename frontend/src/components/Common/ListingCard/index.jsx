@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 
+import { IoMdTime } from "react-icons/io";
 import { transformText } from "../../../utils/plasticColors";
 import defaultImage from "../../../assets/images/waste-default-image.webp";
+import formatDateTime from "../../../utils/formatDateTime";
 
 const ListingCard = ({ waste }) => {
   const url = window.location.href;
   const isProfile = url.split("/").includes("profile");
 
-  const { image, post, user, wasteCategory } = waste;
+  const { image, post, user, wasteCategory, createdAt } = waste;
   const transformedTexts = transformText(wasteCategory);
 
   return !isProfile ? (
@@ -30,6 +32,12 @@ const ListingCard = ({ waste }) => {
               {wasteCategory || "undefined"}
             </p>
           </div>
+          <span className="flex mt-2">
+            <IoMdTime className="mr-2 text-gray-400 my-auto xsm:text-xxs" />
+            <p className="text-[0.7rem] font-light text-gray-500">
+              {formatDateTime(createdAt)}
+            </p>
+          </span>
         </article>
       </div>
     </Link>

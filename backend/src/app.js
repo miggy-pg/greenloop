@@ -52,7 +52,6 @@ app.use("/api", wasteRouter);
 app.use("/api", conversationRouter);
 app.use("/api", messageRouter);
 
-// Routes
 app.get("/", (req, res) => {
   res.send("Welcome");
 });
