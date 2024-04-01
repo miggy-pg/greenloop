@@ -7,7 +7,7 @@ const {
   updateWaste,
 } = require("./waste");
 
-const router = Router();
+const wasteRouter = Router();
 
 /*
 | CRUD Operation             | HTTP Method  | Route                   |
@@ -17,10 +17,9 @@ const router = Router();
 | Fetch Current User Waste   | GET          | /api/wastes/:userId     |
 */
 
-router.post("/wastes/new", postWasteImage);
-router.get("/wastes", fetchWastes);
-// router.get("/wastes/:q", fetchWastes);
-router.put("/wastes/update/:wasteId", updateWaste);
-router.delete("/wastes/:wasteId", deleteWaste);
+wasteRouter.post("/wastes/new", postWasteImage);
+wasteRouter.get("/wastes", fetchWastes);
+wasteRouter.put("/wastes/update/:wasteId", updateWaste);
+wasteRouter.delete("/wastes/:wasteId", deleteWaste);
 
-module.exports = router;
+module.exports = wasteRouter;

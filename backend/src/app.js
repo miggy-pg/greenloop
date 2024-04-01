@@ -31,7 +31,7 @@ app.use(morgan("combined"));
 // Connect DB
 require("./db/connection");
 
-require("./controllers/socket");
+require("./routes/socket/socket.controller");
 
 app.use(
   express.json({
@@ -40,11 +40,17 @@ app.use(
 );
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/api", require("./routes/auth/auth"));
-app.use("/api", require("./routes/user"));
-app.use("/api", require("./routes/waste"));
-app.use("/api", require("./routes/conversation"));
-app.use("/api", require("./routes/message"));
+const authRouter = require("./routes/auth/auth.router");
+const userRouter = require("./routes/user/user.router");
+const wasteRouter = require("./routes/waste/waste.router");
+const conversationRouter = require("./routes/conversation/conversation.router");
+const messageRouter = require("./routes/message/message.router");
+
+app.use("/api", authRouter);
+app.use("/api", userRouter);
+app.use("/api", wasteRouter);
+app.use("/api", conversationRouter);
+app.use("/api", messageRouter);
 
 // Routes
 app.get("/", (req, res) => {

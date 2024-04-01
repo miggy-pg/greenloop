@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { conversation, userConversation } = require("./conversation.controller");
 
-const router = Router();
+const conversationRouter = Router();
 
 /*
 | CRUD Operation            | HTTP Method  | Route                       |
@@ -10,7 +10,7 @@ const router = Router();
 | Fetch User's Conversation | GET          | /api/conversationsign-in    |
 */
 
-router.post("/conversations", conversation);
-router.get("/conversations/:userId", userConversation);
+conversationRouter.post("/conversations", conversation);
+conversationRouter.get("/conversations/:userId", userConversation);
 
-module.exports = router;
+module.exports = conversationRouter;

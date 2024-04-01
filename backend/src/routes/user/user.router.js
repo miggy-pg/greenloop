@@ -6,7 +6,7 @@ const {
   updateProfile,
 } = require("./user.controller");
 
-const router = Router();
+const userRouter = Router();
 
 /*
 | CRUD Operation     | HTTP Method | Route              |
@@ -17,9 +17,9 @@ const router = Router();
 | Delete User        | DELETE      | /api/users/:id     |
 */
 
-router.get("/users", fetchUsers);
-router.get("/users/:userId", fetchUser);
-router.put("/users/:userId", updateProfile);
-router.delete("/users/:userId", deleteUser);
+userRouter.get("/users", fetchUsers);
+userRouter.get("/users/:userId", fetchUser);
+userRouter.put("/users/:userId", updateProfile);
+userRouter.delete("/users/:userId", deleteUser);
 
-module.exports = router;
+module.exports = userRouter;

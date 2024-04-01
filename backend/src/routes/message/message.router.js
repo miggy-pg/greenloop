@@ -3,9 +3,9 @@ const {
   conversationMessage,
   message,
   hasReadMessage,
-} = require("../controllers/message");
+} = require("./message.controller");
 
-const router = Router();
+const messageRouter = Router();
 
 /*
 | CRUD Operation                           | HTTP Method   | Route                             |
@@ -15,8 +15,8 @@ const router = Router();
 | Create New Message                       | POST          | /api/message                      |
 */
 
-router.get("/messages/:conversationId", conversationMessage);
-router.get("/message/:messageId", hasReadMessage);
-router.post("/message", message);
+messageRouter.get("/messages/:conversationId", conversationMessage);
+messageRouter.get("/message/:messageId", hasReadMessage);
+messageRouter.post("/message", message);
 
-module.exports = router;
+module.exports = messageRouter;
