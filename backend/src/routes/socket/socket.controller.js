@@ -3,8 +3,8 @@ const io = require("socket.io")(process.env.SOCKET_PORT, {
     origin: "*",
   },
 });
-const Users = require("../../models/Users");
-const Conversations = require("../../models/Conversations");
+const Users = require("../../models/user.model");
+const Conversations = require("../../models/conversation.model");
 const { checkMessages } = require("../../utils/checkMessages");
 
 let users = [];

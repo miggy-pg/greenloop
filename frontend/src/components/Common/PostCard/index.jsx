@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { IoMdTime } from "react-icons/io";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
@@ -6,10 +7,43 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import Dropdown from "../Dropdown";
 import formatDateTime from "../../../utils/formatDateTime";
 import { transformText } from "../../../utils/plasticColors";
+import { updateWasteAvailableOrNot } from "../../../api/waste";
+import { useForm } from "react-hook-form";
 
 const PostCard = ({ props, defaultImage, wasteDefaultImage }) => {
-  const { post, image, wasteCategory, user, createdAt } = props;
+  const {
+    id: wasteId,
+    post,
+    image,
+    wasteCategory,
+    user,
+    createdAt,
+    available,
+  } = props;
   const transformedTexts = transformText(wasteCategory);
+
+  const queryClient = useQueryClient();
+
+  const { handleSubmit } = useForm();
+
+  const { mutate: updateWasteAvailability } = useMutation({
+    mutationFn: (payload) => {
+      updateWasteAvailableOrNot(payload.id, {
+        available: payload.available,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries("userWastes");
+      console.log("onSuccess");
+    },
+  });
+
+  const onSubmit = () => {
+    updateWasteAvailability({
+      id: wasteId,
+      available: !available,
+    });
+  };
 
   return (
     <>
@@ -31,28 +65,43 @@ const PostCard = ({ props, defaultImage, wasteDefaultImage }) => {
                 >
                   {user?.companyName ? user.companyName : "User"}
                 </Link>
-                <Dropdown
-                  classNames={"py-2 bottom-[-90px] -left-[130px] w-max"}
-                  button={
-                    <HiOutlineDotsHorizontal className="text-gray-400 cursor-pointer" />
-                  }
-                >
-                  <div className="flex h-max w-40 flex-col justify-start rounded-[20px] bg-cover bg-no-repeat pb-4 shadow-md">
-                    <div className="mt-3 ml-4">
-                      <div className="flex items-center gap-2">
-                        <p className="text-xs font-light text-navy-700 ">
-                          Update to
-                        </p>{" "}
+                <span className="flex reverse">
+                  <p
+                    className={`mr-5 text-xs font-light text-white px-3 py-1 rounded-xl ${
+                      available ? "bg-green-700" : "bg-red-700"
+                    } `}
+                  >
+                    {available ? "Available" : "Not Available"}
+                  </p>
+                  <Dropdown
+                    classNames={"py-2 bottom-[-90px] -left-[130px] w-max"}
+                    button={
+                      <HiOutlineDotsHorizontal className="text-gray-400 cursor-pointer" />
+                    }
+                  >
+                    <div className="flex h-max w-40 flex-col justify-start rounded-[20px] bg-zinc-50 bg-no-repeat pb-4 shadow-md">
+                      <div className="mt-3 ml-4">
+                        <div className="flex items-center gap-2">
+                          <p className="text-xxs font-light text-navy-700 ">
+                            Update to
+                          </p>{" "}
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="mt-3 ml-4 flex flex-col">
-                      <span className="text-xs text-gray-800 hover:dark:text-white">
-                        Profile Settings
-                      </span>
+                      <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="mt-3 ml-4 flex flex-col"
+                      >
+                        <button
+                          className="text-xs text-left text-gray-800 cursor-pointer hover:bg-zinc-100 rounded-md"
+                          type="submit"
+                        >
+                          {!available ? "Available" : "Not Available"}
+                        </button>
+                      </form>
                     </div>
-                  </div>
-                </Dropdown>
+                  </Dropdown>
+                </span>
               </div>
               <span className="flex">
                 <IoMdTime className="mr-2 text-gray-400 my-auto xsm:text-xxs" />

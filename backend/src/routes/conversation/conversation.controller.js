@@ -1,6 +1,6 @@
-const Conversations = require("../../models/Conversations");
-const Mesages = require("../../models/Messages");
-const Users = require("../../models/Users");
+const Conversations = require("../../models/conversation.model");
+const Mesages = require("../../models/message.model");
+const Users = require("../../models/user.model");
 
 /**
  *

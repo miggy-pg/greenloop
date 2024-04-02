@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const wasteSCheme = mongoose.Schema(
+const wasteSchema = mongoose.Schema(
   {
     post: {
       type: String,
@@ -26,14 +26,14 @@ const wasteSCheme = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    status: {
-      type: String,
-      default: "Available",
+    available: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }
 );
 
-const Waste = mongoose.model("Waste", wasteSCheme);
+const Waste = mongoose.model("Waste", wasteSchema);
 
 module.exports = Waste;

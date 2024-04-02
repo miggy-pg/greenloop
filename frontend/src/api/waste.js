@@ -5,12 +5,19 @@ export const fetchWastes = async () => {
   return await axios.get(`${getEndpoint}/api/wastes`);
 };
 
-export const uploadPost = async (post) => {
-  return axios.post(`${getEndpoint}/api/wastes/new`, post);
+export const uploadPost = async (payload) => {
+  return axios.post(`${getEndpoint}/api/wastes`, payload);
 };
 
-export const updateWaste = async (wasteId, data) => {
-  return await axios.put(`${getEndpoint}/api/wastes/update/${wasteId}`, data);
+export const updateWaste = async (wasteId, payload) => {
+  return await axios.put(`${getEndpoint}/api/wastes/${wasteId}`, payload);
+};
+
+export const updateWasteAvailableOrNot = async (wasteId, payload) => {
+  return await axios.put(
+    `${getEndpoint}/api/wastes/${wasteId}/availability`,
+    payload
+  );
 };
 
 export const deleteWaste = async (wasteId) => {

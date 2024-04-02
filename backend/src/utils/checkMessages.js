@@ -1,5 +1,5 @@
-const Messages = require("../models/Messages");
-const Users = require("../models/Users");
+const Messages = require("../models/message.model");
+const Users = require("../models/user.model");
 
 exports.checkMessages = async (conversationId) => {
   const messages = await Messages.find({ conversationId });
