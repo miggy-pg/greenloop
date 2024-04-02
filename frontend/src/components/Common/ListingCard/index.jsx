@@ -11,7 +11,7 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { updateWasteAvailableOrNot } from "../../../api/waste";
 import Dropdown from "../Dropdown";
 
-const ListingCard = ({ waste }) => {
+const ListingCard = ({ waste, loggedInUser }) => {
   const url = window.location.href;
   const isProfile = url.split("/").includes("profile");
 
@@ -92,6 +92,7 @@ const ListingCard = ({ waste }) => {
               button={
                 <HiOutlineDotsHorizontal className="text-gray-400 cursor-pointer" />
               }
+              isDisabled={loggedInUser?.id !== user?._id}
             >
               <div className="flex h-max w-40 flex-col justify-start rounded-[20px] bg-zinc-50 bg-no-repeat pb-3 shadow-md">
                 <div className="mt-3 ml-4">

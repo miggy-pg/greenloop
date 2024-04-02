@@ -83,6 +83,7 @@ const Listing = ({ myWaste }) => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const params = new URLSearchParams(searchParams);
+  const user = JSON.parse(localStorage.getItem("user:detail"));
 
   const [currentCategories, setCategoryQuery] = useState([]);
   const [open, setOpen] = useState(true);
@@ -504,7 +505,7 @@ const Listing = ({ myWaste }) => {
         >
           {currentPosts?.length ? (
             currentPosts?.map((waste, index) => (
-              <ListingCard key={index} waste={waste} />
+              <ListingCard key={index} waste={waste} loggedInUser={user} />
             ))
           ) : (
             <span className="flex grid-cols-2 w-full text-3xl font-semibold justify-center items-center">

@@ -10,7 +10,7 @@ import { transformText } from "../../../utils/plasticColors";
 import { updateWasteAvailableOrNot } from "../../../api/waste";
 import { useForm } from "react-hook-form";
 
-const PostCard = ({ props, defaultImage, wasteDefaultImage }) => {
+const PostCard = ({ props, defaultImage, wasteDefaultImage, loggedInUser }) => {
   const {
     id: wasteId,
     post,
@@ -44,7 +44,6 @@ const PostCard = ({ props, defaultImage, wasteDefaultImage }) => {
       available: !available,
     });
   };
-
   return (
     <>
       <div className="bg-white border border-gray-200 shadow-sm rounded-3xl my-2">
@@ -78,6 +77,7 @@ const PostCard = ({ props, defaultImage, wasteDefaultImage }) => {
                     button={
                       <HiOutlineDotsHorizontal className="text-gray-400 cursor-pointer" />
                     }
+                    isDisabled={loggedInUser?.id !== user?._id}
                   >
                     <div className="flex h-max w-40 flex-col justify-start rounded-[20px] bg-zinc-50 bg-no-repeat pb-4 shadow-md">
                       <div className="mt-3 ml-4">

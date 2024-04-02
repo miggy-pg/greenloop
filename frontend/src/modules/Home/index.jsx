@@ -38,6 +38,7 @@ const Home = () => {
                 props={waste}
                 defaultImage={defaultImage}
                 wasteDefaultImage={wasteDefaultImage}
+                loggedInUser={user}
               />
             ))}
         </div>
