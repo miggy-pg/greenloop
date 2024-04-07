@@ -28,9 +28,6 @@ app.use(function (req, res, next) {
 
 app.use(morgan("combined"));
 
-// Connect DB
-require("./db/connection");
-
 require("./routes/socket/socket.controller");
 
 app.use(
