@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 
 import { IoMdTime } from "react-icons/io";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
@@ -8,7 +9,6 @@ import Dropdown from "../Dropdown";
 import formatDateTime from "../../../utils/formatDateTime";
 import { transformText } from "../../../utils/plasticColors";
 import { updateWasteAvailableOrNot } from "../../../api/waste";
-import { useForm } from "react-hook-form";
 
 const PostCard = ({ props, defaultImage, wasteDefaultImage, loggedInUser }) => {
   const {
