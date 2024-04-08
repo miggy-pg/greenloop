@@ -43,11 +43,11 @@ const wasteRouter = require("./routes/waste/waste.router");
 const conversationRouter = require("./routes/conversation/conversation.router");
 const messageRouter = require("./routes/message/message.router");
 
-app.use("/api", authRouter);
-app.use("/api", userRouter);
-app.use("/api", wasteRouter);
-app.use("/api", conversationRouter);
-app.use("/api", messageRouter);
+// app.use("/api", authRouter);
+// app.use("/api", userRouter);
+// app.use("/api", wasteRouter);
+// app.use("/api", conversationRouter);
+// app.use("/api", messageRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome");
