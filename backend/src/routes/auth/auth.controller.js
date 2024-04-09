@@ -1,5 +1,5 @@
 const bcryptjs = require("bcryptjs");
-const Cloudinary = require("../../utils/cloudinary");
+const cloudinaryConnect = require("../../utils/cloudinary");
 const jwt = require("jsonwebtoken");
 const Users = require("../../models/user.model");
 
@@ -20,7 +20,7 @@ exports.registerUser = async (req, res, next) => {
 
     let result;
     if (image?.length > 0) {
-      result = await Cloudinary.uploader.upload(image, {
+      result = await cloudinaryConnect.uploader.upload(image, {
         folder: "users/profile",
         width: 300,
         crop: "scale",
