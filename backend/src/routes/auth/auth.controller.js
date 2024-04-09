@@ -3,7 +3,7 @@ const cloudinaryConnect = require("../../utils/cloudinary");
 const jwt = require("jsonwebtoken");
 const Users = require("../../models/user.model");
 
-exports.registerUser = async (req, res, next) => {
+registerUser = async (req, res, next) => {
   try {
     const {
       companyName,
@@ -18,63 +18,59 @@ exports.registerUser = async (req, res, next) => {
       image,
     } = req.body;
 
-    let result;
+    // We added onAdmin to the condition since we are using the same function for user registration
+    if (!req.body?.onAdmin && password !== confirmPassword) {
+      res.status(400).send("Password does not match");
+    }
+    if (!username || !email || !password) {
+      res.status(400).send("Please fill all required fields");
+    }
+    let imageUrl, publicId;
     if (image?.length > 0) {
-      result = await cloudinaryConnect.uploader.upload(image, {
+      cloudinaryImage = await cloudinaryConnect.uploader.upload(image, {
         folder: "users/profile",
         width: 300,
         crop: "scale",
       });
+
+      imageUrl = cloudinaryImage.secure_url;
+      publicId = cloudinaryImage.public_id;
     }
 
-    if (!req.body?.onAdmin && password !== confirmPassword) {
-      res.status(400).send("Password does not match");
-    } else if (!username || !email || !password) {
-      res.status(400).send("Please fill all required fields");
-    } else {
-      const userNameExist = await Users.findOne({ username });
-      const emailExist = await Users.findOne({ email });
-      if (userNameExist || emailExist) {
-        res
-          .status(400)
-          .send(`${userNameExist ? "Username " : "Email "}already exists`);
-      } else {
-        const newUser = new Users({
-          companyName,
-          email,
-          username,
-          password,
-          organizationType,
-          province,
-          cityMunicipality,
-          token,
-          image: {
-            url: result?.secure_url,
-            public_id: result?.public_id,
-          },
-        });
+    const newUser = new Users({
+      companyName,
+      email,
+      username,
+      password,
+      organizationType,
+      province,
+      cityMunicipality,
+      token,
+      image: {
+        url: imageUrl,
+        public_id: publicId,
+      },
+    });
 
-        bcryptjs.hash(password, 10, (err, hashedPassword) => {
-          newUser.set("password", hashedPassword);
-          newUser.save();
-          next();
-        });
-        return res.status(201).send("Company registered successfully");
-      }
-    }
+    bcryptjs.hash(password, 10, (err, hashedPassword) => {
+      newUser.set("password", hashedPassword);
+      newUser.save();
+      next();
+    });
+    return res.status(201).send("Company registered successfully");
   } catch (error) {
     console.log(error, "Error");
   }
 };
 
-exports.loginUser = async (req, res, next) => {
+loginUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
     if (!username || !password) {
       res
         .status(400)
-        .send(`Please fill ${!username ? "username" : "password"}`);
+        .send(`Please provide a ${!username ? "username" : "password"}`);
     } else {
       const user = await Users.findOne({ username: username });
       console.log("user: ", user);
@@ -126,7 +122,7 @@ exports.loginUser = async (req, res, next) => {
   }
 };
 
-exports.signOutUser = async (req, res) => {
+signOutUser = async (req, res) => {
   try {
     await Users.updateOne(
       { _id: req.params?.userId },
@@ -143,4 +139,10 @@ exports.signOutUser = async (req, res) => {
     console.log(err.message);
     return res.status(500).json({ error: err.message });
   }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  signOutUser,
 };

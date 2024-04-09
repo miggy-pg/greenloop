@@ -4,9 +4,9 @@ async function mongoConnect() {
   await mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
   });
+
+  console.log("Connected to MongoDB");
 }
 
 async function mongoDisconnect() {

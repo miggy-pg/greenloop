@@ -30,7 +30,7 @@ const SignUp = () => {
       navigate("/users/sign-in");
     },
     onError: (error) => {
-      alert(error.response?.data);
+      alert(error?.data);
       console.log("error: ", error);
     },
   });
