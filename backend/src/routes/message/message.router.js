@@ -10,9 +10,9 @@ const messageRouter = Router();
 /*
 | CRUD Operation                           | HTTP Method   | Route                             |
 |------------------------------------------|---------------|-----------------------------------|
-| Fetch Messages from Current Conversation | GET           | /api/messages/:conversationId     |
-| Fetch One Message                        | GET           | /api/message/:messageId           |
-| Create New Message                       | POST          | /api/message                      |
+| Fetch Messages from Current Conversation | GET           | /v1/messages/:conversationId     |
+| Fetch One Message                        | GET           | /v1/message/:messageId           |
+| Create New Message                       | POST          | /v1/message                      |
 */
 
 messageRouter.get("/messages/:conversationId", conversationMessage);

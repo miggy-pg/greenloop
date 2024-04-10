@@ -11,10 +11,10 @@ const userRouter = Router();
 /*
 | CRUD Operation     | HTTP Method | Route              |
 |--------------------|-------------|--------------------|
-| Retrieve All Users | GET         | /api/users/        |
-| Retrieve One User  | GET         | /api/:userId       |
-| Update User        | POST        | /api/users/:id     |
-| Delete User        | DELETE      | /api/users/:id     |
+| Retrieve All Users | GET         | /v1/users/        |
+| Retrieve One User  | GET         | /v1/:userId       |
+| Update User        | POST        | /v1/users/:id     |
+| Delete User        | DELETE      | /v1/users/:id     |
 */
 
 userRouter.get("/users", fetchUsers);

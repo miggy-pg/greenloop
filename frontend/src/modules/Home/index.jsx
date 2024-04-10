@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+import Body from "../../components/Common/Body";
 import Card from "../../components/Common/Card";
 import GreetingCard from "../../components/Common/GreetingCard";
 import PostCard from "../../components/Common/PostCard";
@@ -7,7 +8,6 @@ import Spinner from "../../components/Common/Spinner";
 import defaultImage from "../../assets/images/default-image.jpg";
 import wasteDefaultImage from "../../assets/images/waste-default-image.webp";
 import { useWastes } from "../../hooks/useWaste";
-import Body from "../../components/Common/Body";
 
 const Home = () => {
   document.title = "Green Loop | Home";

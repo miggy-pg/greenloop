@@ -72,7 +72,7 @@ const Chat = () => {
 
   useMemo(() => {
     const fetchUsers = async () => {
-      const res = await fetch(`${getEndpoint}:8000/api/users`, {
+      const res = await fetch(`${getEndpoint}:8000/v1/users`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

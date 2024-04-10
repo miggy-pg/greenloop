@@ -1,4 +1,4 @@
-const Messages = require("../../models/message.model");
+const Message = require("../../models/message.model");
 const Conversations = require("../../models/conversation.model");
 const Users = require("../../models/user.model");
 const Cloudinary = require("../../utils/cloudinary");
@@ -29,7 +29,7 @@ exports.message = async (req, res) => {
         members: [senderId, receiverId],
       });
       await newCoversation.save();
-      const newMessage = new Messages({
+      const newMessage = new Message({
         conversationId: newCoversation._id,
         senderId,
         message,
@@ -46,7 +46,7 @@ exports.message = async (req, res) => {
     } else if (!conversationId && !receiverId) {
       return res.status(400).send("Please fill all required fields");
     }
-    const newMessage = new Messages({
+    const newMessage = new Message({
       conversationId,
       senderId,
       message,
@@ -66,11 +66,8 @@ exports.message = async (req, res) => {
 
 exports.conversationMessage = async (req, res) => {
   try {
-    console.log("req.params: ", req.body);
-    console.log("req.params: ", req.params);
-    console.log("conversationMessage: ", req);
-    const checkMessages = async (conversationId) => {
-      const messages = await Messages.find({ conversationId });
+    const checkMessage = async (conversationId) => {
+      const messages = await Message.find({ conversationId });
       // console.log("messagesconversationId: ", conversationId);
       const messageUserData = Promise.all(
         messages.map(async (message) => {
@@ -105,12 +102,12 @@ exports.conversationMessage = async (req, res) => {
         members: { $all: [req.query.senderId, req.query.receiverId] },
       });
       if (checkConversation.length > 0) {
-        checkMessages(checkConversation[0]._id);
+        checkMessage(checkConversation[0]._id);
       } else {
         return res.status(200).json([]);
       }
     } else {
-      checkMessages(conversationId);
+      checkMessage(conversationId);
     }
   } catch (error) {
     console.log("Error", error);
@@ -120,7 +117,7 @@ exports.conversationMessage = async (req, res) => {
 exports.hasReadMessage = async (req, res) => {
   try {
     const messageId = req.params.messageId;
-    await Messages.updateOne(
+    await Message.updateOne(
       { _id: messageId },
       {
         $set: { hasRead: true },

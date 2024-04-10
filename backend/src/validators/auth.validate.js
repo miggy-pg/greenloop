@@ -12,11 +12,20 @@ const checkUsernameAndEmailAvailability = async (req, res, next) => {
         existingUser.username === username ? "Username" : "Email";
       return res.status(400).send(`${errorMessage} already exists`);
     }
-    next(); // Proceed to the next middleware if user does not exist
+    next();
   } catch (error) {
     console.error("Error checking duplicate user:", error);
     return res.status(500).send("Internal Server Error");
   }
+};
+
+const checkPasswordDoesNotMatch = async (req, res, next) => {
+  const { password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    return res.status(400).send("Passwords do not match");
+  }
+  next();
 };
 
 module.exports = {

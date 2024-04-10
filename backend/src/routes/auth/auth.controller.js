@@ -16,10 +16,14 @@ registerUser = async (req, res, next) => {
       cityMunicipality,
       token,
       image,
+      isAdmin,
+      onAdmin,
     } = req.body;
 
+    console.log("req.body: ", req);
+
     // We added onAdmin to the condition since we are using the same function for user registration
-    if (!req.body?.onAdmin && password !== confirmPassword) {
+    if (!onAdmin && password !== confirmPassword) {
       res.status(400).send("Password does not match");
     }
     if (!username || !email || !password) {
@@ -37,7 +41,7 @@ registerUser = async (req, res, next) => {
       publicId = cloudinaryImage.public_id;
     }
 
-    const newUser = new Users({
+    const createUser = new Users({
       companyName,
       email,
       username,
@@ -50,16 +54,18 @@ registerUser = async (req, res, next) => {
         url: imageUrl,
         public_id: publicId,
       },
+      isAdmin,
     });
 
     bcryptjs.hash(password, 10, (err, hashedPassword) => {
-      newUser.set("password", hashedPassword);
-      newUser.save();
+      createUser.set("password", hashedPassword);
+      createUser.save();
       next();
     });
     return res.status(201).send("Company registered successfully");
   } catch (error) {
     console.log(error, "Error");
+    res.status(500).send("An error occurred while registering company");
   }
 };
 
@@ -72,7 +78,7 @@ loginUser = async (req, res, next) => {
         .status(400)
         .send(`Please provide a ${!username ? "username" : "password"}`);
     } else {
-      const user = await Users.findOne({ username: username });
+      const user = await Users.findOne({ username });
       console.log("user: ", user);
       if (!user) {
         res.status(400).send("Username or password is incorrect");

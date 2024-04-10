@@ -2,10 +2,11 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 const dotenv = require("dotenv");
+const { apiV1Router } = require("./routes/api");
 dotenv.config();
 
 const prodOrigin = [process.env.ORIGIN_1, process.env.ORIGIN_2];
-const devOrigin = ["http://localhost:5173"];
+const devOrigin = [process.env.DEV_ORIGIN];
 const allowedOrigins =
   process.env.NODE_ENV === "production" ? prodOrigin : devOrigin;
 
@@ -37,17 +38,7 @@ app.use(
 );
 app.use(express.urlencoded({ extended: false }));
 
-const authRouter = require("./routes/auth/auth.router");
-const userRouter = require("./routes/user/user.router");
-const wasteRouter = require("./routes/waste/waste.router");
-const conversationRouter = require("./routes/conversation/conversation.router");
-const messageRouter = require("./routes/message/message.router");
-
-app.use("/api", authRouter);
-app.use("/api", userRouter);
-app.use("/api", wasteRouter);
-app.use("/api", conversationRouter);
-app.use("/api", messageRouter);
+app.use("/v1", apiV1Router);
 
 app.get("/", (req, res) => {
   res.send("Welcome");

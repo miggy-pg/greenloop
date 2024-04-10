@@ -10,11 +10,11 @@ const {
 const wasteRouter = Router();
 
 /*
-| CRUD Operation             | HTTP Method  | Route                   |
-|----------------------------|--------------|-------------------------|
-| Create Waste Item          | POST         | /api/wastes/new         |
-| Fetch All Wastes           | GET          | /api/wastes             |
-| Fetch Current User Waste   | GET          | /api/wastes/:userId     |
+| CRUD Operation             | HTTP Method  | Route                  |
+|----------------------------|--------------|------------------------|
+| Create Waste Item          | POST         | /v1/wastes/            |
+| Fetch All Wastes           | GET          | /v1/wastes             |
+| Fetch Current User Waste   | GET          | /v1/wastes/:userId     |
 */
 
 wasteRouter.post("/wastes", postWasteImage);

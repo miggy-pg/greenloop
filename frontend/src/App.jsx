@@ -46,7 +46,6 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  const user = JSON.parse(localStorage.getItem("user:detail"));
   const [hideModals, setHideModals] = useState(false);
 
   const { width } = useWindowSize();

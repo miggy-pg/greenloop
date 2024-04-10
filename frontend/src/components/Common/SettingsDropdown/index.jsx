@@ -6,7 +6,6 @@ const SettingsDropdown = ({ userData }) => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
   const navigate = useNavigate();
 
-
   const signOut = async () => {
     navigate("/users/sign-in");
     localStorage.clear();
