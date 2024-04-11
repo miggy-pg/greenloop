@@ -95,7 +95,7 @@ export default function Users() {
     const formData = { ...data, image };
     userData?.id
       ? handleUpdateUser({ userId: userData.id, formData: formData })
-      : handleCreateUser({ ...formData, onAdmin: true });
+      : handleCreateUser({ ...formData, onAdminCreated: true });
   };
 
   const onClose = () => {

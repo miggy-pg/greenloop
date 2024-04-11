@@ -1,7 +1,7 @@
 const Message = require("../../models/message.model");
 const Conversations = require("../../models/conversation.model");
 const Users = require("../../models/user.model");
-const Cloudinary = require("../../utils/cloudinary");
+const cloudinaryUploader = require("../../utils/cloudinary/cloudinnaryUploader");
 
 exports.message = async (req, res) => {
   try {
@@ -13,36 +13,33 @@ exports.message = async (req, res) => {
       receiverId = "",
     } = req.body;
 
-    let wasteImage = null;
-    if (image?.length > 0) {
-      wasteImage = await Cloudinary.uploader.upload(image, {
-        folder: "conversations/messages",
-        width: 300,
-        crop: "scale",
-      });
-    }
-
     if (!senderId || !message)
       return res.status(400).send("Please fill all required fields");
+
+    const { imageUrl, public_id } = await cloudinaryUploader(
+      image,
+      "conversations/messages",
+      300,
+      "scale"
+    );
     if (conversationId === "new" && receiverId) {
       const newCoversation = new Conversations({
         members: [senderId, receiverId],
       });
       await newCoversation.save();
+
       const newMessage = new Message({
         conversationId: newCoversation._id,
         senderId,
         message,
+        image: {
+          public_id: public_id,
+          url: imageUrl,
+        },
       });
-      if (image?.length) {
-        newMessage.image = {
-          public_id: wasteImage.public_id,
-          url: wasteImage.secure_url,
-        };
-      }
 
       await newMessage.save();
-      return res.status(200).send("Message sent successfully");
+      return res.status(201).send("Message sent successfully");
     } else if (!conversationId && !receiverId) {
       return res.status(400).send("Please fill all required fields");
     }
@@ -50,15 +47,19 @@ exports.message = async (req, res) => {
       conversationId,
       senderId,
       message,
+      image: {
+        public_id: public_id,
+        url: imageUrl,
+      },
     });
-    if (image?.length) {
-      newMessage.image = {
-        public_id: wasteImage.public_id,
-        url: wasteImage.secure_url,
-      };
-    }
+    // if (image?.length) {
+    //   newMessage.image = {
+    //     public_id: wasteImage.public_id,
+    //     url: wasteImage.secure_url,
+    //   };
+    // }
     await newMessage.save();
-    res.status(200).send("Message sent successfully");
+    res.status(201).send("Message sent successfully");
   } catch (error) {
     console.log(error, "Error");
   }

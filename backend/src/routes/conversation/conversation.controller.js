@@ -20,9 +20,9 @@ exports.conversation = async (req, res) => {
         members: [senderId, receiverId],
       });
       await conversations.save();
-      res.status(200).json(conversations);
+      res.status(201).json(conversations);
     }
-    res.status(200).json(conversations);
+    res.status(201).json(conversations);
   } catch (error) {
     console.log(error, "Error");
   }

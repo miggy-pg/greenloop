@@ -502,6 +502,7 @@ const Chat = () => {
                               <>
                                 {/* Desktop Text Message Chat Box */}
                                 <div
+                                  key={index}
                                   className={`max-w-[70%] rounded-b-xl p-4 mb-6 sm:p-2 ${
                                     messageSender === user?.id
                                       ? "bg-primary text-blue rounded-tl-xl ml-auto"

@@ -1,5 +1,5 @@
 const bcryptjs = require("bcryptjs");
-const cloudinaryConnect = require("../../utils/cloudinary");
+const cloudinaryConnect = require("../../utils/cloudinary/cloudinaryConnect");
 const jwt = require("jsonwebtoken");
 const Users = require("../../models/user.model");
 
@@ -17,13 +17,11 @@ registerUser = async (req, res, next) => {
       token,
       image,
       isAdmin,
-      onAdmin,
+      onAdminCreated,
     } = req.body;
 
-    console.log("req.body: ", req);
-
     // We added onAdmin to the condition since we are using the same function for user registration
-    if (!onAdmin && password !== confirmPassword) {
+    if (!onAdminCreated && password !== confirmPassword) {
       res.status(400).send("Password does not match");
     }
     if (!username || !email || !password) {
@@ -81,11 +79,11 @@ loginUser = async (req, res, next) => {
       const user = await Users.findOne({ username });
       console.log("user: ", user);
       if (!user) {
-        res.status(400).send("Username or password is incorrect");
+        res.status(401).send("Username or password is incorrect");
       } else {
         const validateUser = await bcryptjs.compare(password, user.password);
         if (!validateUser) {
-          res.status(400).send("Password is incorrect");
+          res.status(401).send("Password is incorrect");
         } else {
           const payload = {
             userId: user._id,
@@ -124,7 +122,8 @@ loginUser = async (req, res, next) => {
       }
     }
   } catch (error) {
-    console.log(error, "Error");
+    console.log("error: ", error);
+    res.status(500).send("An error occurred while logging in");
   }
 };
 

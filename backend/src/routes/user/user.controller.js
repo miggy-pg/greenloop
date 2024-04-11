@@ -1,5 +1,5 @@
 const bcryptjs = require("bcryptjs");
-const Cloudinary = require("../../utils/cloudinary");
+const Cloudinary = require("../../utils/cloudinary/cloudinaryConnect");
 const Users = require("../../models/user.model");
 const Waste = require("../../models/waste.model");
 
