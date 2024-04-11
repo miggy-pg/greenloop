@@ -2,7 +2,6 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 const dotenv = require("dotenv");
-const { apiV1Router } = require("./routes/api");
 dotenv.config();
 
 const prodOrigin = [process.env.ORIGIN_1, process.env.ORIGIN_2];
@@ -36,6 +35,9 @@ app.use(
     limit: "50mb",
   })
 );
+
+const { apiV1Router } = require("./routes/api");
+
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/v1", apiV1Router);

@@ -1,7 +1,7 @@
-const Message = require("../../models/message.model");
 const Conversations = require("../../models/conversation.model");
+const Message = require("../../models/message.model");
 const Users = require("../../models/user.model");
-const cloudinaryUploader = require("../../utils/cloudinary/cloudinnaryUploader");
+const cloudinaryUploader = require("../../utils/cloudinary/cloudinaryUploader");
 
 exports.message = async (req, res) => {
   try {
@@ -13,14 +13,14 @@ exports.message = async (req, res) => {
       receiverId = "",
     } = req.body;
 
-    if (!senderId || !message)
+    if (!senderId || !message || (!conversationId && !receiverId))
       return res.status(400).send("Please fill all required fields");
 
     const { imageUrl, public_id } = await cloudinaryUploader(
       image,
-      "conversations/messages",
-      300,
-      "scale"
+      process.env.MESSAGE_IMAGE_FOLDER,
+      process.env.MESSAGE_IMAGE_SIZE,
+      process.env.RESIZE_TYPE
     );
     if (conversationId === "new" && receiverId) {
       const newCoversation = new Conversations({
@@ -39,9 +39,7 @@ exports.message = async (req, res) => {
       });
 
       await newMessage.save();
-      return res.status(201).send("Message sent successfully");
-    } else if (!conversationId && !receiverId) {
-      return res.status(400).send("Please fill all required fields");
+      return res.status(200).send("Message sent successfully");
     }
     const newMessage = new Message({
       conversationId,
@@ -52,16 +50,12 @@ exports.message = async (req, res) => {
         url: imageUrl,
       },
     });
-    // if (image?.length) {
-    //   newMessage.image = {
-    //     public_id: wasteImage.public_id,
-    //     url: wasteImage.secure_url,
-    //   };
-    // }
+
     await newMessage.save();
-    res.status(201).send("Message sent successfully");
-  } catch (error) {
-    console.log(error, "Error");
+    res.status(200).send("Message sent successfully");
+  } catch (err) {
+    console.log("Error: ", err);
+    res.status(500).send("Something went wrong");
   }
 };
 
@@ -69,12 +63,9 @@ exports.conversationMessage = async (req, res) => {
   try {
     const checkMessage = async (conversationId) => {
       const messages = await Message.find({ conversationId });
-      // console.log("messagesconversationId: ", conversationId);
       const messageUserData = Promise.all(
         messages.map(async (message) => {
           const user = await Users.findById(message.senderId);
-          // console.log("userConversationMessage: ", message);
-          // console.log("messageConversationMessage: ", message);
           return {
             user: {
               id: user._id,
@@ -92,26 +83,24 @@ exports.conversationMessage = async (req, res) => {
           };
         })
       );
-      // console.log("messageUserData: ", await messageUserData);
       res.status(200).json(await messageUserData);
     };
 
     const conversationId = req.params.conversationId;
 
     if (conversationId === "new") {
-      const checkConversation = await Conversations.find({
+      const checkConversation = await Conversations.findOne({
         members: { $all: [req.query.senderId, req.query.receiverId] },
       });
-      if (checkConversation.length > 0) {
+
+      if (checkConversation?.length > 0) {
         checkMessage(checkConversation[0]._id);
-      } else {
-        return res.status(200).json([]);
       }
     } else {
       checkMessage(conversationId);
     }
-  } catch (error) {
-    console.log("Error", error);
+  } catch (err) {
+    console.log("Error: ", err);
   }
 };
 
@@ -124,7 +113,8 @@ exports.hasReadMessage = async (req, res) => {
         $set: { hasRead: true },
       }
     );
-  } catch (error) {
-    console.log("Error", error);
+    res.status(200).send("Message has been marked as read");
+  } catch (err) {
+    console.log("Error: ", err);
   }
 };

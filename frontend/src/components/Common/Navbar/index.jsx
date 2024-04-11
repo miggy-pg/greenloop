@@ -59,9 +59,8 @@ const Menus = [
 const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
 
-  // Just want to get the data from the backend
   const { userData } = useUser(user?.id);
-  console.log("userData: ", userData);
+  console.log("userData1: ", userData);
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -211,15 +210,8 @@ const Navbar = () => {
                     </div>
                   );
                 } else {
-                  console.log(
-                    "userData: ",
-                    userData &&
-                      userData[0].organizationType.includes("Recycling Startup")
-                  );
                   return userData &&
-                    userData[0].organizationType.includes(
-                      "Recycling Startup"
-                    ) &&
+                    userData?.organizationType.includes("Recycling Startup") &&
                     !menu.name.includes("Post") ? (
                     <NavLink
                       key={index}
@@ -246,7 +238,7 @@ const Navbar = () => {
                     </NavLink>
                   ) : (
                     userData &&
-                      userData[0].organizationType.includes(
+                      userData?.organizationType.includes(
                         "Waste Generator" || "Informal Waste Sector"
                       ) && (
                         <NavLink
@@ -284,7 +276,7 @@ const Navbar = () => {
               )}
 
               {isHoveredSettings && (
-                <SettingsDropdown userData={userData && userData[0]} />
+                <SettingsDropdown userData={userData && userData} />
               )}
               {isLoggingOut && <Logout setIsLoggingOut={setIsLoggingOut} />}
             </ul>

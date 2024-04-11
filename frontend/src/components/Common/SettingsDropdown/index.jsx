@@ -5,11 +5,11 @@ import { signOutUser } from "../../../api/user";
 const SettingsDropdown = ({ userData }) => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
   const navigate = useNavigate();
-
+  console.log("test: ", userData);
   const signOut = async () => {
     navigate("/users/sign-in");
     localStorage.clear();
-    await signOutUser(userData?.userId);
+    await signOutUser(userData?._id);
   };
 
   return (

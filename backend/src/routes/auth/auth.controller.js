@@ -1,7 +1,13 @@
 const bcryptjs = require("bcryptjs");
-const cloudinaryConnect = require("../../utils/cloudinary/cloudinaryConnect");
 const jwt = require("jsonwebtoken");
 const Users = require("../../models/user.model");
+const {
+  cloudinaryUploader,
+} = require("../../utils/cloudinary/cloudinaryUploader");
+
+const UPLOADED_IMAGE_PATH = "users/profile";
+const IMAGE_SIZE = 300;
+const IMAGE_RESIZE_TYPE = "scale";
 
 registerUser = async (req, res, next) => {
   try {
@@ -27,17 +33,13 @@ registerUser = async (req, res, next) => {
     if (!username || !email || !password) {
       res.status(400).send("Please fill all required fields");
     }
-    let imageUrl, publicId;
-    if (image?.length > 0) {
-      cloudinaryImage = await cloudinaryConnect.uploader.upload(image, {
-        folder: "users/profile",
-        width: 300,
-        crop: "scale",
-      });
 
-      imageUrl = cloudinaryImage.secure_url;
-      publicId = cloudinaryImage.public_id;
-    }
+    const { imageUrl, publicId } = await cloudinaryUploader(
+      image,
+      UPLOADED_IMAGE_PATH,
+      IMAGE_SIZE,
+      IMAGE_RESIZE_TYPE
+    );
 
     const createUser = new Users({
       companyName,
@@ -72,55 +74,54 @@ loginUser = async (req, res, next) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      res
+      return res
         .status(400)
         .send(`Please provide a ${!username ? "username" : "password"}`);
-    } else {
-      const user = await Users.findOne({ username });
-      console.log("user: ", user);
-      if (!user) {
-        res.status(401).send("Username or password is incorrect");
-      } else {
-        const validateUser = await bcryptjs.compare(password, user.password);
-        if (!validateUser) {
-          res.status(401).send("Password is incorrect");
-        } else {
-          const payload = {
-            userId: user._id,
-            email: user.email,
-          };
-          const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "JWT_SECRET_KEY";
-
-          jwt.sign(
-            payload,
-            JWT_SECRET_KEY,
-            { expiresIn: 84600 },
-            async (err, token) => {
-              await Users.updateOne(
-                { _id: user._id },
-                {
-                  $set: { token },
-                }
-              );
-              user.save();
-
-              return res.status(200).json({
-                user: {
-                  id: user._id,
-                  username: user.username,
-                  companyName: user.companyName,
-                  province: user.province,
-                  organizationType: user.organizationType,
-                  cityMunicipality: user.cityMunicipality,
-                  isAdmin: user.isAdmin,
-                },
-                token: token,
-              });
-            }
-          );
-        }
-      }
     }
+
+    const user = await Users.findOne({ username });
+    if (!user) {
+      return res.status(401).send("Username or password is incorrect");
+    }
+
+    const validateUser = await bcryptjs.compare(password, user.password);
+    if (!validateUser) {
+      return res.status(401).send("Password is incorrect");
+    }
+
+    const payload = {
+      userId: user._id,
+      email: user.email,
+    };
+    const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "JWT_SECRET_KEY";
+
+    jwt.sign(
+      payload,
+      JWT_SECRET_KEY,
+      { expiresIn: 84600 },
+      async (err, token) => {
+        await Users.updateOne(
+          { _id: user._id },
+          {
+            $set: { token },
+          }
+        );
+        user.save();
+
+        return res.status(200).json({
+          user: {
+            id: user._id,
+            username: user.username,
+            companyName: user.companyName,
+            province: user.province,
+            organizationType: user.organizationType,
+            cityMunicipality: user.cityMunicipality,
+            isAdmin: user.isAdmin,
+          },
+          token: token,
+        });
+      }
+    );
   } catch (error) {
     console.log("error: ", error);
     res.status(500).send("An error occurred while logging in");

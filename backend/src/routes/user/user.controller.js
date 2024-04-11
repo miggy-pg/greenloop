@@ -1,40 +1,26 @@
 const bcryptjs = require("bcryptjs");
-const Cloudinary = require("../../utils/cloudinary/cloudinaryConnect");
+const ObjectId = require("mongoose").Types.ObjectId;
 const Users = require("../../models/user.model");
 const Waste = require("../../models/waste.model");
+const cloudinaryUploader = require("../../utils/cloudinary/cloudinaryUploader");
 
-exports.fetchUser = async (req, res) => {
+fetchUser = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const users = await Users.find({ _id: userId });
+    const userDocument = await Users.findById(new ObjectId(userId));
     const wastes = await Waste.find({ user: userId });
-    const usersData = Promise.all(
-      users.map(async (user) => {
-        return {
-          userId: user._id,
-          email: user.email,
-          username: user.username,
-          password: user.password,
-          companyName: user.companyName,
-          organizationType: user.organizationType,
-          province: user.province,
-          cityMunicipality: user.cityMunicipality,
-          image: user.image.url,
-          wastes: wastes,
-          isAdmin: user.isAdmin,
-        };
-      })
-    );
-    res.status(200).json(await usersData);
+    const user = { ...userDocument._doc, wastes: wastes };
+    res.status(200).json(user);
   } catch (error) {
     console.log("Error", error);
+    res.status(500).send("An error occurred while fetching user");
   }
 };
 
-exports.fetchUsers = async (req, res) => {
+fetchUsers = async (req, res) => {
   try {
     const users = await Users.find({});
-    const usersData = Promise.all(
+    const allUsers = Promise.all(
       users.map(async (user) => {
         return {
           receiverId: user._id,
@@ -52,13 +38,13 @@ exports.fetchUsers = async (req, res) => {
       })
     );
 
-    res.status(200).json(await usersData);
+    res.status(200).json(await allUsers);
   } catch (error) {
     console.log("Error", error);
   }
 };
 
-exports.updateProfile = async (req, res) => {
+updateProfile = async (req, res) => {
   try {
     const userId = req.params.userId;
     const {
@@ -73,14 +59,13 @@ exports.updateProfile = async (req, res) => {
       isAdmin,
     } = req.body;
 
-    let result;
-    if (image?.length > 0) {
-      result = await Cloudinary.uploader.upload(image, {
-        folder: "users/profile",
-        width: 300,
-        crop: "scale",
-      });
-    }
+    const { imageUrl, publicId } = await cloudinaryUploader(
+      image,
+      process.env.USER_IMAGE_FOLDER,
+      process.env.USER_IMAGE_SIZE,
+      process.env.RESIZE_TYPE
+    );
+
     const user = await Users.findById(userId);
     if (user) {
       user.companyName = companyName;
@@ -90,8 +75,8 @@ exports.updateProfile = async (req, res) => {
       user.province = province;
       user.cityMunicipality = cityMunicipality;
       user.image = {
-        public_id: result?.public_id,
-        url: result?.secure_url,
+        public_id: publicId,
+        url: imageUrl,
       };
       user.isAdmin = isAdmin;
     }
@@ -119,10 +104,17 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-exports.deleteUser = async (req, res) => {
+deleteUser = async (req, res) => {
   try {
     await Users.findByIdAndDelete(req.params.userId);
   } catch (error) {
     console.log("Error", error);
   }
+};
+
+module.exports = {
+  fetchUser,
+  fetchUsers,
+  updateProfile,
+  deleteUser,
 };

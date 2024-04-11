@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const {
-  postWasteImage,
+  createWaste,
   deleteWaste,
   fetchWastes,
   updateWaste,
-  wasteAvailableOrNot,
+  checkWasteAvailableOrNot,
 } = require("./waste.controller");
 
 const wasteRouter = Router();
@@ -17,10 +17,10 @@ const wasteRouter = Router();
 | Fetch Current User Waste   | GET          | /v1/wastes/:userId     |
 */
 
-wasteRouter.post("/wastes", postWasteImage);
+wasteRouter.post("/wastes", createWaste);
 wasteRouter.get("/wastes", fetchWastes);
 wasteRouter.put("/wastes/:wasteId", updateWaste);
-wasteRouter.put("/wastes/:wasteId/availability", wasteAvailableOrNot);
+wasteRouter.put("/wastes/:wasteId/availability", checkWasteAvailableOrNot);
 wasteRouter.delete("/wastes/:wasteId", deleteWaste);
 
 module.exports = wasteRouter;

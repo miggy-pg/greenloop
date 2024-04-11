@@ -1,19 +1,14 @@
-const cloudinary = require("./cloudinaryConnect");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
+});
 
 const cloudinaryUploader = async (image, folder, width, crop) => {
   try {
-    if (
-      !image ||
-      typeof image !== "string" ||
-      !folder ||
-      typeof folder !== "string" ||
-      !width ||
-      typeof width !== "number" ||
-      !crop ||
-      typeof crop !== "string"
-    ) {
-      throw new Error("Invalid input parameters for image upload");
-    }
+    if (!image) return { imageUrl: "", publicId: "" };
 
     const cloudinaryImage = await cloudinary.uploader.upload(image, {
       folder,
@@ -30,4 +25,12 @@ const cloudinaryUploader = async (image, folder, width, crop) => {
   }
 };
 
-module.exports = cloudinaryUploader;
+const cloudinaryDelete = async (oldPublicId, newPublicId) => {
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+module.exports = { cloudinaryUploader, cloudinaryDelete };

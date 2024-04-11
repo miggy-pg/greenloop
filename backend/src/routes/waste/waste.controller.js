@@ -1,6 +1,9 @@
 const Waste = require("../../models/waste.model");
 const Users = require("../../models/user.model");
-const Cloudinary = require("../../utils/cloudinary/cloudinaryConnect");
+const {
+  cloudinaryUploader,
+  cloudinaryDelete,
+} = require("../../utils/cloudinary/cloudinaryUploader");
 
 const wasteItems = (user, waste) => {
   return (
@@ -16,11 +19,11 @@ const wasteItems = (user, waste) => {
   );
 };
 
-exports.fetchWastes = async (req, res) => {
+fetchWastes = async (req, res) => {
   try {
-    var wastes = await Waste.find().sort({ createdAt: -1 });
+    const wastes = await Waste.find().sort({ createdAt: -1 });
 
-    var wasteData = Promise.all(
+    const wasteData = Promise.all(
       wastes.map(async (waste) => {
         const user = await Users.findById(waste.user);
         return wasteItems(user, waste);
@@ -28,82 +31,83 @@ exports.fetchWastes = async (req, res) => {
     );
 
     res.status(200).json(await wasteData);
-  } catch (error) {
-    console.log("Error", error);
+  } catch (err) {
+    console.log("Error: ", err);
   }
 };
 
-exports.postWasteImage = async (req, res) => {
+createWaste = async (req, res) => {
   try {
     const { post, image, wasteCategory, user } = req.body;
-    let wasteImage;
-    if (image?.length > 0) {
-      wasteImage = await Cloudinary.uploader.upload(image, {
-        folder: "wastes",
-        width: 450,
-        crop: "scale",
-      });
-    }
+    const { imageUrl, publicId } = await cloudinaryUploader(
+      image,
+      process.env.WASTE_IMAGE_FOLDER,
+      process.env.WASTE_IMAGE_SIZE,
+      process.env.RESIZE_TYPE
+    );
 
     const newWaste = await Waste.create({
       post,
       wasteCategory,
       image: {
-        url: wasteImage?.secure_url,
-        public_id: wasteImage?.public_id,
+        url: imageUrl,
+        public_id: publicId,
       },
       user,
     });
-    res.status(200).json(newWaste);
+    res.status(201).json(newWaste);
   } catch (err) {
-    console.error("Error: ", err);
+    console.err("Error: ", err);
     res.status(500).json(err);
   }
 };
 
-exports.updateWaste = async (req, res) => {
+updateWaste = async (req, res) => {
   try {
     const { post, wasteCategory, image } = req.body;
     const wasteId = req.params.wasteId;
 
     const waste = await Waste.findById(wasteId);
     if (waste) {
-      let newImage;
-      if (image?.length > 0) {
-        newImage = await Cloudinary.uploader.upload(image, {
-          folder: "wastes",
-          width: 450,
-          crop: "scale",
-        });
-      }
-      if (waste?.image?.public_id !== newImage?.public_id) {
-        await Cloudinary.uploader.destroy(waste.image.public_id);
-        waste.image = {
-          url: newImage?.secure_url,
-          public_id: newImage?.public_id,
-        };
-      }
+      // let newImage;
+      // if (image?.length > 0) {
+      //   newImage =
+      // }
+      const { imageUrl, publicId } = await cloudinaryUploader(
+        image,
+        process.env.WASTE_IMAGE_FOLDER,
+        process.env.WASTE_IMAGE_SIZE,
+        process.env.RESIZE_TYPE
+      );
+      // if (waste?.image?.public_id !== newImage?.public_id) {
+      //   await Cloudinary.uploader.destroy(waste.image.public_id);
+      //   waste.image = {
+      //     url: newImage?.secure_url,
+      //     public_id: newImage?.public_id,
+      //   };
+      // }
+      await cloudinaryDelete(waste?.image?.public_id, newImage?.public_id);
       waste.post = post;
       waste.wasteCategory = wasteCategory;
     }
     await waste.save({ validateBeforeSave: false });
     res.status(200).json(waste);
-  } catch (error) {
-    res.status(500).json(error);
-    console.log("Error", error);
+  } catch (err) {
+    res.status(500).json(err);
+    console.log("Error: ", err);
   }
 };
 
-exports.deleteWaste = async (req, res) => {
+deleteWaste = async (req, res) => {
   try {
-    console.log("req.params", req.params);
     await Waste.findByIdAndDelete(req.params.wasteId);
-  } catch (error) {
-    console.log("Error", error);
+    res.status(200).send("Waste deleted successfully");
+  } catch (err) {
+    console.log("Error", err);
   }
 };
 
-exports.wasteAvailableOrNot = async (req, res) => {
+checkWasteAvailableOrNot = async (req, res) => {
   try {
     const wasteId = req.params.wasteId;
     const { available } = req.body;
@@ -114,7 +118,15 @@ exports.wasteAvailableOrNot = async (req, res) => {
       }
     );
     console.log("wasteUpdatedAvailable: ", waste);
-  } catch (error) {
-    console.log("Error", error);
+  } catch (err) {
+    console.log("Error: ", err);
   }
+};
+
+module.exports = {
+  fetchWastes,
+  createWaste,
+  updateWaste,
+  deleteWaste,
+  checkWasteAvailableOrNot,
 };
