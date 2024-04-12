@@ -59,8 +59,12 @@ const Menus = [
 const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
 
-  const { userData } = useUser(user?.id);
-  console.log("userData1: ", userData);
+  const {
+    userQuery: { data: userData },
+    isLoading,
+    error,
+  } = useUser(user?.id);
+  console.log("userData: ", userData);
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -101,7 +105,8 @@ const Navbar = () => {
     width > 900 ? setHideMenuLabels(true) : setHideMenuLabels(false);
   }, [width]);
 
-  console.log("user: ", user);
+  if (isLoading) return <p>Loading...</p>;
+
   return (
     <>
       <header
@@ -210,9 +215,9 @@ const Navbar = () => {
                     </div>
                   );
                 } else {
-                  return userData &&
-                    userData?.organizationType.includes("Recycling Startup") &&
-                    !menu.name.includes("Post") ? (
+                  return userData?.organizationType.includes(
+                    "Recycling Startup"
+                  ) && !menu.name.includes("Post") ? (
                     <NavLink
                       key={index}
                       to={menu.route}
@@ -237,34 +242,33 @@ const Navbar = () => {
                       </span>
                     </NavLink>
                   ) : (
-                    userData &&
-                      userData?.organizationType.includes(
-                        "Waste Generator" || "Informal Waste Sector"
-                      ) && (
-                        <NavLink
-                          key={index}
-                          to={menu.route}
-                          className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] sm:h-[3rem] md:px-[1.1rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
-                        >
-                          <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] md:h-[3.5rem] sm:h-[3rem] sm:text-xl">
-                            {menu.name.includes("Notifications") &&
-                              newMessages.length > 0 && (
-                                <span className="absolute top-2 bg-red-500 text-white w-4 h-4 text-center justify-between rounded-full font-medium text-xs">
-                                  {newMessages.length}
-                                </span>
-                              )}
-                            {menu.icon}
-
-                            {hideMenuLabels && (
-                              <span
-                                className={`text-sm lg:text-[0.7rem] translate-y-1 duration-200`}
-                              >
-                                {menu.name}
+                    userData?.organizationType.includes(
+                      "Waste Generator" || "Informal Waste Sector"
+                    ) && (
+                      <NavLink
+                        key={index}
+                        to={menu.route}
+                        className="px-6 text-[#31572C] h-[5rem] cursor-pointer hover:text-white hover:bg-[#5e8759] duration-200 lg:px-6 md:h-[3.5rem] sm:h-[3rem] md:px-[1.1rem] xsm:px-[1.3rem] 2xsm:px-[1rem]"
+                      >
+                        <span className="flex flex-col text-center items-center justify-center w-full h-[5rem] md:h-[3.5rem] sm:h-[3rem] sm:text-xl">
+                          {menu.name.includes("Notifications") &&
+                            newMessages.length > 0 && (
+                              <span className="absolute top-2 bg-red-500 text-white w-4 h-4 text-center justify-between rounded-full font-medium text-xs">
+                                {newMessages.length}
                               </span>
                             )}
-                          </span>
-                        </NavLink>
-                      )
+                          {menu.icon}
+
+                          {hideMenuLabels && (
+                            <span
+                              className={`text-sm lg:text-[0.7rem] translate-y-1 duration-200`}
+                            >
+                              {menu.name}
+                            </span>
+                          )}
+                        </span>
+                      </NavLink>
+                    )
                   );
                 }
               })}
@@ -275,9 +279,7 @@ const Navbar = () => {
                 />
               )}
 
-              {isHoveredSettings && (
-                <SettingsDropdown userData={userData && userData} />
-              )}
+              {isHoveredSettings && <SettingsDropdown userData={userData} />}
               {isLoggingOut && <Logout setIsLoggingOut={setIsLoggingOut} />}
             </ul>
           </div>

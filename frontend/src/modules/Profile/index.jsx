@@ -28,12 +28,11 @@ const Profile = () => {
     useUploadImage();
 
   const {
-    userData: user,
-    isLoading: userLoading,
+    userQuery: { data: user },
+    isLoading,
     error: userError,
   } = useUser(profileId === decToken.userId ? decToken.userId : profileId);
-
-  const userRef = useRef({});
+  console.log("user: ", user);
 
   const currUser = user && profileId === decToken.userId;
   const visitedUser = user && profileId !== decToken.userId;
@@ -61,7 +60,7 @@ const Profile = () => {
   const handleOpenModal = () => {
     setShowModal(true);
     const filteredMunicipalities = mindanaoPlaces.filter((province) =>
-      province.name.includes(user[0].province)
+      province.name.includes(user.province)
     );
     setPlaces(filteredMunicipalities[0].places);
   };
@@ -106,8 +105,10 @@ const Profile = () => {
   };
 
   useMemo(() => {
-    reset(user && user[0]);
+    reset(user && user);
   }, [user, reset]);
+
+  if (isLoading) return;
 
   return (
     <div
@@ -121,18 +122,18 @@ const Profile = () => {
               <div className="block py-10 h-80 md:max-w-md">
                 <span className="flex justify-center items-center text-center mb-3">
                   <img
-                    src={user[0].image ? user[0].image : defaultImage}
+                    src={user.image ? user.image.url : defaultImage}
                     className="rounded-full w-40 h-40 sm:h-28 sm:w-28 xsm:h-24 xsm:w-24"
                   />
                 </span>
                 <p className="mb-0 text-3xl font-normal text-black md:text-clamp-profile">
-                  {user[0].companyName}
+                  {user.companyName}
                 </p>
                 <p className="mb-5 text-normal font-thin text-black md:text-clamp-xs ">
-                  {user[0].organizationType}
+                  {user.organizationType}
                 </p>
                 <p className="mb-5 text-normal font-normal text-black md:text-clamp-base">
-                  {user[0].cityMunicipality}
+                  {user.cityMunicipality}
                 </p>
                 {profileType ? (
                   <span
@@ -284,7 +285,7 @@ const Profile = () => {
                                         name="email"
                                         id="email"
                                         className="w-4/5 rounded-md text-[#5b5c61] border-none focus:ring-transparent focus:border-transparent focus:text-black md:w-24"
-                                        defaultValue={user[0].email}
+                                        defaultValue={user.email}
                                         {...register("email")}
                                       />
                                     </td>
@@ -390,7 +391,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <Listing myWaste={user[0].wastes} />
+          <Listing myWaste={user.wastes} />
         </>
       )}
     </div>

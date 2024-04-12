@@ -3,7 +3,7 @@ import { fetchUser, fetchUsers } from "../api/user";
 
 export const useUser = (userId) => {
   const {
-    data: userQuery = [],
+    data: user,
     isLoading,
     error,
   } = useQuery({
@@ -12,7 +12,9 @@ export const useUser = (userId) => {
     initialData: {},
   });
 
-  return { userQuery, isLoading, error };
+  const { data: userData } = !isLoading && user;
+
+  return { userData, isLoading, error };
 };
 
 export const useUsers = () => {
