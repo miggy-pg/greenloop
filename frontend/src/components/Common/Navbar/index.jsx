@@ -64,7 +64,7 @@ const Navbar = () => {
     isLoading,
     error,
   } = useUser(user?.id);
-  console.log("userData: ", userData);
+  console.log("userData: ", useUser(user?.id));
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -105,7 +105,7 @@ const Navbar = () => {
     width > 900 ? setHideMenuLabels(true) : setHideMenuLabels(false);
   }, [width]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return;
 
   return (
     <>

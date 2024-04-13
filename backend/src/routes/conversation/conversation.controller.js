@@ -1,6 +1,6 @@
 const Conversations = require("../../models/conversation.model");
 const Mesages = require("../../models/message.model");
-const Users = require("../../models/user.model");
+const Company = require("../../models/company.model");
 
 /**
  *
@@ -36,16 +36,16 @@ exports.conversation = async (req, res) => {
  */
 exports.userConversation = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const companyId = req.params.companyId;
     const conversations = await Conversations.find({
-      members: { $in: [userId] },
+      members: { $in: [companyId] },
     });
     const conversationUserData = Promise.all(
       conversations.map(async (conversation) => {
         const senderId = conversation.members.find(
-          (member) => member !== userId
+          (member) => member !== companyId
         );
-        const sender = await Users.findById(senderId);
+        const sender = await Company.findById(senderId);
         const messages = await Mesages.find({
           conversationId: conversation?._id,
         });

@@ -1,17 +1,17 @@
 const Messages = require("../models/message.model");
-const Users = require("../models/user.model");
+const Company = require("../models/company.model");
 
 exports.checkMessages = async (conversationId) => {
   const messages = await Messages.find({ conversationId });
-  const messageUserData = Promise.all(
+  const companyMessages = Promise.all(
     messages.map(async (message) => {
-      const user = await Users.findById(message.senderId);
+      const company = await Company.findById(message.senderId);
       return {
-        user: {
-          id: user._id,
-          email: user.email,
-          companyName: user.companyName,
-          image: user.image,
+        company: {
+          id: company?._id,
+          email: company?.email,
+          companyName: company?.companyName,
+          image: company?.image,
         },
         hasRead: message.hasRead,
         message: {
@@ -23,5 +23,5 @@ exports.checkMessages = async (conversationId) => {
       };
     })
   );
-  return messageUserData;
+  return companyMessages;
 };

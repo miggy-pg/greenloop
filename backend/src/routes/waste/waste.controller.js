@@ -1,14 +1,14 @@
 const Waste = require("../../models/waste.model");
-const Users = require("../../models/user.model");
+const Company = require("../../models/company.model");
 const {
   cloudinaryUploader,
   cloudinaryDelete,
 } = require("../../utils/cloudinary/cloudinaryUploader");
 
-const wasteItems = (user, waste) => {
+const wasteItems = (company, waste) => {
   return (
     waste && {
-      user: user,
+      company: company,
       id: waste?._id,
       post: waste?.post,
       wasteCategory: waste?.wasteCategory,
@@ -25,8 +25,8 @@ fetchWastes = async (req, res) => {
 
     const wasteData = Promise.all(
       wastes.map(async (waste) => {
-        const user = await Users.findById(waste.user);
-        return wasteItems(user, waste);
+        const company = await Company.findById(waste.company);
+        return wasteItems(company, waste);
       })
     );
 
@@ -38,7 +38,7 @@ fetchWastes = async (req, res) => {
 
 createWaste = async (req, res) => {
   try {
-    const { post, image, wasteCategory, user } = req.body;
+    const { post, image, wasteCategory, company } = req.body;
     const { imageUrl, publicId } = await cloudinaryUploader(
       image,
       process.env.WASTE_IMAGE_FOLDER,
@@ -53,7 +53,7 @@ createWaste = async (req, res) => {
         url: imageUrl,
         public_id: publicId,
       },
-      user,
+      company,
     });
     res.status(201).json(newWaste);
   } catch (err) {
@@ -69,24 +69,18 @@ updateWaste = async (req, res) => {
 
     const waste = await Waste.findById(wasteId);
     if (waste) {
-      // let newImage;
-      // if (image?.length > 0) {
-      //   newImage =
-      // }
       const { imageUrl, publicId } = await cloudinaryUploader(
         image,
         process.env.WASTE_IMAGE_FOLDER,
         process.env.WASTE_IMAGE_SIZE,
         process.env.RESIZE_TYPE
       );
-      // if (waste?.image?.public_id !== newImage?.public_id) {
-      //   await Cloudinary.uploader.destroy(waste.image.public_id);
-      //   waste.image = {
-      //     url: newImage?.secure_url,
-      //     public_id: newImage?.public_id,
-      //   };
-      // }
-      await cloudinaryDelete(waste?.image?.public_id, newImage?.public_id);
+      // Delete the previous image from cloudinary
+      await cloudinaryDelete(waste?.image?.public_id, publicId);
+      waste.image = {
+        url: imageUrl,
+        public_id: publicId,
+      };
       waste.post = post;
       waste.wasteCategory = wasteCategory;
     }
@@ -111,13 +105,12 @@ checkWasteAvailableOrNot = async (req, res) => {
   try {
     const wasteId = req.params.wasteId;
     const { available } = req.body;
-    const waste = await Waste.updateOne(
+    await Waste.updateOne(
       { _id: wasteId },
       {
         $set: { available: Boolean(available) },
       }
     );
-    console.log("wasteUpdatedAvailable: ", waste);
   } catch (err) {
     console.log("Error: ", err);
   }

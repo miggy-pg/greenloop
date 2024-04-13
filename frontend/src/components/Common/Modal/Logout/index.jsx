@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { signOutUser } from "../../../../api/user";
+import { signOutCompany } from "../../../../api/user";
 
 const Logout = ({ setIsLoggingOut }) => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
@@ -8,7 +8,7 @@ const Logout = ({ setIsLoggingOut }) => {
   const signOut = async () => {
     navigate("/users/sign-in");
     localStorage.clear();
-    await signOutUser(user.id);
+    await signOutCompany(user.id);
   };
   return (
     <>

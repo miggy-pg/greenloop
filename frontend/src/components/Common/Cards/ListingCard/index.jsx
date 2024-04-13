@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom";
-
-import { IoMdTime } from "react-icons/io";
-import { transformText } from "../../../utils/plasticColors";
-import defaultImage from "../../../assets/images/waste-default-image.webp";
-import formatDateTime from "../../../utils/formatDateTime";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+
+import defaultImage from "../../../../assets/images/waste-default-image.webp";
+import { IoMdTime } from "react-icons/io";
+import { transformText } from "../../../../utils/plasticColors";
+import formatDateTime from "../../../../utils/formatDateTime";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
-import { updateWasteAvailableOrNot } from "../../../api/waste";
-import Dropdown from "../Dropdown";
+import { updateWasteAvailableOrNot } from "../../../../api/waste";
+import Dropdown from "../../Dropdown";
 
 const ListingCard = ({ waste, loggedInUser }) => {
   const url = window.location.href;

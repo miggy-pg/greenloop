@@ -21,7 +21,9 @@ export default function Users() {
   const [showModal, setShowModal] = useState(false);
   const [places, setPlaces] = useState([]);
 
-  const { allUsers } = useUsers();
+  const {
+    usersQuery: { data: allUsers },
+  } = useUsers();
   const { image, fetchImage, imagePreview, setImage, setImagePreview } =
     useUploadImage();
   const { register, handleSubmit, reset } = useForm({
@@ -43,8 +45,8 @@ export default function Users() {
     }
   };
 
-  const getUserData = (userId) => {
-    const userRecord = allUsers.filter((user) => user.id == userId);
+  const getUserData = (companyId) => {
+    const userRecord = allUsers.filter((user) => user.id == companyId);
     setUserData(userRecord[0]);
     const filteredMunicipalities = mindanaoPlaces.filter((province) =>
       province.name.includes(userRecord[0].province)
@@ -56,7 +58,7 @@ export default function Users() {
   const { mutate: handleCreateUser } = useMutation({
     mutationFn: (data) => createUser(data),
     onSuccess: () => {
-      alert("User created successfully");
+      alert("Company created successfully");
       queryClient.invalidateQueries({ queryKey: ["users"] });
       reset();
       setShowModal(false);
@@ -84,7 +86,7 @@ export default function Users() {
   });
 
   const { mutate: handleDeleteUser } = useMutation({
-    mutationFn: (userId) => deleteUser(userId),
+    mutationFn: (companyId) => deleteUser(companyId),
     onSuccess: () => {
       alert("User has been deleted");
       queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -94,7 +96,7 @@ export default function Users() {
   const onSubmit = (data) => {
     const formData = { ...data, image };
     userData?.id
-      ? handleUpdateUser({ userId: userData.id, formData: formData })
+      ? handleUpdateUser({ companyId: userData.id, formData: formData })
       : handleCreateUser({ ...formData, onAdminCreated: true });
   };
 
@@ -143,7 +145,7 @@ export default function Users() {
                   province={user.province}
                   cityMunicipality={user.cityMunicipality}
                   username={user.username}
-                  userId={user.id}
+                  companyId={user.id}
                   getUserData={getUserData}
                   handleDeleteUser={handleDeleteUser}
                 />

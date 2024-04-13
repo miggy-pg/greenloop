@@ -27,7 +27,9 @@ const cloudinaryUploader = async (image, folder, width, crop) => {
 
 const cloudinaryDelete = async (oldPublicId, newPublicId) => {
   try {
-    await cloudinary.uploader.destroy(publicId);
+    if (oldPublicId === newPublicId) return false;
+    await cloudinary.uploader.destroy(oldPublicId);
+    return true;
   } catch (err) {
     console.error(err);
   }

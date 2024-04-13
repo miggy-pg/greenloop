@@ -19,6 +19,7 @@ export default {
         128: "40rem",
       },
       height: {
+        18: "4.5rem",
         108: "30rem",
         dvh: "100dvh",
         "9/10": "90%",

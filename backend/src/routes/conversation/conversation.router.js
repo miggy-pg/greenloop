@@ -11,6 +11,6 @@ const conversationRouter = Router();
 */
 
 conversationRouter.post("/conversations", conversation);
-conversationRouter.get("/conversations/:userId", userConversation);
+conversationRouter.get("/conversations/:companyId", userConversation);
 
 module.exports = conversationRouter;

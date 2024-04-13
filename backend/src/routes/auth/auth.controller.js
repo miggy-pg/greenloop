@@ -1,15 +1,11 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Users = require("../../models/user.model");
+const Users = require("../../models/company.model");
 const {
   cloudinaryUploader,
 } = require("../../utils/cloudinary/cloudinaryUploader");
 
-const UPLOADED_IMAGE_PATH = "users/profile";
-const IMAGE_SIZE = 300;
-const IMAGE_RESIZE_TYPE = "scale";
-
-registerUser = async (req, res, next) => {
+registerCompany = async (req, res, next) => {
   try {
     const {
       companyName,
@@ -36,9 +32,9 @@ registerUser = async (req, res, next) => {
 
     const { imageUrl, publicId } = await cloudinaryUploader(
       image,
-      UPLOADED_IMAGE_PATH,
-      IMAGE_SIZE,
-      IMAGE_RESIZE_TYPE
+      process.env.USER_IMAGE_FOLDER,
+      process.env.USER_IMAGE_SIZE,
+      process.env.RESIZE_TYPE
     );
 
     const createUser = new Users({
@@ -69,7 +65,7 @@ registerUser = async (req, res, next) => {
   }
 };
 
-loginUser = async (req, res, next) => {
+loginCompany = async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
@@ -90,7 +86,7 @@ loginUser = async (req, res, next) => {
     }
 
     const payload = {
-      userId: user._id,
+      companyId: user._id,
       email: user.email,
     };
     const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "JWT_SECRET_KEY";
@@ -128,7 +124,7 @@ loginUser = async (req, res, next) => {
   }
 };
 
-signOutUser = async (req, res) => {
+signOutCompany = async (req, res) => {
   try {
     await Users.updateOne(
       { _id: req.params?.userId },
@@ -148,7 +144,7 @@ signOutUser = async (req, res) => {
 };
 
 module.exports = {
-  registerUser,
-  loginUser,
-  signOutUser,
+  registerCompany,
+  loginCompany,
+  signOutCompany,
 };

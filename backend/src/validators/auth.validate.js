@@ -1,4 +1,4 @@
-const Users = require("../models/user.model");
+const Users = require("../models/company.model");
 
 const checkUsernameAndEmailAvailability = async (req, res, next) => {
   const { username, email } = req.body;

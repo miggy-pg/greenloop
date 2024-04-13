@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { signOutUser } from "../../../api/user";
+import { signOutCompany } from "../../../api/user";
 
 const SettingsDropdown = ({ userData }) => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
@@ -8,7 +8,7 @@ const SettingsDropdown = ({ userData }) => {
   const signOut = async () => {
     navigate("/users/sign-in");
     localStorage.clear();
-    await signOutUser(userData?._id);
+    await signOutCompany(userData?._id);
   };
 
   return (

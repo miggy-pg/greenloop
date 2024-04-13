@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
@@ -19,7 +19,6 @@ const Profile = () => {
 
   const token = localStorage.getItem("user:token");
   const decToken = jwtDecode(token);
-  console.log("decToken: ", decToken);
 
   const { id: profileId } = useParams();
   const isLoggedIn = token !== null || false;
@@ -30,12 +29,13 @@ const Profile = () => {
   const {
     userQuery: { data: user },
     isLoading,
-    error: userError,
-  } = useUser(profileId === decToken.userId ? decToken.userId : profileId);
-  console.log("user: ", user);
+    error,
+  } = useUser(
+    profileId === decToken.companyId ? decToken.companyId : profileId
+  );
 
-  const currUser = user && profileId === decToken.userId;
-  const visitedUser = user && profileId !== decToken.userId;
+  const currUser = user && profileId === decToken.companyId;
+  const visitedUser = user && profileId !== decToken.companyId;
   const profileType = profileId && isLoggedIn ? currUser : visitedUser;
 
   const { register, handleSubmit, reset } = useForm();
@@ -63,10 +63,11 @@ const Profile = () => {
       province.name.includes(user.province)
     );
     setPlaces(filteredMunicipalities[0].places);
+    setImagePreview(user.image.url);
   };
 
   const { mutate: messageCompany } = useMutation({
-    mutationFn: () => createConversation(decToken.userId, profileId),
+    mutationFn: () => createConversation(decToken.companyId, profileId),
     onSuccess: (data) => {
       const { data: conversationId } = data;
       navigate(`/chats?id=${conversationId[0]._id}`);
@@ -74,7 +75,7 @@ const Profile = () => {
   });
 
   const { mutate: editProfile } = useMutation({
-    mutationFn: (data) => updateUser(data.userId, data.formData),
+    mutationFn: (data) => updateUser(data.companyId, data.formData),
     onSuccess: () => {
       alert("Profile updated successfully");
       reset();
@@ -90,7 +91,7 @@ const Profile = () => {
   const onSubmit = (data) => {
     try {
       const formData = { ...data, image };
-      editProfile({ userId: decToken?.userId, formData: formData });
+      editProfile({ companyId: decToken?.companyId, formData: formData });
 
       setShowModal(false);
     } catch (err) {
@@ -171,9 +172,7 @@ const Profile = () => {
                                 {imagePreview ? (
                                   <img
                                     src={
-                                      imagePreview
-                                        ? URL.createObjectURL(imagePreview)
-                                        : null
+                                      user?.image?.url ? user?.image.url : null
                                     }
                                     alt={
                                       imagePreview ? imagePreview.name : null

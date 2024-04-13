@@ -26,7 +26,7 @@ const SignUp = () => {
   const { mutate: createUser } = useMutation({
     mutationFn: (data) => signUpUser(data),
     onSuccess: () => {
-      alert("User created successfully");
+      alert("Company created successfully");
       navigate("/users/sign-in");
     },
     onError: (error) => {
@@ -39,7 +39,6 @@ const SignUp = () => {
 
   const onSubmit = (data, e) => {
     e.preventDefault();
-    console.log("data: ", data);
     createUser(data);
   };
 

@@ -1,5 +1,9 @@
 const { Router } = require("express");
-const { registerUser, loginUser, signOutUser } = require("./auth.controller");
+const {
+  registerCompany,
+  loginCompany,
+  signOutCompany,
+} = require("./auth.controller");
 const {
   checkUsernameAndEmailAvailability,
 } = require("../../validators/auth.validate");
@@ -14,10 +18,10 @@ const authRouter = Router();
 | Sign-out User        | PATCH        | /v1/sign-out       |
 */
 
-authRouter.post("/sign-up", checkUsernameAndEmailAvailability, registerUser);
+authRouter.post("/sign-up", checkUsernameAndEmailAvailability, registerCompany);
 
-authRouter.post("/sign-in", loginUser);
+authRouter.post("/sign-in", loginCompany);
 
-authRouter.patch("/sign-out/:userId", signOutUser);
+authRouter.patch("/sign-out/:companyId", signOutCompany);
 
 module.exports = authRouter;

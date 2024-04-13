@@ -12,7 +12,7 @@ export default function UserList({
   province,
   username,
   cityMunicipality,
-  userId,
+  companyId,
   getUserData,
   handleDeleteUser,
 }) {
@@ -43,7 +43,7 @@ export default function UserList({
           $variations="primaryBlue"
           $size="small"
           onClick={() => {
-            getUserData(userId);
+            getUserData(companyId);
           }}
         >
           Update
@@ -53,7 +53,7 @@ export default function UserList({
         <StyledButton
           $variations="danger"
           $size="small"
-          onClick={() => handleDeleteUser(userId)}
+          onClick={() => handleDeleteUser(companyId)}
         >
           Delete
         </StyledButton>
@@ -62,7 +62,7 @@ export default function UserList({
         <StyledButton
           $variations="secondary"
           $size="small"
-          onClick={() => navigate(`/profile/${userId}`)}
+          onClick={() => navigate(`/profile/${companyId}`)}
         >
           Details
         </StyledButton>

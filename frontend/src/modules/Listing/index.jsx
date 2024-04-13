@@ -10,8 +10,8 @@ import { TbArrowBarLeft } from "react-icons/tb";
 
 import Body from "../../components/Common/Body";
 import Pagination from "../../components/Common/Pagination";
-import ListingCard from "../../components/Common/ListingCard";
-import SortByCard from "../../components/Common/SortByCard";
+import ListingCard from "../../components/Common/Cards/ListingCard";
+import SortByCard from "../../components/Common/Cards/SortByCard";
 import mindanaoPlaces from "../../constants/mindanaoPlaces";
 import wasteCategories from "../../constants/wasteCategories";
 

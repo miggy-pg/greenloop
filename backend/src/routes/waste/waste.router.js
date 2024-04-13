@@ -14,7 +14,7 @@ const wasteRouter = Router();
 |----------------------------|--------------|------------------------|
 | Create Waste Item          | POST         | /v1/wastes/            |
 | Fetch All Wastes           | GET          | /v1/wastes             |
-| Fetch Current User Waste   | GET          | /v1/wastes/:userId     |
+| Fetch Current User Waste   | GET          | /v1/wastes/:companyId     |
 */
 
 wasteRouter.post("/wastes", createWaste);

@@ -1,7 +1,9 @@
 const Conversations = require("../../models/conversation.model");
 const Message = require("../../models/message.model");
-const Users = require("../../models/user.model");
-const cloudinaryUploader = require("../../utils/cloudinary/cloudinaryUploader");
+const Company = require("../../models/company.model");
+const {
+  cloudinaryUploader,
+} = require("../../utils/cloudinary/cloudinaryUploader");
 
 exports.message = async (req, res) => {
   try {
@@ -65,13 +67,13 @@ exports.conversationMessage = async (req, res) => {
       const messages = await Message.find({ conversationId });
       const messageUserData = Promise.all(
         messages.map(async (message) => {
-          const user = await Users.findById(message.senderId);
+          const company = await Company.findById(message.senderId);
           return {
-            user: {
-              id: user._id,
-              email: user.email,
-              companyName: user.companyName,
-              image: user.image,
+            company: {
+              id: company._id,
+              email: company.email,
+              companyName: company.companyName,
+              image: company.image,
             },
             hasRead: message.hasRead,
             message: {

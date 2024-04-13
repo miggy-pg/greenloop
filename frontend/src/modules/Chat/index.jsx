@@ -41,8 +41,8 @@ const Chat = () => {
   }, []);
 
   useMemo(() => {
-    socket?.emit("addUser", user?.id);
-    socket?.on("getUsers", (users) => {
+    socket?.emit("addCompany", user?.id);
+    socket?.on("getCompanies", (users) => {
       console.log("activeUsers: ", users);
     });
     socket?.on("getMessage", (data) => {

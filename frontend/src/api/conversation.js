@@ -1,14 +1,14 @@
 import axios from "redaxios";
 import { getEndpoint } from "../utils/Helper";
 
-export const getMessages = async (conversationId, userId, receiverId) => {
+export const getMessages = async (conversationId, companyId, receiverId) => {
   return axios.get(
-    `${getEndpoint}/v1/messages/${conversationId}?senderId=${userId}&&receiverId=${receiverId}`
+    `${getEndpoint}/v1/messages/${conversationId}?senderId=${companyId}&&receiverId=${receiverId}`
   );
 };
 
-export const getConversations = async (userId) => {
-  return axios.get(`${getEndpoint}/v1/conversations/${userId}`);
+export const getConversations = async (companyId) => {
+  return axios.get(`${getEndpoint}/v1/conversations/${companyId}`);
 };
 
 export const createConversation = async (senderId, receiverId) => {
