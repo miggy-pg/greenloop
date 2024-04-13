@@ -27,10 +27,12 @@ const Post = () => {
     mutationFn: (formData) => uploadPost(formData),
     onSuccess: () => {
       alert("Post uploaded successfully");
-      queryClient.invalidateQueries({ queryKey: ["userWastes"] });
+      queryClient.invalidateQueries({ queryKey: ["companyWastes"] });
       reset();
       setImagePreview("");
       setImage([]);
+      const wasteLength = localStorage.getItem("wasteLength");
+      localStorage.setItem("wasteLength", Number(wasteLength) + 1);
     },
     onError: (error) => {
       console.log("errors: ", error);

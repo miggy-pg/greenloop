@@ -1,29 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser, fetchUsers } from "../api/user";
 
-export const useUser = (companyId) => {
-  console.log("companyId", companyId);
+export const useCompany = (companyId) => {
   const {
-    data: userQuery = [],
+    data: companyData = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["user"],
+    queryKey: ["company"],
     queryFn: () => fetchUser(companyId),
   });
 
-  return { userQuery, isLoading, error };
+  return { companyData, isLoading, error };
 };
 
-export const useUsers = () => {
+export const useCompanies = () => {
   const {
-    data: usersQuery = [],
+    data: companiesData = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["companies"],
     queryFn: () => fetchUsers(),
   });
 
-  return { usersQuery, isLoading, error };
+  return { companiesData, isLoading, error };
 };

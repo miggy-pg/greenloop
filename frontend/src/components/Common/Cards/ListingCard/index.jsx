@@ -37,7 +37,7 @@ const ListingCard = ({ waste, loggedInUser }) => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries("userWastes");
+      queryClient.invalidateQueries("companyWastes");
       console.log("onSuccess");
     },
   });

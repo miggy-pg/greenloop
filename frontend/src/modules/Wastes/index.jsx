@@ -36,7 +36,7 @@ export default function Wastes() {
     mutationFn: (waste) => updateWaste(waste.wasteId, waste.formData),
     onSuccess: () => {
       alert("Waste updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["userWastes"] });
+      queryClient.invalidateQueries({ queryKey: ["companyWastes"] });
       reset();
       setShowModal(false);
       setWasteData({});
@@ -52,7 +52,7 @@ export default function Wastes() {
     mutationFn: (wasteId) => deleteWaste(wasteId),
     onSuccess: () => {
       alert("Waste has been deleted");
-      queryClient.invalidateQueries({ queryKey: ["userWastes"] });
+      queryClient.invalidateQueries({ queryKey: ["companyWastes"] });
     },
     onError: (error) => {
       console.log("error: ", error);

@@ -32,6 +32,7 @@ fetchWastes = async (req, res) => {
 
     res.status(200).json(await wasteData);
   } catch (err) {
+    res.status(500).json(err);
     console.log("Error: ", err);
   }
 };

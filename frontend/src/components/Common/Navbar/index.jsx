@@ -19,7 +19,7 @@ import Logout from "../Modal/Logout";
 import { useSocketMessages } from "../../../hooks/useSocket";
 
 import greenloopLogo from "../../../assets/images/greenloop-logo.png";
-import { useUser } from "../../../hooks/useUser";
+import { useCompany } from "../../../hooks/useCompany";
 
 const iconSizes = "h-4.5 w-4.5 lg:h-5 lg:w-5 md:h-5 md:w-5";
 
@@ -63,8 +63,7 @@ const Navbar = () => {
     userQuery: { data: userData },
     isLoading,
     error,
-  } = useUser(user?.id);
-  console.log("userData: ", useUser(user?.id));
+  } = useCompany(user?.id);
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();

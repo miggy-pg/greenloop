@@ -1,23 +1,23 @@
 import axios from "redaxios";
 import { getEndpoint } from "../utils/Helper";
 
-export const fetchUser = async (companyId) => {
+export const fetchCompany = async (companyId) => {
   return axios.get(`${getEndpoint}/v1/users/${companyId}`);
 };
 
-export const fetchUsers = async () => {
+export const fetchCompanies = async () => {
   return axios.get(`${getEndpoint}/v1/users`);
 };
 
-export const updateUser = async (companyId, user) => {
+export const updateCompany = async (companyId, user) => {
   return axios.put(`${getEndpoint}/v1/users/${companyId}`, user);
 };
 
-export const createUser = async (user) => {
+export const createCompany = async (user) => {
   return axios.post(`${getEndpoint}/v1/sign-up`, user);
 };
 
-export const deleteUser = async (companyId) => {
+export const deleteCompany = async (companyId) => {
   return axios.delete(`${getEndpoint}/v1/users/${companyId}`);
 };
 

@@ -33,7 +33,7 @@ const PostCard = ({ props, defaultImage, wasteDefaultImage, loggedInUser }) => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries("userWastes");
+      queryClient.invalidateQueries("companyWastes");
       console.log("onSuccess");
     },
   });

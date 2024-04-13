@@ -7,7 +7,7 @@ export const useWastes = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["userWastes"],
+    queryKey: ["companyWastes"],
     queryFn: fetchWastes,
   });
 
