@@ -19,7 +19,7 @@ import Logout from "../Modal/Logout";
 import { useSocketMessages } from "../../../hooks/useSocket";
 
 import greenloopLogo from "../../../assets/images/greenloop-logo.png";
-import { useCompany } from "../../../hooks/useCompany";
+import { useFetchCompany } from "../../../hooks/useCompany";
 
 const iconSizes = "h-4.5 w-4.5 lg:h-5 lg:w-5 md:h-5 md:w-5";
 
@@ -60,10 +60,10 @@ const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("user:detail"));
 
   const {
-    userQuery: { data: userData },
+    companyData: { data: companyData },
     isLoading,
     error,
-  } = useCompany(user?.id);
+  } = useFetchCompany(user?.id);
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -214,7 +214,7 @@ const Navbar = () => {
                     </div>
                   );
                 } else {
-                  return userData?.organizationType.includes(
+                  return companyData?.organizationType.includes(
                     "Recycling Startup"
                   ) && !menu.name.includes("Post") ? (
                     <NavLink
@@ -241,7 +241,7 @@ const Navbar = () => {
                       </span>
                     </NavLink>
                   ) : (
-                    userData?.organizationType.includes(
+                    companyData?.organizationType.includes(
                       "Waste Generator" || "Informal Waste Sector"
                     ) && (
                       <NavLink
@@ -278,7 +278,9 @@ const Navbar = () => {
                 />
               )}
 
-              {isHoveredSettings && <SettingsDropdown userData={userData} />}
+              {isHoveredSettings && (
+                <SettingsDropdown companyData={companyData} />
+              )}
               {isLoggingOut && <Logout setIsLoggingOut={setIsLoggingOut} />}
             </ul>
           </div>

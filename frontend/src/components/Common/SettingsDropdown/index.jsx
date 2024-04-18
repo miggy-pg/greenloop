@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { signOutCompany } from "../../../api/user";
+import { signOutCompany } from "../../../api/company";
 
 const SettingsDropdown = ({ userData }) => {
   const user = JSON.parse(localStorage.getItem("user:detail"));

@@ -4,19 +4,22 @@ import Table from "../../Common/Table";
 import StyledButton from "../../Common/Button/StyledButton";
 import defaultImage from "../../../assets/images/default-image.jpg";
 
-export default function UserList({
-  image,
-  companyName,
-  email,
-  organizationType,
-  province,
-  username,
-  cityMunicipality,
-  companyId,
-  getUserData,
-  handleDeleteUser,
+export default function CompanyList({
+  company,
+  getCompanyData,
+  handleDeleteCompany,
 }) {
   const navigate = useNavigate();
+  const {
+    image,
+    companyName,
+    email,
+    organizationType,
+    province,
+    username,
+    cityMunicipality,
+    id: companyId,
+  } = company;
 
   return (
     <tr className="hover:bg-gray-100">
@@ -42,9 +45,7 @@ export default function UserList({
         <StyledButton
           $variations="primaryBlue"
           $size="small"
-          onClick={() => {
-            getUserData(companyId);
-          }}
+          onClick={() => getCompanyData(companyId)}
         >
           Update
         </StyledButton>
@@ -53,7 +54,7 @@ export default function UserList({
         <StyledButton
           $variations="danger"
           $size="small"
-          onClick={() => handleDeleteUser(companyId)}
+          onClick={() => handleDeleteCompany(companyId)}
         >
           Delete
         </StyledButton>

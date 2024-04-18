@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { signOutCompany } from "../../../../api/user";
+import { signOutCompany } from "../../../../api/company";
 
 const Logout = ({ setIsLoggingOut }) => {
   const user = JSON.parse(localStorage.getItem("user:detail"));

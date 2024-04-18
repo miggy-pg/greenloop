@@ -16,7 +16,7 @@ const SignUp = lazy(() => import("./modules/SignUp"));
 const Listing = lazy(() => import("./modules/Listing"));
 const Post = lazy(() => import("./modules/Post"));
 const Profile = lazy(() => import("./modules/Profile"));
-const Users = lazy(() => import("./modules/Users"));
+const Company = lazy(() => import("./modules/Company"));
 const Wastes = lazy(() => import("./modules/Wastes"));
 const DashboardLayout = lazy(() => import("./modules/Dashboard"));
 const MobileNotification = lazy(() => import("./modules/Notification/Mobile"));
@@ -99,7 +99,7 @@ const App = () => {
                 <Route path="notifications" element={<MobileNotification />} />
               )}
               <Route path="dashboard" element={<DashboardLayout />}>
-                <Route index path="users" element={<Users />} />
+                <Route index path="companies" element={<Company />} />
                 <Route path="wastes" element={<Wastes />} />
               </Route>
             </Route>
