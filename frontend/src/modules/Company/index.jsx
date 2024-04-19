@@ -2,9 +2,9 @@ import { useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
-import { createCompany, deleteCompany, updateCompany } from "../../api/company";
 import Table from "../../components/Common/Table";
 import CompanyList from "../../components/Management/CompanyList";
+import { createCompany, deleteCompany, updateCompany } from "../../api/company";
 import { useUploadImage } from "../../hooks/useUploadImage";
 import { useFetchCompanies } from "../../hooks/useCompany";
 import { userHeader } from "../../constants/userHeader";
@@ -47,14 +47,12 @@ export default function Users() {
   };
 
   const getCompanyData = (companyId) => {
-    console.log("companyId: ", companyId);
-    const userRecord = allCompanies.filter(
+    const companyInfo = allCompanies.filter(
       (company) => company.id == companyId
     );
-    console.log("userRecord: ", userRecord);
-    setCompanyData(userRecord[0]);
+    setCompanyData(companyInfo[0]);
     const filteredMunicipalities = mindanaoPlaces.filter((province) =>
-      province.name.includes(userRecord[0].province)
+      province.name.includes(companyInfo[0].province)
     )[0];
     setPlaces(filteredMunicipalities.places);
     setShowModal(true);
@@ -74,7 +72,7 @@ export default function Users() {
   });
 
   const { mutate: handleUpdateCompany } = useMutation({
-    mutationFn: (data) => updateCompany(data.userId, data.formData),
+    mutationFn: (data) => updateCompany(data.companyId, data.formData),
     onSuccess: () => {
       alert("Company updated successfully");
       queryClient.invalidateQueries({ queryKey: ["companies"] });

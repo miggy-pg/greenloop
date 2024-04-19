@@ -11,11 +11,11 @@ const {
 const authRouter = Router();
 
 /*
-| CRUD Operation       | HTTP Method  | Route              |
-|----------------------|--------------|--------------------|
-| Create User          | POST         | /v1/sign-up       |
-| Sign-in User         | POST         | /v1/sign-in       |
-| Sign-out User        | PATCH        | /v1/sign-out       |
+| CRUD Operation       | HTTP Method  | Route                       |
+|----------------------|--------------|-----------------------------|
+| Create Company          | POST         | /v1/sign-up                 |
+| Sign-in Company         | POST         | /v1/sign-in                 |
+| Sign-out Company        | PATCH        | /v1/sign-out/:companyId     |
 */
 
 authRouter.post("/sign-up", checkUsernameAndEmailAvailability, registerCompany);

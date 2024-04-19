@@ -5,12 +5,12 @@ const wasteSchema = mongoose.Schema(
     post: {
       type: String,
       required: [true, "Please write something about the waste"],
-      maxLength: 200,
+      maxlength: 200,
     },
     wasteCategory: {
       type: String,
       required: [true, "Please select a category"],
-      maxLength: 40,
+      maxlength: 40,
     },
     image: {
       public_id: {

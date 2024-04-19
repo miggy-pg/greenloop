@@ -8,7 +8,7 @@ cloudinary.config({
 
 const cloudinaryUploader = async (image, folder, width, crop) => {
   try {
-    if (!image) return { imageUrl: "", publicId: "" };
+    if (!image.length) return { imageUrl: "", publicId: "" };
 
     const cloudinaryImage = await cloudinary.uploader.upload(image, {
       folder,
