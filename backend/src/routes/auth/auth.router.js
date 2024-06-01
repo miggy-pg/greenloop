@@ -18,7 +18,7 @@ const authRouter = Router();
 | Sign-out Company        | PATCH        | /v1/sign-out/:companyId     |
 */
 
-authRouter.post("/sign-up", checkUsernameAndEmailAvailability, registerCompany);
+authRouter.post("/sign-up", registerCompany);
 
 authRouter.post("/sign-in", loginCompany);
 

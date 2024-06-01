@@ -1,0 +1,9 @@
+{
+  "editor.wordWrap": "off",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.fontSize": 12,
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "files.autoSave": "onFocusChange",
+  "eslint.run": "onSave"
+}

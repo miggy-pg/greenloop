@@ -8,6 +8,7 @@ const prodOrigin = [process.env.ORIGIN_1, process.env.ORIGIN_2];
 const devOrigin = [process.env.DEV_ORIGIN];
 const allowedOrigins =
   process.env.NODE_ENV === "production" ? prodOrigin : devOrigin;
+console.log("NODE_ENV: ", process.env.NODE_ENV);
 
 app.use(function (req, res, next) {
   const origin = req.headers.origin;

@@ -24,7 +24,7 @@ const SettingsDropdown = ({ userData }) => {
       <ul className="py-1">
         {user.isAdmin && (
           <li>
-            <Link to="dashboard/users">
+            <Link to="dashboard/companies">
               <span
                 className="block px-4 py-4 cursor-pointer hover:bg-gray-100"
                 role="menuitem"
