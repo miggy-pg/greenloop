@@ -70,14 +70,14 @@ io.on("connection", (socket) => {
       const messages = await checkMessages(checkConversation[0]._id);
       const newMessages = messages.filter(
         (message) =>
-          !message.hasRead && message.user.id.toString() !== companyId
+          !message.hasRead && message.company.id.toString() !== companyId
       );
       io.to(socket.id).emit("getNewMessages", newMessages);
     }
   });
 
   socket.on("disconnect", () => {
-    companies = companies.filter((company) => user.socketId !== socket.id);
+    companies = companies.filter((company) => company.socketId !== socket.id);
     io.emit("getCompanies", companies);
   });
 });

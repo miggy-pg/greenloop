@@ -156,7 +156,7 @@ const Chat = () => {
   };
 
   console.log("receiverUserTest: ", receiverUser);
-  console.log("messages: ", messages);
+  console.log("conversations: ", conversations);
 
   return (
     <div className="w-full h-full" id="profile">
@@ -459,11 +459,10 @@ const Chat = () => {
                 <div className="p-14 sm:p-2">
                   {messages?.messages?.length > 0 ? (
                     messages.messages.map(
-                      ({ message, company: messageSender }, index) => {
-                        console.log("messageSneder: ", messageSender);
+                      ({ message, user: messageSender }, index) => {
                         return (
                           <div key={index}>
-                            {messageSender?.id == user?.id ? (
+                            {messageSender.id == user?.id ? (
                               <>
                                 {/* Current User Message Message Chat Box */}
                                 <div
@@ -486,7 +485,7 @@ const Chat = () => {
                                 {message?.msgImage?.url && (
                                   <div
                                     className={`w-full rounded-b-xl p-2 mb-2 ${
-                                      messageSender?.id === user?.id
+                                      messageSender === user?.id
                                         ? "bg-primary text-blue rounded-tl-xl ml-auto"
                                         : "bg-secondary rounded-tr-xl"
                                     } `}
@@ -503,10 +502,11 @@ const Chat = () => {
                             ) : (
                               <>
                                 {/* Desktop Text Message Chat Box */}
+                                {console.log("user: ", user)}
                                 <div
                                   key={index}
                                   className={`max-w-[70%] rounded-b-xl p-4 mb-6 sm:p-2 ${
-                                    messageSender?.id === user?.id
+                                    messageSender === user?.id
                                       ? "bg-primary text-blue rounded-tl-xl ml-auto"
                                       : "bg-secondary rounded-tr-xl"
                                   } `}
@@ -532,7 +532,7 @@ const Chat = () => {
                                 {message?.msgImage?.url && (
                                   <div
                                     className={`max-w-[70%] rounded-b-xl p-4 mb-6 ${
-                                      messageSender?.id === user?.id
+                                      messageSender === user?.id
                                         ? "bg-primary text-blue rounded-tl-xl ml-auto"
                                         : "bg-secondary rounded-tr-xl"
                                     } `}
@@ -543,7 +543,7 @@ const Chat = () => {
                                           src={
                                             messageSender?.image?.url?.length >
                                             0
-                                              ? messageSender?.image.url
+                                              ? messageSender.image.url
                                               : defaultImage
                                           }
                                           alt={messageSender?.companyName}

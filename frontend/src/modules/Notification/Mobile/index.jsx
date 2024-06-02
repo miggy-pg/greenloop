@@ -35,7 +35,7 @@ const MobileNotification = () => {
                   <div className="text-gray-500 font-normal text-clamp-xs mb-1 ">
                     New message from {""}
                     <span className="font-semibold text-gray-900">
-                      {message.user.companyName}
+                      {message.company.companyName}
                     </span>
                     : <br />
                     <p className="text-clamp-base font-semibold text-gray-700">

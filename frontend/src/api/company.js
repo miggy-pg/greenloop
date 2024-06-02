@@ -2,10 +2,6 @@ import axios from "redaxios";
 import { getEndpoint } from "../utils/Helper";
 
 export const fetchCompany = async (companyId) => {
-  console.log(
-    "fetchCompany: ",
-    await axios.get(`${getEndpoint}/v1/users/${companyId}`)
-  );
   return axios.get(`${getEndpoint}/v1/users/${companyId}`);
 };
 

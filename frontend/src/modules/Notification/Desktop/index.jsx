@@ -38,7 +38,7 @@ const Notification = ({ newMessages, hasReadMessage }) => {
                 <div className="text-gray-500 font-normal text-clamp-xs mb-1.5 ">
                   New message from {""}
                   <span className="font-semibold text-gray-900">
-                    {message.user.companyName}
+                    {message.company.companyName}
                   </span>
                   : {message?.message?.msg}
                   <blockquote className="text-clamp-xs text-gray-500 font-light">
