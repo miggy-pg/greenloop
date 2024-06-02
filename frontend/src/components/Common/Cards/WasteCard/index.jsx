@@ -16,7 +16,7 @@ const PostCard = ({ props, defaultImage, wasteDefaultImage, loggedInUser }) => {
     post,
     image,
     wasteCategory,
-    user,
+    company,
     createdAt,
     available,
   } = props;
@@ -44,24 +44,26 @@ const PostCard = ({ props, defaultImage, wasteDefaultImage, loggedInUser }) => {
       available: !available,
     });
   };
+
+  console.log("listng: ", props);
   return (
     <div className="bg-white border border-gray-200 shadow-sm rounded-3xl my-2">
       <article className="py-6 px-6 text-gray-800 xsm:px-4">
         <div className="flex items-left mb-5 text-sm font-semibold">
-          <Link to={`profile/${user?._id}`}>
+          <Link to={`profile/${company?._id}`}>
             <img
               className="w-11 h-11 mr-5 rounded-full cursor-pointer hover:opacity-80 xsm:w-9 xsm:h-9 xsm:mr-3"
-              src={user?.image ? image?.url : defaultImage}
-              alt={user?.companyName}
+              src={company?.image ? image?.url : defaultImage}
+              alt={company?.companyName}
             />
           </Link>
           <div className="w-full text-left">
             <div className="flex justify-between items-center">
               <Link
                 className="hover:underline cursor-pointer xsm:text-xxs"
-                to={`profile/${user?._id}`}
+                to={`profile/${company?._id}`}
               >
-                {user?.companyName ? user.companyName : "User"}
+                {company?.companyName ? company.companyName : "User"}
               </Link>
               <span className="flex reverse">
                 <p
@@ -76,7 +78,7 @@ const PostCard = ({ props, defaultImage, wasteDefaultImage, loggedInUser }) => {
                   button={
                     <HiOutlineDotsHorizontal className="text-gray-400 cursor-pointer" />
                   }
-                  isDisabled={loggedInUser?.id !== user?._id}
+                  isDisabled={loggedInUser?.id !== company?._id}
                 >
                   <div className="flex h-max w-40 flex-col justify-start rounded-[20px] bg-zinc-50 bg-no-repeat pb-4 shadow-md">
                     <div className="mt-3 ml-4">

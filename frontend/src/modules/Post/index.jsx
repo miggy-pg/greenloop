@@ -13,7 +13,7 @@ import wasteCategories from "../../constants/wasteCategories";
 const Post = () => {
   document.title = "Green Loop | Post";
 
-  const user = JSON.parse(localStorage.getItem("user:detail"));
+  const company = JSON.parse(localStorage.getItem("user:detail"));
 
   const [errors, setErrors] = useState({});
   const { image, imagePreview, fetchImage, setImagePreview, setImage } =
@@ -41,7 +41,7 @@ const Post = () => {
   });
 
   const onSubmit = (data) => {
-    const formData = { ...data, image, user: user?.id };
+    const formData = { ...data, image, company: company?.id };
     createWaste(formData);
   };
 

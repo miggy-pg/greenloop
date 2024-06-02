@@ -4,8 +4,10 @@ const {
   cloudinaryUploader,
   cloudinaryDelete,
 } = require("../../utils/cloudinary/cloudinaryUploader");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const wasteItems = (company, waste) => {
+  console.log("company: ", company);
   return (
     waste && {
       company: company,
@@ -17,6 +19,28 @@ const wasteItems = (company, waste) => {
       createdAt: waste?.createdAt,
     }
   );
+};
+
+fetchWaste = async (req, res) => {
+  try {
+    const companyId = req.params.companyId;
+
+    const wastes = await Waste.find().sort({ createdAt: -1 });
+
+    const wasteData = Promise.all(
+      wastes.map(async (waste) => {
+        console.log("wasteId: ", waste);
+        const company = await Company.findById(companyId);
+        console.log("companyHere: ", company);
+        return wasteItems(company, waste);
+      })
+    );
+
+    res.status(200).json(await wasteData);
+  } catch (err) {
+    res.status(500).json(err);
+    console.log("Error: ", err);
+  }
 };
 
 fetchWastes = async (req, res) => {

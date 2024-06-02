@@ -6,12 +6,12 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 
 import Listing from "../Listing";
-import { updateUser } from "../../api/user";
+import { updateCompany } from "../../api/company";
 import { createConversation } from "../../api/conversation";
 
 import defaultImage from "../../assets/images/default-image.jpg";
 import { useUploadImage } from "../../hooks/useUploadImage";
-import { useUser } from "../../hooks/useUser";
+import { useFetchCompany } from "../../hooks/useCompany";
 import mindanaoPlaces from "../../constants/mindanaoPlaces";
 
 const Profile = () => {
@@ -27,10 +27,10 @@ const Profile = () => {
     useUploadImage();
 
   const {
-    userQuery: { data: user },
+    companyData: { data: user },
     isLoading,
     error,
-  } = useUser(
+  } = useFetchCompany(
     profileId === decToken.companyId ? decToken.companyId : profileId
   );
 
@@ -75,7 +75,7 @@ const Profile = () => {
   });
 
   const { mutate: editProfile } = useMutation({
-    mutationFn: (data) => updateUser(data.companyId, data.formData),
+    mutationFn: (data) => updateCompany(data.companyId, data.formData),
     onSuccess: () => {
       alert("Profile updated successfully");
       reset();

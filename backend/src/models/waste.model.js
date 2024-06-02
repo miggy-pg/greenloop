@@ -22,9 +22,9 @@ const wasteSchema = mongoose.Schema(
         required: [true, "Please upload an image"],
       },
     },
-    user: {
+    company: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Company",
     },
     available: {
       type: Boolean,

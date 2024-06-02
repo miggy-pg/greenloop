@@ -6,6 +6,7 @@ import { updateHasReadMessage } from "../api/message";
 import { socketPort } from "../utils/Helper";
 
 export const useSocketMessages = (user) => {
+  console.log("socketUser: ".user);
   const queryClient = useQueryClient();
 
   const [socket, setSocket] = useState(null);
