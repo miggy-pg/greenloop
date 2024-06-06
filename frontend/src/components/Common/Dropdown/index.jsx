@@ -20,7 +20,10 @@ function useOutsideAlerter(ref, setX) {
 }
 
 const Dropdown = (props) => {
-  const { button, children, classNames, animation, isDisabled } = props;
+  const { button: Icon, children, classNames, animation, isDisabled } = props;
+  // const {}
+  console.log("icon: ", Icon);
+  console.log("Dropdown: ", props);
   const wrapperRef = React.useRef(null);
   const [openWrapper, setOpenWrapper] = React.useState(false);
   useOutsideAlerter(wrapperRef, setOpenWrapper);
@@ -28,7 +31,10 @@ const Dropdown = (props) => {
   return (
     <div ref={wrapperRef} className="relative flex">
       <div className="flex" onMouseDown={() => setOpenWrapper(!openWrapper)}>
-        <button disabled={isDisabled ? true : false}>{button}</button>
+        <button disabled={isDisabled ? true : false}>
+          {/* <Icon /> */}
+          {Icon}
+        </button>
       </div>
       <div
         className={`${classNames} absolute z-10 ${

@@ -8,31 +8,27 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 const wasteItems = (company, waste) => {
   console.log("company: ", company);
-  return (
-    waste && {
-      company: company,
-      id: waste?._id,
-      post: waste?.post,
-      wasteCategory: waste?.wasteCategory,
-      image: waste?.image,
-      available: waste?.available,
-      createdAt: waste?.createdAt,
-    }
-  );
+  return {
+    companyId: company?._id,
+    id: waste?._id,
+    post: waste?.post,
+    wasteCategory: waste?.wasteCategory,
+    image: waste?.image,
+    available: waste?.available,
+    createdAt: waste?.createdAt,
+  };
 };
 
 fetchWaste = async (req, res) => {
   try {
     const companyId = req.params.companyId;
-
     const wastes = await Waste.find().sort({ createdAt: -1 });
-
     const wasteData = Promise.all(
       wastes.map(async (waste) => {
         console.log("wasteId: ", waste);
         const company = await Company.findById(companyId);
         console.log("companyHere: ", company);
-        return wasteItems(company, waste);
+        return waste && wasteItems(company, waste);
       })
     );
 
@@ -49,8 +45,9 @@ fetchWastes = async (req, res) => {
 
     const wasteData = Promise.all(
       wastes.map(async (waste) => {
+        console.log("fetchWastes: ", waste);
         const company = await Company.findById(waste.company);
-        return wasteItems(company, waste);
+        return waste && wasteItems(company, waste);
       })
     );
 

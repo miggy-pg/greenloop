@@ -30,7 +30,6 @@ const Home = () => {
     () => localStorage.setItem("wasteLength", wasteLength || 0),
     [wasteLength]
   );
-  console.log("Error: ", error);
   if (error) return <h1>Error: {error.message}</h1>;
   return (
     <Body bodyClass={"bg-[#F8F8F8] mt-12 py-14"} pageId="homepage">

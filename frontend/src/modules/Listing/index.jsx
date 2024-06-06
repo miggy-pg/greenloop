@@ -97,7 +97,6 @@ const Listing = ({ myWaste }) => {
     isLoading,
     error,
   } = useMemo(() => wasteQuery, [wasteQuery]);
-
   let filterQuery = searchParams.get("filter") || "";
   let provinceParams = searchParams.get("province") || "";
   let cityMunicipalityParams = searchParams.get("cityMunicipality") || "";
