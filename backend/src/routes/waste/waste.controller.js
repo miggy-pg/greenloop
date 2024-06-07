@@ -9,7 +9,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 const wasteItems = (company, waste) => {
   console.log("company: ", company);
   return {
-    companyId: company?._id,
+    company: company,
     id: waste?._id,
     post: waste?.post,
     wasteCategory: waste?.wasteCategory,

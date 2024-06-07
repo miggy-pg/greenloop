@@ -21,7 +21,7 @@ const ListingCard = ({ waste, loggedInUser }) => {
     id: wasteId,
     image,
     post,
-    companyId,
+    company,
     wasteCategory,
     createdAt,
     available,
@@ -53,7 +53,7 @@ const ListingCard = ({ waste, loggedInUser }) => {
 
   return !isProfile ? (
     <div className="bg-white border border-gray-200 shadow-sm rounded-3xl my-2 md:my-4">
-      <Link to={`/profile/${companyId}`}>
+      <Link to={`/profile/${company?._id}`}>
         <div className="h-80 flex items-center justify-between lg:justify-evenly sm:h-40 2xsm:h-28">
           <div className="w-screen border rounded-t-3xl">
             <img
@@ -94,7 +94,7 @@ const ListingCard = ({ waste, loggedInUser }) => {
               button={
                 <HiOutlineDotsHorizontal className="text-gray-400 cursor-pointer" />
               }
-              isDisabled={loggedInUser?.id !== companyId}
+              isDisabled={loggedInUser?.id !== company?._id}
             >
               <div className="flex h-max w-40 flex-col justify-start rounded-[20px] bg-zinc-50 bg-no-repeat pb-3 shadow-md">
                 <div className="mt-3 ml-4">
