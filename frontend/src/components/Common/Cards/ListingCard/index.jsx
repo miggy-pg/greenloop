@@ -12,8 +12,6 @@ import { updateWasteAvailableOrNot } from "../../../../api/waste";
 import Dropdown from "../../Dropdown";
 
 const ListingCard = ({ waste, loggedInUser }) => {
-  console.log("listingcard: ", waste);
-  console.log("loggedInUser: ", loggedInUser);
   const url = window.location.href;
   const isProfile = url.split("/").includes("profile");
 

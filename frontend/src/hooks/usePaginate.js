@@ -1,7 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 
 export const usePaginate = (origWaste, POST_PER_PAGE = 6) => {
-  console.log("paginate: ", origWaste);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const currentPage = !searchParams.get("page")

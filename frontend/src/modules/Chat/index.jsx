@@ -34,15 +34,15 @@ const Chat = () => {
   const { width } = useWindowSize();
 
   const user = JSON.parse(localStorage.getItem("user:detail"));
-  console.log("userChat: ", user);
   const conversationId = searchParams.get("id");
 
   useEffect(() => {
     setSocket(io.connect(socketPort));
   }, []);
-
+  console.log("messages: ", messages);
   useMemo(() => {
     socket?.emit("addCompany", user?.id);
+    console.log("userSocket: ", user);
     socket?.on("getCompanies", (users) => {
       console.log("activeUsers: ", users);
     });
@@ -460,7 +460,7 @@ const Chat = () => {
                   {messages?.messages?.length > 0 ? (
                     messages.messages.map(
                       ({ message, company: messageSender }, index) => {
-                        console.log("messageSneder: ", messageSender);
+                        console.log("messageSender: ", messageSender);
                         return (
                           <div key={index}>
                             {messageSender?.id == user?.id ? (

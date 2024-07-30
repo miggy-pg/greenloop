@@ -13,8 +13,6 @@ export const useSocketMessages = (user) => {
   const [newMessages, setNewMessages] = useState([]);
   const [onClickedRead, setOnClickedRead] = useState(false);
 
-  console.log("newMessages: ", newMessages);
-
   const { mutate: readMessage } = useMutation({
     mutationFn: (messageId) => updateHasReadMessage(messageId),
     onSuccess: () => {

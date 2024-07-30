@@ -24,6 +24,10 @@ const filterWastes = (
   cityMunicipality,
   categories
 ) => {
+  console.log("unfilteredWastes: ", unfilteredWastes);
+  console.log("province: ", province);
+  console.log("cityMunicipality: ", cityMunicipality);
+  console.log("categories: ", categories);
   let filteredWaste = unfilteredWastes;
   let provinceItem = province?.toLowerCase();
   let cityMunicipalityItem = cityMunicipality?.toLowerCase();
@@ -36,7 +40,9 @@ const filterWastes = (
         waste.user.province.toLowerCase().includes(provinceItem)
       )
       .filter((waste) =>
-        waste.user.cityMunicipality.toLowerCase().includes(cityMunicipalityItem)
+        waste.user?.cityMunicipality
+          .toLowerCase()
+          .includes(cityMunicipalityItem)
       )
       .filter((waste) =>
         categories.some((category) =>
@@ -59,7 +65,9 @@ const filterWastes = (
         waste.user.province.toLowerCase().includes(provinceItem)
       )
       .filter((waste) =>
-        waste.user.cityMunicipality.toLowerCase().includes(cityMunicipalityItem)
+        waste.user?.cityMunicipality
+          .toLowerCase()
+          .includes(cityMunicipalityItem)
       );
   } else if (provinceItem && !cityMunicipalityItem && !categories) {
     return filteredWaste.filter((waste) =>
@@ -73,7 +81,7 @@ const filterWastes = (
     );
   } else if (!provinceItem && cityMunicipalityItem && !categories) {
     return filteredWaste.filter((waste) =>
-      waste.user.cityMunicipality.toLowerCase().includes(cityMunicipalityItem)
+      waste.user?.cityMunicipality.toLowerCase().includes(cityMunicipalityItem)
     );
   }
 };
@@ -129,23 +137,25 @@ const Listing = ({ myWaste }) => {
     setCategoryQuery([]);
 
     let selectedProvince = e.target.value;
-
     if (
       e.target.id == "provinces" &&
       provinceParams &&
       selectedProvince == "Select a Province"
     ) {
+      params.set("province", selectedProvince);
       searchParams.delete("province");
       searchParams.delete("cityMunicipality");
       setSearchParams(searchParams);
       setPlaces([]);
       setFilteredWaste({});
     } else {
+      console.log("Here 2");
+      params.set("province", selectedProvince);
       const filteredMunicipalities = mindanaoPlaces.filter((province) =>
         province.name.includes(selectedProvince)
       )[0];
       const wastesProvince = displayedWaste.filter((waste) =>
-        waste.user.province.includes(selectedProvince)
+        waste.user?.province.includes(selectedProvince)
       );
       wasteCategories.map((category) => {
         document.getElementById(category).checked = false;
@@ -155,10 +165,12 @@ const Listing = ({ myWaste }) => {
       setPlaces(filteredMunicipalities.places);
       searchParams.delete("category");
       setSearchParams(searchParams);
+      params.set("province", selectedProvince);
 
       const items = selectedProvince.split(" ");
       if (items.length > 3) {
-        params.set("province", items.slice(0, 3).join());
+        const province = items.slice(0, 3).join();
+        params.set("province", province);
         setSearchParams(searchParams);
         document.getElementById("municipalities").value =
           filteredMunicipalities.places[0];

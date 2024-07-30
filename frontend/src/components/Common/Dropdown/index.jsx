@@ -21,9 +21,6 @@ function useOutsideAlerter(ref, setX) {
 
 const Dropdown = (props) => {
   const { button: Icon, children, classNames, animation, isDisabled } = props;
-  // const {}
-  console.log("icon: ", Icon);
-  console.log("Dropdown: ", props);
   const wrapperRef = React.useRef(null);
   const [openWrapper, setOpenWrapper] = React.useState(false);
   useOutsideAlerter(wrapperRef, setOpenWrapper);
